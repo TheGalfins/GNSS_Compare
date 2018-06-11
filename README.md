@@ -3,7 +3,5 @@
 Work in progress...
 
 
-.. image:: https://readthedocs.org/projects/gnss-compare/badge/?version=latest
-:target: https://gnss-compare.readthedocs.io/en/latest/?badge=latest
-:alt: Documentation Status
+[![Documentation Status](https://readthedocs.org/projects/gnss-compare/badge/?version=latest)](https://gnss-compare.readthedocs.io/en/latest/?badge=latest)
 
