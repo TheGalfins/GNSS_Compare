@@ -1,0 +1,1 @@
+Search.setIndex({docnames:["index"],envversion:53,filenames:["index.rst"],objects:{},objnames:{},objtypes:{},terms:{index:0,modul:0,page:0,search:0},titles:["Welcome to GNSS Compare\u2019s documentation!"],titleterms:{compar:0,document:0,gnss:0,refer:0,test:0,welcom:0}})
