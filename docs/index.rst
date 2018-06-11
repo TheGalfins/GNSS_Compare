@@ -3,8 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to GNSS Compare's documentation!
+Introduction!
 ========================================
+
+Welcome to GNSS Compare's documentation!
+
+Please stay tuned, as this is still a demo version...
+
 
 .. toctree::
    :maxdepth: 2
@@ -12,7 +17,7 @@ Welcome to GNSS Compare's documentation!
 
 
 
-Testing references
+Testing 
 ==================
 
 * :ref:`genindex`
