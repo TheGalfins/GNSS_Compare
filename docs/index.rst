@@ -12,7 +12,7 @@ Welcome to GNSS Compare's documentation!
 
 
 
-Indices and tables
+Testing references
 ==================
 
 * :ref:`genindex`
