@@ -7,7 +7,9 @@ Introduction!
 ========================================
 
 .. image:: img/GalileoIcon_blue.png
-    :width: 40pt
+    :width: 80%
+    :align: center
+    :alt: Project logo
 
 
 Welcome to GNSS Compare's documentation!
