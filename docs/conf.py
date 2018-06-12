@@ -16,12 +16,17 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import datetime
 
 # -- Project information -----------------------------------------------------
 
 project = 'GNSS Compare'
-copyright = '2018, The Galfins'
 author = 'Mateusz Krainski'
+email = 'mateusz@krainski.eu'
+
+copyright = '{year}, the Galfins'.format(
+    year=datetime.date.today().year
+)
 
 # The short X.Y version
 version = ''
@@ -59,7 +64,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
