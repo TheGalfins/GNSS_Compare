@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 .. image:: img/GalileoIcon_blue.png
-    :width: 80%
+    :width: 40%
     :align: center
     :alt: Project logo
 
