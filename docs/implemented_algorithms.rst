@@ -21,32 +21,34 @@ will also write about the tunning of the EKFs.
 
 First things first! Let's remember the Kalman Filter equations, *the implemented ones*, in order to make the rest of this section more enjoyable.
 
-We have the time prediction of the state vector (x) and it's variance-covariance matrix (P)
+We have the time prediction of the state vector (x) and it's variance-covariance matrix (P):
 
 .. math::
   \hat{\mathbf{x}}^-_k = \mathbf{F}_k \hat{\mathbf{x}}^+_{k-1}
 .. math::
-  \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k
+  \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k .
 
 In the next step we can compute the innovation vector (gamma) and it's variance-covariance matrix (S) with the help of
-the obsevation vector (z), the observation matrix (H) and the measurement noise matrix (R).
+the obsevation vector (z), the observation matrix (H) and the measurement noise matrix (R):
 
 .. math::
   \boldsymbol{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
 .. math::
-  \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k
+  \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k.
 
-We are almost there, we just need to compute the famous Kalman gain (K)!
+We are almost there, we just need to compute the famous Kalman gain (K)!:
 
 .. math::
-  \mathbf{K}_k = \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} \mathbf{S}^{-1}_k
+  \mathbf{K}_k = \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} \mathbf{S}^{-1}_k.
 
-Finally the measurement update step is
+Finally the measurement update step is:
 
 .. math::
   \hat{\mathbf{x}}^+_k = \hat{\mathbf{x}}^-_k + \mathbf{K}_k \boldsymbol{\gamma}_k
-.. math::  
-  \mathbf{P}^+_k = \left(\mathbf{I}_k - \mathbf{K}_k \mathbf{H}_k \right) \mathbf{P}^-_k
+.. math::
+  \mathbf{P}^+_k = \left(\mathbf{I}_k - \mathbf{K}_k \mathbf{H}_k \right) \mathbf{P}^-_k.
+
+Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
 
 
 Static user
