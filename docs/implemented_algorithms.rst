@@ -192,6 +192,11 @@ modifying the values in Q and R experimentally (i.e., trial and error). Just as 
 implementing *adaptive* estimators. Who knows, maybe you (the reader) will decide to implement some nice ideas now that
 this possibility is enabled with *GNSS Compare's* flexible framework.
 
+*Practical advise: When the observation matrix (H) is being built do consider that it's size is defined as following:
+the number of rows is the number of measurements and the number of columns is the number of unknowns. Therefore When
+switching from the static case to the dynamic case, H changes also. We mention this just to be sure that a possible hiccup
+is avoided.*
+
 Filter tunning
 -----------------------------
 
