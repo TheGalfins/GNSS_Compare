@@ -42,6 +42,7 @@ We are almost there, we just need to compute the famous Kalman gain (K)!
   \mathbf{K}_k = \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} \mathbf{S}^{-1}_k
 
 Finally the measurement update step is
+
 .. math::
   \hat{\mathbf{x}}^+_k = \hat{\mathbf{x}}^-_k + \mathbf{K}_k \boldsymbol{\gamma}_k
   \mathbf{P}^+_k = \left(\mathbf{I}_k - \mathbf{K}_k \mathbf{H}_k \right) \mathbf{P}^-_k
