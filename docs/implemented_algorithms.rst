@@ -142,3 +142,6 @@ is to take care that we are dealing with the parameters of a variance-covariance
 to be converted in units of meters (remember that we have expressed the receiver clock states in units of meters).
 
 So basically we are done with the *static user* case! That's great as we can move to the dynamic one!
+
+Filter tunning
+-----------------------------
