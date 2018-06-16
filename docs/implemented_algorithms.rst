@@ -19,7 +19,7 @@ Therefore we begin with the definition of the state vector, or in other words, t
 
 .. math::
 
-    (a + b)^2 = a^2 + 2ab + b^2
+    \mathbf{x} = 2
 
 
 This is further text
