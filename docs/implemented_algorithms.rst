@@ -21,13 +21,19 @@ will also write about the tunning of the EKFs.
 
 First things first! Let's remember the Kalman Filter equations, *the implemented ones*, in order to make the rest of this section more enjoyable.
 
-We have the time prediction of the state vector (P) and it's variance-covariance matrix (P)
+We have the time prediction of the state vector (x) and it's variance-covariance matrix (P)
 
 .. math::
-  \hat{\mathbf{x}}_k = \mathbf{F}_k \hat{\mathbf{x}}_{k-1}
+  \hat{\mathbf{x}}^-_k = \mathbf{F}_k \hat{\mathbf{x}}_{k-1}
 .. math::
-  \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k  
+  \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k
 
+In the next step we can compute the innovation vector (gamma) and it's variance-covariance matirx (S) with the help of
+the obsevation vector (z), the observation matrix (H) and the meausrement noise matrix (R).
+.. math::
+  \boldsymbol{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
+.. math::
+  \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k
 
 Static user
 -----------
