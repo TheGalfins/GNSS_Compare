@@ -11,6 +11,8 @@ Global Navigation Satellite Systems Glossary
 ============================================
 
 
+.. _pvt:
+
 Position, Velocity and Time
 ---------------------------
 
