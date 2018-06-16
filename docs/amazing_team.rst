@@ -1,14 +1,7 @@
 
 ******************************
-Android GNSS raw measurements
+The GNSS Compare's developers
 ******************************
 
-
-Galileo code based pseudoranges
-=============
-
-
-
-
-GPS code based pseudoranges
-=============
+In this section we present you the amazing people that were fueled by
+enormous amounts of tea in order to develop *GNSS Compare*!
