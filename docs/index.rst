@@ -22,6 +22,7 @@ Please stay tuned, as this is still a demo version...
    :caption: Contents
 
    description
+   amazing_team
    user_manual
    android_gnssMeasurements
    implemented_algorithms
