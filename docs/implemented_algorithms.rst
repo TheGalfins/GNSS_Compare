@@ -152,8 +152,8 @@ state vector:
 .. math::
     \mathbf{x}_k = \left(X~~U~~Y~~V~~Z~~W~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}.
 
-We can already observe that we have more three more parameters to estimate (U, V, W) which are the velocities on the X, Y and Z directions.
-If our state vector modified (with respect to the static case) then our intuition will tell us that we need to define a new transition matrix,
+We can already observe that we have three more parameters to estimate (U, V, W) which are the velocities on the X, Y and Z directions.
+If our state vector is modified (with respect to the static case) then our intuition will tell us that we need to define a new transition matrix,
 a new process noise matrix. Which is exactly what we are going to do next, therfore:
 
 .. math::
