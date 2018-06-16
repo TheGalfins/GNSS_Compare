@@ -169,8 +169,9 @@ a new process noise matrix. Which is exactly what we are going to do next, therf
            0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
    \end{pmatrix}
 
+
 For the process noise matrix we use the approach presented in the book of Rober Grover Brown and Patrick Y. C. Hwang
- ( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second we refer to this book in implemented PVT algorithms section,
+( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second we refer to this book in implemented PVT algorithms section,
  however you can trust us that is a very good one!
 
 
