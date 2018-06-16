@@ -36,8 +36,19 @@ aspect. A static user doesn't *change* his/hers position, therefore this means t
 the same! We only have to take care of how we model the dynamic behavior of the receiver's clock, which is approximated to be:
 
 .. math::
-    \delta t_{R,k} = \delta t_{R,k-1} + \Delta t \dot{\delta t}_{R,k-1}
+    \delta t_{R,k} = \delta t_{R,k-1} + \Delta T~\dot{\delta t}_{R,k-1}
 
+Having in view all of this information we can define the transition matrix of the filter as:
 
+.. math::
+  \begin{pmatrix}
+           1 & 0 & \color{red}{-1} &~~0  & 0 & 0 \cdots 0 & 0\\
+           0 & 1 &~~0 & \color{red}{-1} & 0 & 0 \cdots 0 & 0\\
+           0 & 0 & \color{red}{-1} &~~0  & 1 & 0 \cdots 0 & 0\\
+           0 & 0 &~~0 & \color{red}{-1}  & 0 & 1 \cdots 0 & 0\\
+           \vdots  & \vdots  &~~\vdots &~~\vdots & \vdots & \vdots & \vdots   \\
+           0 & 0 & \color{red}{-1} &~~0  & 0 & 0 \cdots 1 & 0\\
+           0 & 0 &~~0 & \color{red}{-1}  & 0 & 0 \cdots 0 & 1\\
+   \end{pmatrix}
 
 This is further text
