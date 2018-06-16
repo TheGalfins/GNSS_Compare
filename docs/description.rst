@@ -3,6 +3,8 @@
 Description
 ***********
 
+The purpose of GNSS Compare is to make the life of developers and reasearchers easier. It's an easy to use and easy to extend framework for calculating the PVT_, :ref:`Position, Velocity and Time`.
+
 
 Project history
 ===============
@@ -13,3 +15,4 @@ GNSS Compare is an Android application developed by the Galfins as part of the i
 .. _ESA: http://esa.int
 .. _`Galileo programme`: https://www.esa.int/Our_Activities/Navigation/Galileo/What_is_Galileo
 .. _`Galileo Smartphone App Challenge`: http://www.esa.int/Our_Activities/Navigation/ESA_trainees_compete_in_inaugural_Galileo_app_contest
+.. _PVT: :ref:`Position, Velocity and Time`
