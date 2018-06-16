@@ -1,13 +1,15 @@
 
-**************
-Used Algorihms
-**************
+**********************
+Implemented Algorithms
+**********************
 
 
 Kalman Filter
 =============
 
-This section describes the implemented Kalman Filter.
+One of the estimation techniques implemented in the GNSS Compare framework is the Kalman Filter.
+Taking into account that the measurement model is linearized about the time predicted position, the implementation
+is an Extended Kalman Filter (EKF).
 
 .. math::
 
