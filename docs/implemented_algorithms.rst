@@ -70,7 +70,7 @@ linearize it if we have knowledge about an approximated position of the receiver
 step of the EKF. Taking this into account and applying a first order Taylor series expansion we obtain:
 
 .. math::
-  PR_c - \rho_0 + \delta t_S - d_{0,\text{ion}} - d_{0,\text{trop}} = -\frac{X^S-X_0}{\rho_0}-\frac{Y^S-Y_0}{\rho_0}-\frac{Z^S-Z_0}{\rho_0}+\delta t_R
+  PR_c - \rho_0 + \delta t_S - d_{0,\text{ion}} - d_{0,\text{trop}} = -\frac{X^S-X_0}{\rho_0}\Delta X-\frac{Y^S-Y_0}{\rho_0}\Delta Y-\frac{Z^S-Z_0}{\rho_0}\Delta Z+\delta t_R
 
 
 Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
