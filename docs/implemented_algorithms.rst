@@ -71,8 +71,12 @@ by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matr
 In the above expression the receiver clock related parameters are expressed as:
 
 .. math::
-  S_g \approx 2 \pi^2 h_{-2}~~\text{where}~~h_{-2}~\text{is the Power Spectral Density (PSD) of the random walk frequency noise}
+  S_g \approx 2 \pi^2 h_{-2}
 .. math::
   S_f \approx \frac{h_0}{2}
 
-The parameter h_2
+The parameter h-2 and h0 are the Power Spectral Density (PSD) of the random walk frequency noise and the PSD
+of the white noise, as defined in the suggested book above. Some typical values for a low quality Temperature
+Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practical advise before using this values
+is to take care that we are dealing with the parameters of a variance-covariance matrix and also that they have
+to be converted in units of meters (remember that we have expressed the receiver clock states in units of meters).
