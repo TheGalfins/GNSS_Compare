@@ -13,7 +13,7 @@ is an Extended Kalman Filter (EKF).
 
 In this section we describe the theoretical aspects of the EKF implementation such that the curious minds can understand easily
 what is behind GNSS Compare's awesome algorithms. We are interested to implement the EKF for two types of users:
-a *static user* and *dynamic user*.
+a *static user* and a *dynamic user*.
 
 Therefore we will describe how the state vector is defined, or in other words, the vector containing the parameters that we wish to estimate
 (hint: the parameters are related to the *GNSS Compare*'s user position!), and also what dynamic and measurements models we have considered. And as *bonus* we
@@ -79,7 +79,7 @@ pseudorange equation one can form the observation matrix (H).
 *Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns
 that we are estimating directly in the EKF state vector. Check the GNSS Compare code (e.g., StaticExtendedKalmanFilter class) to understand how this is handled*.
 
-Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
+Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*!
 
 Static user
 -----------
@@ -145,6 +145,30 @@ So basically we are done with the *static user* case! That's great as we can mov
 
 Dynamic user
 -----------------------------
+
+In the case of a dynamic user there are few aspects that one has to consider. Let's start again by defining the new
+state vector:
+
+.. math::
+    \mathbf{x}_k = \left(X~~U~~Y~~V~~Z~~W~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}.
+
+We can already observe that we have more three more parameters to estimate (U, V, W) which are the velocities on the X, Y and Z directions.
+If our state vector modified (with respect to the static case) then our intuition will tell us that we need to define a new transition matrix,
+a new process noise matrix. Which is exactly what we are going to do next, therfore:
+
+.. math::
+  \mathbf{F}_k =
+  \begin{pmatrix}
+           1 & \Delta T & 0 & 0 & 0 & 0 & 0 & 0 \\
+           0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+           0 & 0 & 1 & \Delta T & 0 & 0 & 0 & 0 \\
+           0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+           0 & 0 & 0 & 0 & 1 & \Delta T & 0 & 0 \\
+           0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+           0 & 0 & 0 & 0 & 0 & 0 & 1 & \Delta T \\
+           0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+   \end{pmatrix}
+
 
 
 Filter tunning
