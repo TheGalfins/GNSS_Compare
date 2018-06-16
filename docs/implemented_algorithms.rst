@@ -154,7 +154,7 @@ state vector:
 
 We can already observe that we have three more parameters to estimate (U, V, W) which are the velocities on the X, Y and Z directions.
 If our state vector is modified (with respect to the static case) then our intuition will tell us that we need to define a new transition matrix and a
-a new process noise matrix. Which is exactly what we are going to do next, therfore:
+new process noise matrix. Which is exactly what we are going to do next, therefore:
 
 .. math::
   \mathbf{F}_k =
