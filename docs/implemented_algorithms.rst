@@ -71,8 +71,8 @@ by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matr
 In the above expression the receiver clock related parameters are expressed as:
 
 .. math::
-  S_g \approx 2 \pi^2 h_{-2}
+  S_g \approx 2 \pi^2 h_{-2}~~\text{where}~~h_{-2}~\text{is the Power Spectral Density (PSD) of the random walk frequency noise}
 .. math::
   S_f \approx \frac{h_0}{2}
 
-The parameter h_2 
+The parameter h_2
