@@ -23,4 +23,5 @@ Please stay tuned, as this is still a demo version...
 
    description
    user_manual
+   used_algorithms
    glossary
