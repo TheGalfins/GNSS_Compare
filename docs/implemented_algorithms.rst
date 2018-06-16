@@ -16,16 +16,17 @@ what is behind GNSS Compare's awesome algorithms. We are interested to implement
 a *static user* and *dynamic user*.
 
 Therefore we will describe how the state vector is defined, or in other words, the vector containing the parameters that we wish to estimate
-(hint: the parameters are related to the *GNSS Compare*'s user position!), the considered dynamic and measurements models. And as *bonus* we
-will also write about the (dreadful) tunning of the EKFs.
+(hint: the parameters are related to the *GNSS Compare*'s user position!), and also what dynamic and measurements models we have considered. And as *bonus* we
+will also write about the tunning of the EKFs.
 
 
 Static user
 -----------
+In the case of a static user we have the following state vector:
 
 .. math::
 
-    \mathbf{x} = \left( \right)
+    \mathbf{x} = \left(X Y Z \delta t_R \dot{\delta t}_R \right)
 
 
 This is further text
