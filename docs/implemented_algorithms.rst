@@ -36,7 +36,7 @@ the obsevation vector (z), the observation matrix (H) and the measurement noise 
 .. math::
   \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k.
 
-We are almost there, we just need to compute the famous Kalman gain (K)!:
+We are almost there, we just need to compute the famous Kalman gain (K)!
 
 .. math::
   \mathbf{K}_k = \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} \mathbf{S}^{-1}_k.
@@ -48,8 +48,16 @@ Finally the measurement update step is:
 .. math::
   \mathbf{P}^+_k = \left(\mathbf{I}_k - \mathbf{K}_k \mathbf{H}_k \right) \mathbf{P}^-_k.
 
-Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
+However, before explaining how the EKF for the *static user* and the *dynamic user* was implemented, we still
+need to talk about the measurement model based on the GNSS pseudoranges retrieved from the smartphone's GNSS
+receiver. If you are familiar with this concepts, you can skip the following section.
 
+Pseudorange measurement model
+-----------------------------
+Test
+
+
+Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
 
 Static user
 -----------
@@ -85,9 +93,9 @@ Having in view all of this information we can define the transition matrix (F) o
 
 We are almost done with the dynamic model elements. The only thing that we need now is the process noise matrix (Q). Because
 the process noise matrix contains the uncertainty we have in the dynamic model that we consider, we have to define it accordingly.
-In the static case we are sure that the user is not moving and that the receiver clock has frequency and phase errors. In order to
+In the static case we can assume that the user is not moving and that the receiver clock has some frequency and phase errors. In order to
 fully understand this reasoning, the interested reader is advised to check the following book: *Introduction to Random Signals and Applied Kalman Filtering*
-by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matrix is:
+by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matrix is approximated to be:
 
 .. math::
   \mathbf{Q}_k =
