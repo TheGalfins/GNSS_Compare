@@ -28,5 +28,16 @@ In the case of a static user we have the following state vector:
 
     \mathbf{x} = \left(X~~Y~~Z~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}
 
+In the above expression X, Y and Z are the coordinates in Earth Centered Earth Fixed (ECEF) frame and the last two parameters
+are the receiver clock bias and the receiver clock drift. All the parameters are expressed in units of meters.
+
+Now that the state vector is defined, we can move on choosing the dynamic model. However first, let's think a bit about this
+aspect. A static user doesn't *change* his/hers position, therefore this means that over time the X, Y, Z coordinates remain
+the same! We only have to take care of how we model the dynamic behavior of the receiver's clock, which is approximated to be:
+
+.. math::
+    \delta t_{R,k} = \delta t_{R,k-1} + \Delta t \dot{\delta t}_{R,k-1}
+
+
 
 This is further text
