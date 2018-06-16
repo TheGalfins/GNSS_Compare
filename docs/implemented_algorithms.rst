@@ -10,7 +10,7 @@ The information here can be associated with the following Java classes:
 
 *DynamicExtendedKalmanFilter*
 
-*PedestrianStaticExtendedKalmanFilter (indeed, this one sounds a bit strange however bear with us as explanation will be given when the filter tunning is explained)*
+*PedestrianStaticExtendedKalmanFilter (indeed, this one sounds a bit strange however bear with us as explanations will be given when the filter tunning is explained)*
 
 *WeightedLeastSquares*
 
