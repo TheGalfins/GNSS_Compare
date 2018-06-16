@@ -194,7 +194,7 @@ this possibility is enabled with *GNSS Compare's* flexible framework.
 
 *Practical advise: When the observation matrix (H) is being built do consider that it's size is defined in the following way:
 the number of rows is the number of measurements and the number of columns is the number of unknowns. Therefore when
-switching from the static case to the dynamic case, H changes also. We mention this just to be sure that a possible hiccup
+switching from the static case to the dynamic case, H changes also. We mention this just to be sure that a possible conceptual hiccup
 is avoided.*
 
 Filter tunning
