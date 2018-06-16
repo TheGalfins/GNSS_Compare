@@ -4,11 +4,11 @@ Android GNSS raw measurements
 ******************************
 
 
-Galileo code based pseudoranges
-===============================
+Galileo
+=======
 
 
 
 
-GPS code based pseudoranges
-===========================
+GPS
+====
