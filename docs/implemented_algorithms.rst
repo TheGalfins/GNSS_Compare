@@ -24,14 +24,15 @@ First things first! Let's remember the Kalman Filter equations, *the implemented
 We have the time prediction of the state vector (x) and it's variance-covariance matrix (P)
 
 .. math::
-  \hat{\mathbf{x}}^-_k = \mathbf{F}_k \hat{\mathbf{x}}_{k-1}
+  \hat{\mathbf{x}}^-_k = \mathbf{F}_k \hat{\mathbf{x}}^+_{k-1}
 .. math::
   \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k
 
 In the next step we can compute the innovation vector (gamma) and it's variance-covariance matirx (S) with the help of
 the obsevation vector (z), the observation matrix (H) and the meausrement noise matrix (R).
+
 .. math::
-  \mathbf{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
+  \boldsymbol{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
 .. math::
   \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k
 
