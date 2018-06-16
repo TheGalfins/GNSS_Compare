@@ -61,9 +61,9 @@ by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matr
 .. math::
   \mathbf{Q}_k =
   \begin{pmatrix}
-           0 & 0 & 0 & 0 & 0 \\
-           0 & 0 & 0 & 0 & 0 \\
-           0 & 0 & 0 & 0 & 0 \\
-           0 & 0 & 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
-           0 & 0 & 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
+           0~~~~& 0~~~~&0 & 0 & 0 \\
+           0~~~~& 0~~~~& 0 & 0 & 0 \\
+           0~~~~& 0~~~~& 0 & 0 & 0 \\
+           0~~~~& 0~~~~& 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
+           0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}
