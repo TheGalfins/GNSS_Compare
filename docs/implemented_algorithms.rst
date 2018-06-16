@@ -171,7 +171,7 @@ a new process noise matrix. Which is exactly what we are going to do next, therf
 
 
 For the process noise matrix we use the approach presented in the book of Rober Grover Brown and Patrick Y. C. Hwang
-( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
+( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second time we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
 
 .. math::
   \mathbf{Q}_k =
@@ -186,6 +186,11 @@ For the process noise matrix we use the approach presented in the book of Rober 
            0~~~~& 0~~~~& 0 & 0 & 0 & 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}
 
+The parameters Sx, Sy and Sz are spectral amplitudes that reflect the position random process. Unfortunately, setting their values
+is not as straigth forward as for the receiver clock states. We have to rely on what we call the *tunning* process which is
+modifying the values in Q and R experimentally (i.e., trial and error). Just as a note, this can be avoided by designing and
+implementing *adaptive* filters. Well, who knows, maybe you (the reader) will decide to implement some nice ideas now that
+this possibility is enabled with *GNSS Compare*.
 
 Filter tunning
 -----------------------------
