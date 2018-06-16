@@ -180,8 +180,8 @@ For the process noise matrix we use the approach presented in the book of Rober 
            \frac{S_X~\Delta T^2}{2}& S_X~\Delta T & 0 & 0 & 0 & 0 & 0 & 0 \\
            0~~~~& 0~~~~& \frac{S_Y~\Delta T^3}{3} & \frac{S_Y~\Delta T^2}{2} & 0 & 0 & 0 & 0\\
            0~~~~& 0~~~~& \frac{S_Y~\Delta T^2}{2} & S_Y~\Delta T & 0 & 0 & 0 & 0\\
-           0~~~~& 0~~~~& 0 & 0 & 0 & 0 & 0 & 0\\
-           0~~~~& 0~~~~& 0 & 0 & 0 & 0 & 0 & 0\\
+           0~~~~& 0~~~~& 0 & 0 & \frac{S_Z~\Delta T^3}{3} & \frac{S_Z~\Delta T^2}{2} & 0 & 0\\
+           0~~~~& 0~~~~& 0 & 0 & \frac{S_Z~\Delta T^2}{2} & S_Z~\Delta T & 0 & 0\\
            0~~~~& 0~~~~& 0 & 0 & 0 & 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
            0~~~~& 0~~~~& 0 & 0 & 0 & 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}
