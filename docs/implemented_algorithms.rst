@@ -3,6 +3,12 @@
 Implemented PVT Algorithms
 ***************************
 
+In this section we provide the theoretical aspects behind the *GNSS Compare's* PVT algorithms.
+The information here can be associated with the following Java classes:
+*StaticExtendedKalmanFilter*
+*DynamicExtendedKalmanFilter*
+*PedestrianStaticExtendedKalmanFilter (indeed, this one sounds a bit strange however bear with us as explanation will be given when the filter tunning is explained)*
+*WeightedLeastSquares*
 
 Kalman Filter
 =============
