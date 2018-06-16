@@ -46,8 +46,14 @@ Having in view all of this information we can define the transition matrix of th
   \mathbf{F}_k =
   \begin{pmatrix}
            1 & 0 & 0 & 0 & 0 \\
-           0 & 1 & 0 & 0 & 0\\
-           0 & 0 & 1 & 0 & 0\\
-           0 & 0 & 0 & 1 & \Delta T\\
-           1 & 0 & 0 & 0 & 1\\
+           0 & 1 & 0 & 0 & 0 \\
+           0 & 0 & 1 & 0 & 0 \\
+           0 & 0 & 0 & 1 & \Delta T \\
+           0 & 0 & 0 & 0 & 1 \\
    \end{pmatrix}
+
+We are almost done with the dynamic model elements. The only thing that we need now is the process noise matrix (Q). Because
+the process noise matrix contains the uncertainty we have in the dynamic model that we consider, we have to define it accordingly.
+In the static case we are sure that the user is not moving and that the receiver clock has frequency and phase errors. In order to
+fully understand this reasoning, the interested reader is advised to check the following book *Introduction to Random Signals and Applied Kalman Filtering*
+by Rober Grover Brown and Patrick Y. C. Hwang.
