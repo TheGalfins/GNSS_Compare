@@ -74,3 +74,5 @@ In the above expression the receiver clock related parameters are expressed as:
   S_g \approx 2 \pi^2 h_{-2}
 .. math::
   S_f \approx \frac{h_0}{2}
+
+The parameter h_2 
