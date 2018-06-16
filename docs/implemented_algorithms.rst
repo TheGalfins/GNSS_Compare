@@ -1,7 +1,7 @@
 
-**********************
-Implemented Algorithms
-**********************
+***************************
+Implemented PVT Algorithms
+***************************
 
 
 Kalman Filter
@@ -19,10 +19,19 @@ Therefore we will describe how the state vector is defined, or in other words, t
 (hint: the parameters are related to the *GNSS Compare*'s user position!), and also what dynamic and measurements models we have considered. And as *bonus* we
 will also write about the tunning of the EKFs.
 
+First things first! Let's remember the Kalman Filter equations, *the implemented ones*, in order to make the rest of this section more enjoyable.
+
+We have the time prediction of the state vector (P) and it's variance-covariance matrix (P)
+
+.. math::
+  \hat{\mathbf{x}}_k = \mathbf{F}_k \hat{\mathbf{x}}_{k-1}
+.. math::
+  \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k  
+
 
 Static user
 -----------
-In the case of a static user we have the following state vector (x) at the epoch *k*:
+In the case of a static user we have the following state vector at the epoch *k*:
 
 .. math::
 
@@ -80,3 +89,5 @@ of the white noise, as defined in the suggested book above. Some typical values 
 Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practical advise before using this values
 is to take care that we are dealing with the parameters of a variance-covariance matrix and also that they have
 to be converted in units of meters (remember that we have expressed the receiver clock states in units of meters).
+
+So basically we are done with the *static user* case! That's great as we can move to the dynamic one!
