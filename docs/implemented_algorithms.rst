@@ -28,13 +28,24 @@ We have the time prediction of the state vector (x) and it's variance-covariance
 .. math::
   \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k
 
-In the next step we can compute the innovation vector (gamma) and it's variance-covariance matirx (S) with the help of
-the obsevation vector (z), the observation matrix (H) and the meausrement noise matrix (R).
+In the next step we can compute the innovation vector (gamma) and it's variance-covariance matrix (S) with the help of
+the obsevation vector (z), the observation matrix (H) and the measurement noise matrix (R).
 
 .. math::
   \boldsymbol{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
 .. math::
   \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k
+
+We are almost there, we just need to compute the famous Kalman gain (K)!
+
+.. math::
+  \mathbf{K}_k = \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} \mathbf{S}^{-1}_k
+
+Finally the measurement update step is
+.. math::
+  \hat{\mathbf{x}}^+_k = \hat{\mathbf{x}}^-_k + \mathbf{K}_k \boldsymbol{\gamma}_k
+  \mathbf{P}^+_k = \left(\mathbf{I}_k - \mathbf{K}_k \mathbf{H}_k \right) \mathbf{P}^-_k
+
 
 Static user
 -----------
