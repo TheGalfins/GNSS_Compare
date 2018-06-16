@@ -67,3 +67,10 @@ by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matr
            0~~~~& 0~~~~& 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
            0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}
+
+In the above expression the receiver clock related parameters are expressed as:
+
+.. math::
+  S_g \approx 2 \pi^2 h_{-2}
+.. math::
+  S_f \approx \frac{h_0}{2}
