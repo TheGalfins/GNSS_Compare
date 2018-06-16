@@ -25,3 +25,13 @@ Android Glossary
 
 Software Engineering Glossary
 =============================
+
+.. _polymorphism:
+
+Polymorphism
+------------
+
+According to Wikipedia_, *Polymorphism is the provision of a single interface to entities of different types*. In Java this is achieved due to class inheritance. 
+
+
+.. _Wikipedia: https://en.wikipedia.org/wiki/Polymorphism_(computer_science)
