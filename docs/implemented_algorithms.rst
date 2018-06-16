@@ -26,7 +26,7 @@ In the case of a static user we have the following state vector:
 
 .. math::
 
-    \mathbf{x} = \left(X Y Z \delta t_R \dot{\delta t}_R \right)
+    \mathbf{x} = \left(X~~Y~~Z~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}
 
 
 This is further text
