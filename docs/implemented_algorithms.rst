@@ -31,7 +31,7 @@ We have the time prediction of the state vector (x) and it's variance-covariance
 In the next step we can compute the innovation vector (gamma) and it's variance-covariance matirx (S) with the help of
 the obsevation vector (z), the observation matrix (H) and the meausrement noise matrix (R).
 .. math::
-  \boldsymbol{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
+  \mathbf{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
 .. math::
   \mathbf{S}_k = \mathbf{H}_k \mathbf{P}^-_k \mathbf{H}_k^{\text{T}} + \mathbf{R}_k
 
