@@ -23,5 +23,6 @@ Please stay tuned, as this is still a demo version...
 
    description
    user_manual
+   android_gnssMeasurements
    implemented_algorithms
    glossary
