@@ -22,11 +22,11 @@ will also write about the tunning of the EKFs.
 
 Static user
 -----------
-In the case of a static user we have the following state vector:
+In the case of a static user we have the following state vector at the epoch *k*:
 
 .. math::
 
-    \mathbf{x} = \left(X~~Y~~Z~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}
+    \mathbf{x}_k = \left(X~~Y~~Z~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}
 
 In the above expression X, Y and Z are the coordinates in Earth Centered Earth Fixed (ECEF) frame and the last two parameters
 are the receiver clock bias and the receiver clock drift. All the parameters are expressed in units of meters.
@@ -36,19 +36,17 @@ aspect. A static user doesn't *change* his/hers position, therefore this means t
 the same! We only have to take care of how we model the dynamic behavior of the receiver's clock, which is approximated to be:
 
 .. math::
-    \delta t_{R,k} = \delta t_{R,k-1} + \Delta T~\dot{\delta t}_{R,k-1}
+    \delta t_{R,k} = \delta t_{R,k-1} + \Delta T~\dot{\delta t}_{R,k-1} \\
+    \dot{\delta t}_{R,k} = \dot{\delta t}_{R,k-1}
 
 Having in view all of this information we can define the transition matrix of the filter as:
 
 .. math::
+  \mathbf{F}_k =
   \begin{pmatrix}
-           1 & 0 & \color{red}{-1} &~~0  & 0 & 0 \cdots 0 & 0\\
-           0 & 1 &~~0 & \color{red}{-1} & 0 & 0 \cdots 0 & 0\\
-           0 & 0 & \color{red}{-1} &~~0  & 1 & 0 \cdots 0 & 0\\
-           0 & 0 &~~0 & \color{red}{-1}  & 0 & 1 \cdots 0 & 0\\
-           \vdots  & \vdots  &~~\vdots &~~\vdots & \vdots & \vdots & \vdots   \\
-           0 & 0 & \color{red}{-1} &~~0  & 0 & 0 \cdots 1 & 0\\
-           0 & 0 &~~0 & \color{red}{-1}  & 0 & 0 \cdots 0 & 1\\
+           1 & 0 & 0 & 0 & 0 \\
+           0 & 1 & 0 & 0 & 0\\
+           0 & 0 & 1 & 0 & 0\\
+           0 & 0 & 0 & 1 & \Delta T\\
+           1 & 0 & 0 & 0 & 1\\
    \end{pmatrix}
-
-This is further text
