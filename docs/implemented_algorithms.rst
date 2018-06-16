@@ -54,7 +54,23 @@ receiver. If you are familiar with this concepts, you can skip the following sec
 
 Pseudorange measurement model
 -----------------------------
-Test
+
+For a code-based pseudorange (PRc) we have the following (non-linear) equation taking into account the
+satellite clock bias (dtS), the delay caused by the ionosphere (dion), the delay caused by the troposphere (dtrop)
+and the receiver noise (epsilon).
+
+.. math::
+   PR_c = \rho + \delta t_R - delta t^S + d_{\text{ion}} + d_{\text{trop}} + \mathbf{\epsilon}
+
+We know, there are more effects that are perturbing the GNSS measurements, however
+we wish to keep things as simple as possible and the interested persons can always access some good books on this topic!
+
+The above equation is non-linear because of the geometric distance (rho) between the receiver and the GNSS satellite. Luckly we can
+linearize it if we have knowledge about an approximated position of the receiver (X0, Y0, Z0), which we do! We do have from the time prediction
+step of the EKF. Taking this into account and applying a first order Taylor series expansion we obtain:
+
+.. math::
+  PR_c - \rho_0 + \delta t_S - d_{\text{ion}} - d_{\text{trop}} =
 
 
 Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
