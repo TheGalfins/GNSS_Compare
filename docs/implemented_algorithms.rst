@@ -171,8 +171,20 @@ a new process noise matrix. Which is exactly what we are going to do next, therf
 
 
 For the process noise matrix we use the approach presented in the book of Rober Grover Brown and Patrick Y. C. Hwang
-( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second we refer to this book in implemented PVT algorithms section,
- however you can trust us that is a very good one!
+( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
+
+.. math::
+  \mathbf{Q}_k =
+  \begin{pmatrix}
+           \frac{S_X~\Delta T^3}{3}& \frac{S_X~\Delta T^2}{2}& 0 & 0 & 0 & 0 & 0 & 0 \\
+           \frac{S_X~\Delta T^2}{2}& S_X~\Delta T & 0 & 0 & 0 & 0 & 0 & 0 \\
+           0~~~~& 0~~~~& \frac{S_Y~\Delta T^3}{3} & \frac{S_Y~\Delta T^2}{2} & 0 & 0 & 0 & 0\\
+           0~~~~& 0~~~~& \frac{S_Y~\Delta T^2}{2} & S_Y~\Delta T & 0 & 0 & 0 & 0\\
+           0~~~~& 0~~~~& 0 & 0 & 0 & 0 & 0 & 0\\
+           0~~~~& 0~~~~& 0 & 0 & 0 & 0 & 0 & 0\\
+           0~~~~& 0~~~~& 0 & 0 & 0 & 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
+           0~~~~& 0~~~~& 0 & 0 & 0 & 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
+   \end{pmatrix}
 
 
 Filter tunning
