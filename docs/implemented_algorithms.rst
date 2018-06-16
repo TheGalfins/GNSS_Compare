@@ -77,7 +77,7 @@ by using the approximate receiver position. On the right hand side we have the u
 pseudorange equation one can form the observation matrix (H).
 
 *Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns
-that we are estimating directly in the EKF state vector. Check the GNSS Compare code (e.g., StaticExtendedKalmanFilter class) to understand how this is handled*
+that we are estimating directly in the EKF state vector. Check the GNSS Compare code (e.g., StaticExtendedKalmanFilter class) to understand how this is handled*.
 
 Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*.
 
@@ -92,7 +92,7 @@ In the case of a static user we have the following state vector at the epoch *k*
 In the above expression X, Y and Z are the coordinates in Earth Centered Earth Fixed (ECEF) frame and the last two parameters
 are the receiver clock bias and the receiver clock drift. All the parameters are expressed in units of meters.
 
-Now that the state vector is defined, we can move on choosing the dynamic model. However first, let's think a bit about this
+Now that the state vector is defined, we can move on by choosing the dynamic model. However first, let's think a bit about this
 aspect. A static user doesn't *change* his/hers position, therefore this means that over time the X, Y, Z coordinates remain
 the same! We only have to take care of how we model the dynamic behavior of the receiver's clock, which is approximated to be:
 
@@ -136,8 +136,7 @@ In the above expression the receiver clock related parameters are expressed as:
 .. math::
   S_f \approx \frac{h_0}{2}
 
-The parameter h-2 and h0 are the Power Spectral Density (PSD) of the random walk frequency noise and the PSD
-of the white noise, as defined in the suggested book above. Some typical values for a low quality Temperature
+The parameter h-2 and h0 are the Power Spectral Densities (PSD) of the random walk frequency noise and of the white noise, as defined in the suggested book above. Some typical values for a low quality Temperature
 Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practical advise before using this values
 is to take care that we are dealing with the parameters of a variance-covariance matrix and also that they have
 to be converted in units of meters (remember that we have expressed the receiver clock states in units of meters).
