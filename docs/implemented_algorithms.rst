@@ -117,7 +117,7 @@ We are almost done with the dynamic model elements. The only thing that we need 
 the process noise matrix contains the uncertainty we have in the dynamic model that we consider, we have to define it accordingly.
 In the static case we can assume that the user is not moving and that the receiver clock has some frequency and phase errors. In order to
 fully understand this reasoning, the interested reader is advised to check the following book: *Introduction to Random Signals and Applied Kalman Filtering*
-by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matrix is approximated to be:
+by Robert Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matrix is approximated to be:
 
 .. math::
   \mathbf{Q}_k =
@@ -170,7 +170,7 @@ a new process noise matrix. Which is exactly what we are going to do next, therf
    \end{pmatrix}
 
 
-For the process noise matrix we use the approach presented in the book of Rober Grover Brown and Patrick Y. C. Hwang
+For the process noise matrix we use the approach presented in the book of Robert Grover Brown and Patrick Y. C. Hwang
 ( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second time we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
 
 .. math::
