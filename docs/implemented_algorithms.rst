@@ -22,7 +22,7 @@ will also write about the tunning of the EKFs.
 
 Static user
 -----------
-In the case of a static user we have the following state vector at the epoch *k*:
+In the case of a static user we have the following state vector (x) at the epoch *k*:
 
 .. math::
 
@@ -40,7 +40,7 @@ the same! We only have to take care of how we model the dynamic behavior of the 
 .. math::
       \dot{\delta t}_{R,k} = \dot{\delta t}_{R,k-1}
 
-Having in view all of this information we can define the transition matrix of the filter as:
+Having in view all of this information we can define the transition matrix (F) of the filter as:
 
 .. math::
   \mathbf{F}_k =
@@ -55,5 +55,15 @@ Having in view all of this information we can define the transition matrix of th
 We are almost done with the dynamic model elements. The only thing that we need now is the process noise matrix (Q). Because
 the process noise matrix contains the uncertainty we have in the dynamic model that we consider, we have to define it accordingly.
 In the static case we are sure that the user is not moving and that the receiver clock has frequency and phase errors. In order to
-fully understand this reasoning, the interested reader is advised to check the following book *Introduction to Random Signals and Applied Kalman Filtering*
-by Rober Grover Brown and Patrick Y. C. Hwang.
+fully understand this reasoning, the interested reader is advised to check the following book: *Introduction to Random Signals and Applied Kalman Filtering*
+by Rober Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matrix is:
+
+.. math::
+  \mathbf{Q}_k =
+  \begin{pmatrix}
+           0 & 0 & 0 & 0 & 0 \\
+           0 & 0 & 0 & 0 & 0 \\
+           0 & 0 & 0 & 0 & 0 \\
+           0 & 0 & 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
+           0 & 0 & 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
+   \end{pmatrix}
