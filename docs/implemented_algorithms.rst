@@ -227,5 +227,13 @@ Another assumption that is made is that the measurements received at the k-th ep
 true at all* ). However here is an idea for you, maybe you can try investigating some interesting measurement weigthing methods and then
 *compare* (the main keyword of the whole project) the results you get with our not so realistic assumption. Let the researcher within you thrive!
 
+Let's move to the Q matrix now. For this we present three tunning examples: static, pedestrian and dynamic.
+
+**Static tunning**
+
+**Pedestrian tunning**
+
+**Dynamic tunning**
+
 Weighted Least Squares
 ======================
