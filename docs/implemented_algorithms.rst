@@ -318,7 +318,7 @@ For *n* observed satellites we have the following measurement model:
             \vdots & \vdots \\
             \mathbf{u}^n & 1\\
     \end{pmatrix}}_{\mathbf{H}}
-    \mathbf{\begin{pmatrix}
+    \underbrace{\begin{pmatrix}
              \delta \mathbf{r}^{\text{T}} \\
              \delta t_R\\
      \end{pmatrix}}_{\mathbf{x}}.
