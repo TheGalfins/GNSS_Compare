@@ -298,6 +298,15 @@ The linearized code-based pseudorange measurement is:
 Let's also express the unit line of sight vector as:
 
 .. math::
-    \mathbf{u} = \left[-\frac{X^S-X_0}{\rho_0}\Delta X,~~-\frac{Y^S-Y_0}{\rho_0}\Delta Y,~~,-\frac{Z^S-Z_0}{\rho_0}\Delta Z \right]
+    \mathbf{u} = \left[-\frac{X^S-X_0}{\rho_0},~~-\frac{Y^S-Y_0}{\rho_0},~~-\frac{Z^S-Z_0}{\rho_0} \right].
 
 For *n* observed satellites we have the following measurement model:
+
+.. math::
+  \mathbf{Q}_k =
+  \begin{pmatrix}
+           PR^1_c - \rho^1_0 + Corr^1 \\
+           PR^2_c - \rho^2_0 + Corr^2\\
+           \vdots \\
+           PR^n_c - \rho^n_0 + Corr^n\\
+   \end{pmatrix}.
