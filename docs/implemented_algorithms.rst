@@ -223,7 +223,7 @@ applications* ). Therefore, the diagonal elements of the R matrix are:
   \mathbf{R}_{ii,k} = \sigma^2_{ii}.
 
 To keep things relatively simple, we can assign the value for the sigma 10 meters ( *don't forget to square it before putting it in R* ).
-Another assumption that is made is that the measurements received at the k-th epoch have equal variances ( *ok, this is assumption is not
+Another assumption that is made is that the measurements received at the k-th epoch have equal variances ( *ok, this assumption is not
 true at all* ). However here is an idea for you, maybe you can try investigating some interesting measurement weigthing methods and then
 *compare* (the main keyword of the whole project) the results you get with our not so realistic assumption. Let the researcher within you thrive!
 
@@ -282,3 +282,9 @@ requires a minimum number of measurements (typically 4 if we want to estimate th
 
 Nevertheless is useful to have such an estimator as its behavior can be studied in real-time/post-processing in comparison with an EKF.
 And all this thanks to *GNSS Compare*!
+
+Altough the pseudorange measurement model was presented in the EKF description we will do it once more time just for the
+sake of completion.
+
+Pseudorange measurement model
+-----------------------------
