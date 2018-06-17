@@ -295,18 +295,29 @@ The linearized code-based pseudorange measurement is:
   PR_c - \rho_0 + \underbrace{(\delta t^S - d_{0,\text{ion}} - d_{0,\text{trop}})}_{Corr}
   = -\frac{X^S-X_0}{\rho_0}\Delta X-\frac{Y^S-Y_0}{\rho_0}\Delta Y-\frac{Z^S-Z_0}{\rho_0}\Delta Z+\delta t_R.
 
-Let's also express the unit line of sight vector as:
+Let's also express the unit line of sight vector and the position related unknowns as:
 
 .. math::
-    \mathbf{u} = \left[-\frac{X^S-X_0}{\rho_0},~~-\frac{Y^S-Y_0}{\rho_0},~~-\frac{Z^S-Z_0}{\rho_0} \right].
+    \mathbf{u} = \left[-\frac{X^S-X_0}{\rho_0},~~-\frac{Y^S-Y_0}{\rho_0},~~-\frac{Z^S-Z_0}{\rho_0} \right],
+.. math::
+    \delta\mathbf{r} = \left[\Delta X,~~\Delta Y,~~\Delta Z \right].
 
 For *n* observed satellites we have the following measurement model:
 
 .. math::
-  \mathbf{Q}_k =
   \begin{pmatrix}
            PR^1_c - \rho^1_0 + Corr^1 \\
            PR^2_c - \rho^2_0 + Corr^2\\
            \vdots \\
            PR^n_c - \rho^n_0 + Corr^n\\
-   \end{pmatrix}.
+   \end{pmatrix}
+   \begin{pmatrix}
+            \mathbf{u}^1 & 1\\
+            \mathbf{u}^2 & 2\\
+            \vdots & \vdots \\
+            \mathbf{u}^n & 1\\
+    \end{pmatrix}
+    \begin{pmatrix}
+             \delta \mathbf{r}^{\text{T}} \\
+             \delta t_R\\
+     \end{pmatrix}.
