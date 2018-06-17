@@ -73,7 +73,7 @@ and the receiver noise (epsilon).
    PR_c = \rho + \delta t_R - \delta t^S + d_{\text{ion}} + d_{\text{trop}} + \mathbf{\epsilon}
 
 We know, there are more effects that are perturbing the GNSS measurements, however
-we wish to keep things as simple as possible and the interested persons can always access some good books on this topic!
+we wish to keep things as simple as possible and the interested persons can always add more error sources in the *GNSS Compare's* code.
 
 The above equation is non-linear because of the geometric distance (rho) between the receiver and the GNSS satellite. Luckly we can
 linearize it if we have knowledge about an approximated position of the receiver (X0, Y0, Z0), which we do! We do have from the time prediction
