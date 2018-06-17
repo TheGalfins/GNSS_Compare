@@ -323,4 +323,7 @@ For *n* observed satellites we have the following measurement model:
              \delta t_R\\
      \end{pmatrix}}_{\mathbf{x}}.
 
-Test
+To estimate the vector of unknowns (x) in the WLS sense, we proceed in the following way:
+
+.. math::
+  \hat{\mathbf{x}} = \left(\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{H} \right)^{-1}\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{z}.
