@@ -80,7 +80,7 @@ linearize it if we have knowledge about an approximated position of the receiver
 step of the EKF. Taking this into account and applying a first order Taylor series expansion we obtain:
 
 .. math::
-  PR_c - \rho_0 + \delta t^S - d_{0,\text{ion}} - d_{0,\text{trop}} = -\frac{X^S-X_0}{\rho_0}\Delta X-\frac{Y^S-Y_0}{\rho_0}\Delta Y-\frac{Z^S-Z_0}{\rho_0}\Delta Z+\delta t_R
+  PR_c - \rho_0 + \delta t^S - d_{0,\text{ion}} - d_{0,\text{trop}} = -\frac{X^S-X_0}{\rho_0}\Delta X-\frac{Y^S-Y_0}{\rho_0}\Delta Y-\frac{Z^S-Z_0}{\rho_0}\Delta Z+\delta t_R.
 
 On the left side of the equation we have moved every term that can be computed. The subscript 0 means that those parameters are estimated
 by using the approximate receiver position information. On the right hand side we have the unknowns (dX, dY, dZ, dtR) and their coefficients. Based on the linearized
@@ -97,7 +97,7 @@ In the case of a static user we have the following state vector at the epoch *k*
 
 .. math::
 
-    \mathbf{x}_k = \left(X~~Y~~Z~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}
+    \mathbf{x}_k = \left(X~~Y~~Z~~\delta t_R~~\dot{\delta t}_R \right)^{\text{T}}.
 
 In the above expression X, Y and Z are the coordinates in Earth Centered Earth Fixed (ECEF) frame and the last two parameters
 are the receiver clock bias and the receiver clock drift. All the parameters are expressed in units of meters.
@@ -107,9 +107,9 @@ aspect. A static user doesn't *change* his/hers position, therefore this means t
 the same! We only have to take care of how we model the dynamic behavior of the receiver's clock, which is approximated to be:
 
 .. math::
-    \delta t_{R,k} = \delta t_{R,k-1} + \Delta T~\dot{\delta t}_{R,k-1}
+    \delta t_{R,k} = \delta t_{R,k-1} + \Delta T~\dot{\delta t}_{R,k-1},
 .. math::
-      \dot{\delta t}_{R,k} = \dot{\delta t}_{R,k-1}
+      \dot{\delta t}_{R,k} = \dot{\delta t}_{R,k-1}.
 
 Having in view all of this information we can define the transition matrix (F) of the filter as:
 
@@ -121,7 +121,7 @@ Having in view all of this information we can define the transition matrix (F) o
            0 & 0 & 1 & 0 & 0 \\
            0 & 0 & 0 & 1 & \Delta T \\
            0 & 0 & 0 & 0 & 1 \\
-   \end{pmatrix}
+   \end{pmatrix}.
 
 We are almost done with the dynamic model elements. The only thing that we need now is the process noise matrix (Q). Because
 the process noise matrix contains the uncertainty we have in the dynamic model that we consider, we have to define it accordingly.
@@ -137,14 +137,14 @@ by Robert Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise mat
            0~~~~& 0~~~~& 0 & 0 & 0 \\
            0~~~~& 0~~~~& 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
            0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
-   \end{pmatrix}
+   \end{pmatrix}.
 
 In the above expression the receiver clock related parameters are expressed as:
 
 .. math::
-  S_g \approx 2 \pi^2 h_{-2}
+  S_g \approx 2 \pi^2 h_{-2},
 .. math::
-  S_f \approx \frac{h_0}{2}
+  S_f \approx \frac{h_0}{2}.
 
 The parameter h-2 and h0 are the Power Spectral Densities (PSD) of the random walk frequency noise and of the white noise, as defined in the suggested book above. Some typical values for a low quality Temperature
 Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practical advise before using this values
@@ -177,7 +177,7 @@ new process noise matrix. Which is exactly what we are going to do next, therefo
            0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
            0 & 0 & 0 & 0 & 0 & 0 & 1 & \Delta T \\
            0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
-   \end{pmatrix}
+   \end{pmatrix}.
 
 
 For the process noise matrix we use the approach presented in the book of Robert Grover Brown and Patrick Y. C. Hwang
@@ -220,7 +220,7 @@ coming from different satellites ( *an assumption that is not entirely represeti
 applications* ). Therefore, the diagonal elements of the R matrix are:
 
 .. math::
-  \mathbf{R}_{ii,k} = \sigma^2_{ii}
+  \mathbf{R}_{ii,k} = \sigma^2_{ii}.
 
 To keep things relatively simple, we can assign the value for the sigma 10 meters ( *don't forget to square it before putting it in R* ).
 Another assumption that is made is that the measurements received at the k-th epoch have equal variances ( *ok, this is assumption is not
