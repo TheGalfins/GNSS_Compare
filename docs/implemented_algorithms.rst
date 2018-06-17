@@ -246,7 +246,19 @@ In the above we use the *c* notation for the speed of light.
 Intuitively we should have used the EKF designed for a dynamic user in this situation. It would only make sense as a pedestrian *changes* his/hers
 position over time. However, one must take into account that the pseudoranges delivered by the smartphone's GNSS receiver are quite noisy and if
 there are no other means to detect the motion of the user (e.g., using an Inertial Measurement Unit) then estimating the velocities can make our results not soo accurate.
-Having this situation in view we have found a workaround.
+Having this situation in view we have found a workaround: we use the EKF designed for a static user and we let some process noise for the X and Y coordinates ( *unless
+one of our users is not Superman we are not that interested in the Z direction* ). This means that we have the following Q matrix:
+
+.. math::
+  \mathbf{Q}_k =
+  \begin{pmatrix}
+           0~~~~& 0~~~~&0 & 0 & 0 \\
+           0~~~~& 0~~~~& 0 & 0 & 0 \\
+           0~~~~& 0~~~~& 0 & 0 & 0 \\
+           0~~~~& 0~~~~& 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
+           0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
+   \end{pmatrix}.
+
 
 **Dynamic tunning**
 
