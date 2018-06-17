@@ -230,6 +230,7 @@ true at all* ). However here is an idea for you, maybe you can try investigating
 Let's move to the Q matrix now. For this we present three tunning examples: static, pedestrian and dynamic.
 
 **Static tunning**
+
 For the static case we have already seen that we only have to take care about the process noise of the receiver clock states. So the values
 that we are assigning to the PSD of the random walk of the frequency noise and of the white noise are:
 
@@ -238,9 +239,14 @@ that we are assigning to the PSD of the random walk of the frequency noise and o
 .. math::
   h_0 = 2e-19~c^2.
 
-In the above we use the *c* notation for the speed of light. 
+In the above we use the *c* notation for the speed of light.
 
 **Pedestrian tunning**
+
+Intuitively we should have used the EKF designed for a dynamic user in this situation. It would only make sense as a pedestrian *changes* his/hers
+position over time. However, one must take into account that the pseudoranges delivered by the smartphone's GNSS receiver are quite noisy and if
+there are no other means to detect the motion of the user (e.g., using an Inertial Measurement Unit) then estimating the velocities can make our results not soo accurate.
+Having this situation in view we have found a workaround.
 
 **Dynamic tunning**
 
