@@ -252,15 +252,24 @@ one of our users is not Superman we are not that interested in the Z direction* 
 .. math::
   \mathbf{Q}_k =
   \begin{pmatrix}
-           0~~~~& 0~~~~&0 & 0 & 0 \\
-           0~~~~& 0~~~~& 0 & 0 & 0 \\
+           0.2~~~~& 0~~~~&0 & 0 & 0 \\
+           0~~~~& 0.2~~~~& 0 & 0 & 0 \\
            0~~~~& 0~~~~& 0 & 0 & 0 \\
            0~~~~& 0~~~~& 0 & S_f+\frac{S_g~\Delta T^3}{3} & \frac{S_g~\Delta T^2}{2} \\
            0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}.
 
+The value 0.2 was chosen by trial and error and it fits a *slow* walking pedestrian.
 
 **Dynamic tunning**
+
+Finally we have arrived at the final case regarding the tunning of the dynamic EKF. Again the following values were determined empirically:
+
+.. math::
+  S_X = S_Y = 0.8,
+.. math::
+  S_Z = 0.08.
+
 
 Weighted Least Squares
 ======================
