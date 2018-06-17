@@ -305,21 +305,22 @@ Let's also express the unit line of sight vector and the position related unknow
 For *n* observed satellites we have the following measurement model:
 
 .. math::
-  \begin{pmatrix}
+  \underbrace{\begin{pmatrix}
            PR^1_c - \rho^1_0 + Corr^1 \\
            PR^2_c - \rho^2_0 + Corr^2\\
            \vdots \\
            PR^n_c - \rho^n_0 + Corr^n\\
-   \end{pmatrix}
-   \begin{pmatrix}
+   \end{pmatrix}}_{\mathbf{z}}
+   =
+   \underbrace{\begin{pmatrix}
             \mathbf{u}^1 & 1\\
             \mathbf{u}^2 & 2\\
             \vdots & \vdots \\
             \mathbf{u}^n & 1\\
-    \end{pmatrix}
-    \begin{pmatrix}
+    \end{pmatrix}}_{\mathbf{H}}
+    \mathbf{\begin{pmatrix}
              \delta \mathbf{r}^{\text{T}} \\
              \delta t_R\\
-     \end{pmatrix}.
+     \end{pmatrix}}_{\mathbf{x}}.
 
 Test
