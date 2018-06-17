@@ -214,6 +214,11 @@ Because at the moment we are dealing with a standard EKF and not an adaptive one
 assign values in the process noise matrix (Q) and in the measurement noise matrix (R) such that the filter
 is tunned to our situation.
 
+Let's start with the R matrix. We set R to be a diagonal matrix containing the variances of each pseudorange measurement.
+The measurement noise matrix being diagonal relies on the assumption that there is no cross-correlation between the measurements
+coming from different satellites ( *an assumption that is not entirely represeting the reality, however it fits most of the
+applications* ).
+
 
 
 Weighted Least Squares
