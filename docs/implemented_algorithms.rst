@@ -181,7 +181,7 @@ new process noise matrix. Which is exactly what we are going to do next, therefo
 
 
 For the process noise matrix we use the approach presented in the book of Robert Grover Brown and Patrick Y. C. Hwang
-( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the second time we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
+( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the third time we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
 
 .. math::
   \mathbf{Q}_k =
@@ -209,6 +209,12 @@ is avoided.*
 
 Filter tunning
 -----------------------------
+
+Because at the moment we are dealing with a standard EKF and not an adaptive one this means that we have to
+assign values in the process noise matrix (Q) and in the measurement noise matrix (R) such that the filter
+is tunned to our situation.
+
+
 
 Weighted Least Squares
 ======================
