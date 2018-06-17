@@ -14,8 +14,8 @@ The information here can be associated with the following Java classes:
 
 *WeightedLeastSquares*
 
-Kalman Filter
-=============
+Extended Kalman Filter
+======================
 
 One of the estimation techniques implemented in the *GNSS Compare* framework is the Kalman Filter.
 Taking into account that the measurement model is linearized about the time predicted position, in fact the implementation
@@ -281,4 +281,4 @@ are some drawbacks like: the quality of the estimations fully depends on the qua
 requires a minimum number of measurements (typically 4 if we want to estimate the 3D position and the receiver clock bias).
 
 Nevertheless is useful to have such an estimator as its behavior can be studied in real-time/post-processing in comparison with an EKF.
-And all this thanks to *GNSS Compare*! 
+And all this thanks to *GNSS Compare*!
