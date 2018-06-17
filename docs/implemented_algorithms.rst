@@ -259,7 +259,8 @@ one of our users is not Superman we are not that interested in the Z direction* 
            0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}.
 
-The value 0.2 was chosen by trial and error and it fits a *slow* walking pedestrian.
+The value 0.2 was chosen by trial and error and it fits a *slow* walking pedestrian. We hope that the name of the Java class
+*PedestrianStaticExtendedKalmanFilter* makes a little bit more sense now.
 
 **Dynamic tunning**
 
