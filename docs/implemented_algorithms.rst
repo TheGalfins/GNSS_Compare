@@ -288,3 +288,9 @@ sake of completion.
 
 Pseudorange measurement model
 -----------------------------
+
+The linearized code-based pseudorange measurement is:
+
+.. math::
+  PR_c - \rho_0 + \underbrace{(\delta t^S - d_{0,\text{ion}} - d_{0,\text{trop}})}_{Corr}
+  = -\frac{X^S-X_0}{\rho_0}\Delta X-\frac{Y^S-Y_0}{\rho_0}\Delta Y-\frac{Z^S-Z_0}{\rho_0}\Delta Z+\delta t_R.
