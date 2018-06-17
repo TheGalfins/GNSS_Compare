@@ -230,6 +230,15 @@ true at all* ). However here is an idea for you, maybe you can try investigating
 Let's move to the Q matrix now. For this we present three tunning examples: static, pedestrian and dynamic.
 
 **Static tunning**
+For the static case we have already seen that we only have to take care about the process noise of the receiver clock states. So the values
+that we are assigning to the PSD of the random walk of the frequency noise and of the white noise are:
+
+.. math::
+  h_{-2} = 2e-20~c^2,
+.. math::
+  h_0 = 2e-19~c^2.
+
+In the above we use the *c* notation for the speed of light. 
 
 **Pedestrian tunning**
 
