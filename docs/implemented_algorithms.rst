@@ -314,7 +314,7 @@ For *n* observed satellites we have the following measurement model:
    =
    \underbrace{\begin{pmatrix}
             \mathbf{u}^1 & 1\\
-            \mathbf{u}^2 & 2\\
+            \mathbf{u}^2 & 1\\
             \vdots & \vdots \\
             \mathbf{u}^n & 1\\
     \end{pmatrix}}_{\mathbf{H}}
@@ -326,4 +326,7 @@ For *n* observed satellites we have the following measurement model:
 To estimate the vector of unknowns (x) in the WLS sense, we proceed in the following way:
 
 .. math::
-  \hat{\mathbf{x}} = \left(\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{H} \right)^{-1}\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{z}.
+  \hat{\mathbf{x}}_{\text{WLS}} = \left(\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{H} \right)^{-1}\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{z}.
+
+*Practical advise: In the WLS case, as the position is concerned, we are estimating the change in the position and not directly the position. We encourage you to check the
+WeightedLeastSquares class to see how this is handled.*
