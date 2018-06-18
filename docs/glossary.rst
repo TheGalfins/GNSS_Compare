@@ -11,6 +11,17 @@ Global Navigation Satellite Systems Glossary
 ============================================
 
 
+.. _gnss:
+
+Global Navigation Satellite Systems
+-----------------------------------
+
+.. _pseudorange:
+
+Pseudorange
+-----------
+
+
 .. _pvt:
 
 Position, Velocity and Time
@@ -31,7 +42,7 @@ Software Engineering Glossary
 Polymorphism
 ------------
 
-According to Wikipedia_, *Polymorphism is the provision of a single interface to entities of different types*. In Java this is achieved due to class inheritance. 
+According to Wikipedia_, *Polymorphism is the provision of a single interface to entities of different types*. In Java this is achieved due to class inheritance.
 
 
 .. _Wikipedia: https://en.wikipedia.org/wiki/Polymorphism_(computer_science)
