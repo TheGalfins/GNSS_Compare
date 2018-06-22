@@ -8,4 +8,4 @@ enormous amounts of tea [*]_ in order to develop *GNSS Compare*!
 
 
 
-.. [*] Typically is coffee, but we like to approach things differently. 😊
+.. [*] Typically it's coffee, but we like to approach things differently. 😊
