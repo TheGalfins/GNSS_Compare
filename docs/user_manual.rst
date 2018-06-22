@@ -5,7 +5,7 @@ User manual
 
 In order to fully understand what's under the hood for GNSS Compare, we must introduce a few terms we are using through the application. It's going to be a very general explanation -- if something will be not clear, please take a look at our :ref:`Glossary`. We hope you'll find answers to more detailed questions there.
 
-Let's start with the basics. GNSS compare allows the user to calculate the phone's location, based on phone's measurements of satellite signals. This is normally done by the phone automatically, but with the recent release of Android API 24 and the `GnssMeasurement`_ class, developers gained access to unprocessed measurements. This can be used e.g. by GNSS scientists and researchers to come up with new, more precise or less resource intense methods for precise positioning. GNSS Compare is basically a tool for such scientists to compare their algorithms. And if you're not an GNSS expert, it can be a tool for you to learn more on this subject. And believe me - there's a lot of interesting things to learn.
+Let's start with the basics. GNSS compare allows the user to calculate the phone's location, based on phone's measurements of satellite signals. This is normally done by the phone automatically, but with the recent release of Android API 24 and the `GnssMeasurement`_ class, developers gained access to unprocessed measurements. This can be used e.g. by GNSS scientists and researchers to come up with new, more precise or less resource intense methods for precise positioning. GNSS Compare is basically a tool for such scientists to compare their algorithms. And if you're not an GNSS expert, it can be a tool for you to learn more on this subject. And believe me -- there's a lot of interesting things to learn.
 
 Constellation
 =============
@@ -36,8 +36,13 @@ In the context of GNSS Compare, a ``Correction`` is a class, which provides a me
 - the satellite's position,
 - additional data, stored in the :ref:`ephemeris<ephemeris>` data
 
-The general rule is simple - the more corrections are applied, the more accurate the final position.
+The general rule is simple -- the more corrections are applied, the more accurate the final position.
 
+
+PVT Estimator
+=============
+
+The idea is quite simple. PVT estimators are algorithms which take as input satellite positions and pseudoranges to those satellites and try to estimate the receiver's position, velocity and time. In fact, the simpler ones estimate just the position and time. Let's take a look at the estimated values. Position is quite obvious - that's what we would want to get from this whole process. In some cases, we can use the signal characteristics to improve the estimation of the receiver's velocity, thus increasing the accuracy of future position estimations. And finally, we need to estimate the time of reception, because we need to know the time of the reception of the signal very precisely. 
 
 
 .. _`GnssMeasurement`: https://developer.android.com/reference/android/location/GnssMeasurement
