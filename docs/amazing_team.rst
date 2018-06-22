@@ -1,8 +1,11 @@
 
-******************************
-The GNSS Compare's developers
-******************************
+*************************
+GNSS Compare Hall of Fame
+*************************
 
 In this section we present you the amazing people that were fueled by
-enormous amounts of tea ( *typically is coffee, however we like to approach things differently ;)* )
-in order to develop *GNSS Compare*!
+enormous amounts of tea [*]_ in order to develop *GNSS Compare*!
+
+
+
+.. [*] Typically is coffee, but we like to approach things differently. 😊
