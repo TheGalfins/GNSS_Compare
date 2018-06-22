@@ -36,7 +36,7 @@ In the context of GNSS Compare, a ``Correction`` is a class, which provides a me
 - the satellite's position,
 - additional data, stored in the :ref:`ephemeris<ephemeris>` data
 
-The general rule is simple - the more corrections are applied, the more accurate the final position. 
+The general rule is simple - the more corrections are applied, the more accurate the final position.
 
 
 
