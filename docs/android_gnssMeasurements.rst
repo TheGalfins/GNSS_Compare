@@ -24,7 +24,9 @@ Roughly speaking, the pseudorange is the difference between the time of signal r
 
 .. code-block:: java
     galileoTime = TimeNanos - (FullBiasNanos + BiasNanos)
+.. code-block:: java
     tRxGalileoTOW = galileotTime (modulo) Constants.NUMBER_NANO_SECONDS_PER_WEEK
+.. code-block:: java
     tRxGalileoE1_2nd = galileotTime (modulo) Constants.NumberNanoSeconds100Milli
 
 
