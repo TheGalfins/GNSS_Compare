@@ -17,6 +17,9 @@ The variable names used in the description of the algorithms are the same as the
 the definition of each used variable (e.g., *ReceivedSvTimeNanos*) can be found on the `Android Developer`_ webpage or in the white paper mentioned above. We will keep things
 straight forward in this section.
 
+A final note, the pseduroanges computed here are based on the ranging codes that modulate the L1 carrier signal.
+
+
 Galileo
 =======
 
@@ -76,9 +79,18 @@ Finally, we do the following check and we decide which computed pseudorange we u
 GPS
 ====
 
+We follow a similar approach for GPS also by starting to compute the time of signal reception:
 
+.. code-block:: java
 
+       gpsTime = TimeNanos - (FullBiasNanos + BiasNanos);
+       tRxGPS  = gpsTime + TimeOffsetNanos;
 
+In the next step we compute in a more straight forward way the GPS pseudorange:
+
+.. code-block:: java
+       weekNumberNanos = Math.floor((-1. * FullBiasNanos) / Constants.NUMBER_NANO_SECONDS_PER_WEEK)*onstants.NUMBER_NANO_SECONDS_PER_WEEK;
+       pseudorange = (tRxGPS - weekNumberNanos - ReceivedSvTimeNanos) / 1.0E9 * Constants.SPEED_OF_LIGHT;
 
 
 
