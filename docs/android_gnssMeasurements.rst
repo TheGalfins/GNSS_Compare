@@ -74,7 +74,6 @@ Finally, we do the following check and we decide which computed pseudorange we u
 
     }
 
-
 GPS
 ====
 
