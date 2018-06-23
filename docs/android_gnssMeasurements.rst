@@ -23,10 +23,9 @@ Galileo
 Roughly speaking, the pseudorange is the difference between the time of signal reception and the time of signal transmission multiplied by they speed of light. Therefore, let's see how we compute the time of signal reception with the Android raw parameters:
 
 .. code-block:: java
+
     galileoTime = TimeNanos - (FullBiasNanos + BiasNanos)
-.. code-block:: java
     tRxGalileoTOW = galileotTime (modulo) Constants.NUMBER_NANO_SECONDS_PER_WEEK
-.. code-block:: java
     tRxGalileoE1_2nd = galileotTime (modulo) Constants.NumberNanoSeconds100Milli
 
 
