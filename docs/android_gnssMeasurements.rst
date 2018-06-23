@@ -17,7 +17,7 @@ The variable names used in the description of the algorithms are the same as the
 the definition of each used variable (e.g., *ReceivedSvTimeNanos*) can be found on the `Android Developer`_ webpage or in the white paper mentioned above. We will keep things
 straight forward in this section.
 
-A final note, the pseduroanges computed here are based on the ranging codes that modulate the L1 carrier signal.
+As an additional informative note, the pseduroanges computed here are based on the ranging codes that modulate the L1 carrier signal.
 
 
 Galileo
@@ -93,6 +93,35 @@ In the next step we compute in a more straight forward way the GPS pseudorange:
        weekNumberNanos = Math.floor((-1. * FullBiasNanos) / Constants.NUMBER_NANO_SECONDS_PER_WEEK)*onstants.NUMBER_NANO_SECONDS_PER_WEEK;
        pseudorange = (tRxGPS - weekNumberNanos - ReceivedSvTimeNanos) / 1.0E9 * Constants.SPEED_OF_LIGHT;
 
+Also for GPS we have to check if the computed pseduroange is usable in PVT or not. Therefore, we get the states status:
+
+.. code-block:: java
+
+   int measState = measurement.getState();
+
+We apply again the bitwise AND operator to see if the TOW is decoded and if the receiver locked on the signal's code:
+
+.. code-block:: java
+
+    boolean codeLock = (measState & GnssMeasurement.STATE_CODE_LOCK) > 0;
+    boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) > 0;
+
+Additionaly we can add an extra criteria, a criteria that checks for the uncertainty in the determined TOW:
+
+.. code-block:: java
+
+     private static final int MAXTOWUNCNS = 50;    // [nanoseconds]
+     boolean towUncertainty = measurement.getReceivedSvTimeUncertaintyNanos() < MAXTOWUNCNS;
+
+Finally we decide to use or not the GPS pseduorange based on the following check:
+
+.. code-block:: java
+
+     if(codeLock && towDecoded && towUncertainty && pseudorange < 1e9){
+
+        // use pseudorange
+
+     }
 
 
 
