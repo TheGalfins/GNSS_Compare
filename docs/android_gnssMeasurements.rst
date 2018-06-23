@@ -38,7 +38,7 @@ Therefore we will use *tRxGalileoTOW* and *tRxGalileoE1_2nd* to compute two pseu
 
    tTxGalileo = ReceivedSvTimeNanos + TimeOffsetNanos;
 
-Finally the two pseudoranges are:
+The two pseudoranges are:
 
 .. code-block:: java
 
@@ -59,6 +59,20 @@ With the help of the bitwise AND operation we can identify if the seeked states 
     boolean towKnown = (measState & GnssMeasurement.STATE_TOW_KNOWN) > 0;
     boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) > 0;
     boolean codeLock = (measState & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) > 0;
+
+Finally, we do the following check and we decide which computed pseudorange we use:
+
+.. code-block:: java
+
+    if ((towKnown || towDecoded)) {
+
+        // use pseudorangeTOW
+
+    }else if (codeLock){
+
+       // pseudorangeE1_2nd
+
+    }
 
 
 GPS
