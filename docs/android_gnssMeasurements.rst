@@ -14,13 +14,20 @@ At the code level, you can find the algorithms in the following Java classes:
 *GpsConstellation*
 
 The variable names used in the description of the algorithms are the same as the ones in the GNSS Compare's code. Moreover,
-the definition of each used variable (e.g., ReceivedSvTimeNanos) can be found on the `Android Developer`_ webpage. We will keep things
+the definition of each used variable (e.g., ReceivedSvTimeNanos) can be found on the `Android Developer`_ webpage or in the white paper mentioned above. We will keep things
 straight forward in this section.
 
 Galileo
 =======
 
+Roughly speaking, the pseudorange is the difference between the time of signal reception and the time of signal transmission multiplied by they speed of light. Therefore, let's see how we compute the time of signal reception with the Android raw parameters:
 
+.. math::
+  galileoTime = TimeNanos - (FullBiasNanos + BiasNanos),
+.. math::
+  tRxGalileoTOW = galileotTime (modulo) Constants.NUMBER_NANO_SECONDS_PER_WEEK,
+.. math::
+  tRxGalileoE1_2nd = galileotTime (modulo) Constants.NumberNanoSeconds100Milli.
 
 
 GPS
