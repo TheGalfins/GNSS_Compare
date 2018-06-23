@@ -24,13 +24,26 @@ Roughly speaking, the pseudorange is the difference between the time of signal r
 
 .. code-block:: java
 
-    galileoTime = TimeNanos - (FullBiasNanos + BiasNanos)
-    tRxGalileoTOW = galileoTime % Constants.NUMBER_NANO_SECONDS_PER_WEEK
-    tRxGalileoE1_2nd = galileoTime % Constants.NumberNanoSeconds100Milli
+    galileoTime = TimeNanos - (FullBiasNanos + BiasNanos);
+    tRxGalileoTOW = galileoTime % Constants.NUMBER_NANO_SECONDS_PER_WEEK;
+    tRxGalileoE1_2nd = galileoTime % Constants.NumberNanoSeconds100Milli;
 
 It may look a bit strange that we compute two times of reception ( *tRxGalileoTOW* and *tRxGalileoE1_2nd*) however there is an
 explanation behind this. We have to be aware of the fact that Galileo signals have more complex modulation schemes if compared with the legacy signals of GPS. In this sense, processing Galileo signals requires more effort from the GNSS receiver. Now in order to use the Galileo pseudoranges in the PVT estimation, these pseudoranges have to pass some kind of health check. One of these checks looks if the Time Of Week (TOW) parameter is decoded or determined from other sources (e.g., mobile network), and the other one checks if the smartphone's GNSS receiver is locked on the Galileo E1 secondary code. We will see soon how this is handled. However, we will not deal with the theoretical background in order to reason the approach presented here because it
 does require some advanced receiver GNSS signal processing knowledge and at this point this is outside of our aims. In exchange, we can advise the curious minds to check a book on GNSS signal structures, like *Engineering Satellite-Based Navigation and Timing: Global Navigation Satellite Systems, Signals and Receivers by John W. Betz*.
+
+Therefore we will use *tRxGalileoTOW* and *tRxGalileoE1_2nd* to compute two pseudoranges and we will use only one them, the one that manages to pass the health check of course!. Now let's compute the time of signal transmission:
+
+.. code-block:: java
+
+   tTxGalileo = ReceivedSvTimeNanos + TimeOffsetNanos;
+
+Finally the two pseudoranges are:
+
+.. code-block:: java
+
+   pseudorangeTOW = (tRxGalileoTOW - tTxGalileo) * 1e-9 * Constants.SPEED_OF_LIGHT;
+   pseudorangeE1_2nd = ((galileoTime - tTxGalileo) % Constants.NumberNanoSeconds100Milli) * 1e-9 * Constants.SPEED_OF_LIGHT;
 
 
 GPS
