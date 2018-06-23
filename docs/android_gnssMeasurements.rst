@@ -32,7 +32,7 @@ It may look a bit strange that we compute two times of reception ( *tRxGalileoTO
 explanation behind this. We have to be aware of the fact that Galileo signals have more complex modulation schemes if compared with the legacy signals of GPS. In this sense, processing Galileo signals requires more effort from the GNSS receiver. Now in order to use the Galileo pseudoranges in the PVT estimation, these pseudoranges have to pass some kind of health check. One of these checks looks if the Time Of Week (TOW) parameter is decoded or determined from other sources (e.g., mobile network), and the other one checks if the smartphone's GNSS receiver is locked on the Galileo E1 secondary code. We will see soon how this is handled. However, we will not deal with the theoretical background in order to reason the approach presented here because it
 does require some advanced receiver GNSS signal processing knowledge and at this point this is outside of our aims. In exchange, we can advise the curious minds to check a book on GNSS signal structures, like *Engineering Satellite-Based Navigation and Timing: Global Navigation Satellite Systems, Signals and Receivers by John W. Betz*.
 
-Therefore we will use *tRxGalileoTOW* and *tRxGalileoE1_2nd* to compute two pseudoranges and we will use only one them, the one that manages to pass the health check of course!. Now let's compute the time of signal transmission:
+Therefore we will use *tRxGalileoTOW* and *tRxGalileoE1_2nd* to compute two pseudoranges and we will use only one them, the one that manages to pass the health check of course! Now let's compute the time of signal transmission:
 
 .. code-block:: java
 
@@ -44,6 +44,21 @@ Finally the two pseudoranges are:
 
    pseudorangeTOW = (tRxGalileoTOW - tTxGalileo) * 1e-9 * Constants.SPEED_OF_LIGHT;
    pseudorangeE1_2nd = ((galileoTime - tTxGalileo) % Constants.NumberNanoSeconds100Milli) * 1e-9 * Constants.SPEED_OF_LIGHT;
+
+We have said that we need to test these two pseudoranges for some criteria. And the Java object containing the *health status* or
+the *states* that we wish to find if they are true or not is:
+
+.. code-block:: java
+
+   int measState = measurement.getState();
+
+With the help of the bitwise AND operation we can identify if the seeked states are true or not. Please check the `Android Developer`_ website to have a better insight of this process:
+
+.. code-block:: java
+
+    boolean towKnown = (measState & GnssMeasurement.STATE_TOW_KNOWN) > 0;
+    boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) > 0;
+    boolean codeLock = (measState & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) > 0;
 
 
 GPS
