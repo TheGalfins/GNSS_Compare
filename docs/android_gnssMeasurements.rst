@@ -93,7 +93,7 @@ In the next step we compute in a more straight forward way the GPS pseudorange:
        weekNumberNanos = Math.floor((-1. * FullBiasNanos) / Constants.NUMBER_NANO_SECONDS_PER_WEEK)*onstants.NUMBER_NANO_SECONDS_PER_WEEK;
        pseudorange = (tRxGPS - weekNumberNanos - ReceivedSvTimeNanos) / 1.0E9 * Constants.SPEED_OF_LIGHT;
 
-Also for GPS we have to check if the computed pseduroange is usable in PVT or not. Therefore, we get the states status:
+We have to check if the computed pseudorange is usable in PVT or not. Therefore, we get the states status:
 
 .. code-block:: java
 
