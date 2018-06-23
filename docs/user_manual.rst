@@ -12,7 +12,7 @@ Constellation
 
 There are a few :ref:`Global Navigation Satellite Systems<gnss>` on the planet. Or actually - around the planet: the `Global Positioning System`_ (GPS), owned by the US Government, `Glonass`_, owned by the Russian Federation, Chineese system `BeiDou`_, and of course `Galileo`_, owned by the European Union, which is set to soon become fully operational.
 
-Each of those constellations consists of a set of 20-30 satellites orbiting above our heads at an altitude of around 20000 km. So many satellites are needed, because the system operator assures that from each spot on Earth, at any time of the day, at least four satellites are visible (and usually a lot more). Those satellites are constantly broadcasting a signal, which among other parameters contains a timestamp. The receiver then receives the signal, compares the timestamp with current time, and thanks to that is able to calculate the distance to the satellite. Knowing the time of transmission and satellites orbital parameters (retrieved from a special server in the form of :ref:`ephemeris<ephemeris>` data) it's also possible to calcualte the satellite's current position in space. Of course - the details of how those calculations are performed vary slightly from constellation to constellation.
+Each of those constellations consists of a set of 20-30 satellites orbiting above our heads at an altitude of around 20000 km. So many satellites are needed, because the system operator assures that from each spot on Earth, at any time of the day, at least four satellites are visible (and usually a lot more). Those satellites are constantly broadcasting a signal, which among other parameters contains a timestamp. The receiver then receives the signal, compares the timestamp with current time, and thanks to that is able to calculate the distance to the satellite. Knowing the time of transmission and the satellites orbital parameters (retrieved from a special server in the form of :ref:`ephemeris<ephemeris>` data or extracted from the received signal iteself) it's also possible to calcualte the satellite's current position in space. Of course - the details of how those calculations are performed vary slightly from constellation to constellation.
 
 In the context of GNSS Compare, a ``Constellation``, is a class, which defines those two properties:
 
@@ -25,7 +25,7 @@ In this context, the constellations can be treated individually, e.g. we separat
 Corrections
 ===========
 
-As the signal travels from the satellite, it's prone to a number of distortions and interferences, which bend it's path and make it appear more distant or closer. For precise positioning, we need to estimate the distance to the satellite with a precision of few meters over thousands of kilometers, so we need to remove from the signal any disturbances we might know of.
+As the signal travels from the satellite, it's prone to a number of distortions and interferences, which bend it's path and make it appear more distant or closer. For a more accurate positioning, we need to estimate the distance to the satellite with a precision of few meters over thousands of kilometers, so we need to remove from the signal any disturbances we might know of.
 
 Those disturbances are estimated using various, more or less complicated, mathematical models of the natural phenomena. Those models allow us to calculate corrections, which are later applied to the pseudorances. The most commonly used corrections are ionospheric, tropospheric and those including relativistic effects.
 
@@ -42,8 +42,7 @@ The general rule is simple -- the more corrections are applied, the more accurat
 PVT Estimator
 =============
 
-The idea is quite simple. PVT estimators are algorithms which take as input satellite positions and pseudoranges to those satellites and try to estimate the receiver's position, velocity and time. In fact, the simpler ones estimate just the position and time. Let's take a look at the estimated values. Position is quite obvious - that's what we would want to get from this whole process. In some cases, we can use the signal characteristics to improve the estimation of the receiver's velocity, thus increasing the accuracy of future position estimations. And finally, we need to estimate the time of reception, because we need to know the time of the reception of the signal very precisely.
-
+The idea is quite simple. PVT estimators are algorithms which take as input satellite positions and pseudoranges to those satellites and aim to estimate the receiver's position, velocity and time. In fact, the simpler ones estimate just the position and time. Let's take a look at the parameters we wish to estimate. Position is quite obvious - that's what we would want to get from this whole process. In some cases, we can use the signal characteristics to improve the estimation of the receiver's velocity (e.g., using doppler measurements), thus increasing the accuracy of the position estimations. And finally, we need to estimate the receiver clock bias with respect to the used satellite navigation system.
 
 .. _`GnssMeasurement`: https://developer.android.com/reference/android/location/GnssMeasurement
 .. _`Global Positioning System`: https://www.gps.gov/
