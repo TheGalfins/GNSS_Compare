@@ -24,8 +24,6 @@ Roughly speaking, the pseudorange is the difference between the time of signal r
 
 .. java::
   galileoTime = TimeNanos - (FullBiasNanos + BiasNanos),
-  tRxGalileoTOW = galileotTime (modulo) Constants.NUMBER_NANO_SECONDS_PER_WEEK,
-  tRxGalileoE1_2nd = galileotTime (modulo) Constants.NumberNanoSeconds100Milli.
 
 
 GPS
