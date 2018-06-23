@@ -89,6 +89,7 @@ We follow a similar approach for GPS also by starting to compute the time of sig
 In the next step we compute in a more straight forward way the GPS pseudorange:
 
 .. code-block:: java
+
        weekNumberNanos = Math.floor((-1. * FullBiasNanos) / Constants.NUMBER_NANO_SECONDS_PER_WEEK)*onstants.NUMBER_NANO_SECONDS_PER_WEEK;
        pseudorange = (tRxGPS - weekNumberNanos - ReceivedSvTimeNanos) / 1.0E9 * Constants.SPEED_OF_LIGHT;
 
