@@ -18,18 +18,19 @@ Welcome to GNSS Compare's documentation!
 Please stay tuned, as this is still a demo version...
 
 .. toctree::
-   :maxdepth: 2
-   :caption: GNSS Compare
+    :maxdepth: 2
+    :caption: GNSS Compare
 
-   description
-   amazing_team
-   android_gnssMeasurements
-   glossary
+    description
+    amazing_team
+    android_gnssMeasurements
+    glossary
 
 
 ***********
 User Manual
 ***********
+
 .. toctree::
     :maxdepth: 2
     :caption: User manual
