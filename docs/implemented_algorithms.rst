@@ -6,13 +6,13 @@ Implemented PVT Algorithms
 In this section we provide the theoretical aspects behind the *GNSS Compare's* PVT algorithms.
 The information here can be associated with the following Java classes:
 
-*StaticExtendedKalmanFilter*
+- ``StaticExtendedKalmanFilter``
 
-*DynamicExtendedKalmanFilter*
+- ``DynamicExtendedKalmanFilter``
 
-*PedestrianStaticExtendedKalmanFilter (indeed, this one sounds a bit strange however bear with us as explanations will be given when the filter tunning is explained)*
+- ``PedestrianStaticExtendedKalmanFilter`` - this one sounds a bit strange, however bear with us as explanations will be given when the filter tunning is explained
 
-*WeightedLeastSquares*
+- ``WeightedLeastSquares``
 
 Extended Kalman Filter
 ======================
@@ -93,6 +93,7 @@ Good, now we can see how the EKF was implemented for the *static user* and the *
 
 Static user
 -----------
+
 In the case of a static user we have the following state vector at the epoch *k*:
 
 .. math::
