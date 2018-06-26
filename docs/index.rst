@@ -35,8 +35,8 @@ User Manual
     :maxdepth: 2
     :caption: User manual
 
-    user_manual/intro
-    user_manual/gnss_basics
-    user_manual/code_basics
-    user_manual/android_gnssMeasurements
-    user_manual/implemented_algorithms
+    user_manual/intro.rst
+    user_manual/gnss_basics.rst
+    user_manual/code_basics.rst
+    user_manual/android_gnssMeasurements.rst
+    user_manual/implemented_algorithms.rst
