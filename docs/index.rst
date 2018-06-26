@@ -19,11 +19,24 @@ Please stay tuned, as this is still a demo version...
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents
+   :caption: GNSS Compare
 
    description
    amazing_team
-   user_manual
    android_gnssMeasurements
-   implemented_algorithms
    glossary
+
+
+***********
+User Manual
+***********
+
+.. toctree::
+    :maxdepth: 2
+    :caption: User manual
+
+    user_manual/intro
+    user_manual/gnss_basics
+    user_manual/code_basics
+    user_manual/android_gnssMeasurements
+    user_manual/implemented_algorithms
