@@ -17,4 +17,4 @@ In order to fully understand what's under the hood for GNSS Compare, we must int
 
 
 
-    .. _`GnssMeasurement`: https://developer.android.com/reference/android/location/GnssMeasurement
+.. _`GnssMeasurement`: https://developer.android.com/reference/android/location/GnssMeasurement
