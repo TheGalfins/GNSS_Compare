@@ -9,9 +9,9 @@
     :alt: Project logo
 
 
-
+************
 Introduction
-========================================
+************
 
 Welcome to GNSS Compare's documentation!
 
