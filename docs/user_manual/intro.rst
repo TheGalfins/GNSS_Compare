@@ -1,7 +1,7 @@
 
-***********
-User manual
-***********
+************
+Introduction
+************
 
 Let's start with the basics. GNSS compare allows the user to calculate the phone's location, based on the phone's GNSS pseudorange measurements. This is normally done by the phone automatically, however with the recent release of Android API 24 and the `GnssMeasurement`_ class, developers gained access to unprocessed pseudorange measurements. This can be used e.g., by GNSS scientists and researchers to come up with new, more precise or less resource intense methods for precise positioning. GNSS Compare is basically a tool for such scientists to compare their algorithms. And if you're not an GNSS expert, it can be a tool for you to learn more on this subject. And believe me -- there's a lot of interesting things to learn.
 

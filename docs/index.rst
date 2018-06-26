@@ -27,10 +27,6 @@ Please stay tuned, as this is still a demo version...
     glossary
 
 
-***********
-User Manual
-***********
-
 .. toctree::
     :maxdepth: 2
     :caption: User manual
