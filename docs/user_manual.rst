@@ -14,3 +14,7 @@ In order to fully understand what's under the hood for GNSS Compare, we must int
 
     um_gnss_basics
     um_code_basics
+
+
+
+    .. _`GnssMeasurement`: https://developer.android.com/reference/android/location/GnssMeasurement

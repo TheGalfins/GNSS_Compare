@@ -44,7 +44,6 @@ In the context of GNSS Compare, the ``PvtMethod`` class does exactly that. It's 
 
 
 
-.. _`GnssMeasurement`: https://developer.android.com/reference/android/location/GnssMeasurement
 .. _`Global Positioning System`: https://www.gps.gov/
 .. _`Glonass`: https://www.glonass-iac.ru/en/
 .. _`BeiDou`: http://en.chinabeidou.gov.cn/
