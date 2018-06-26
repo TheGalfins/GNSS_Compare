@@ -8,7 +8,9 @@ Let's start with the basics. GNSS compare allows the user to calculate the phone
 In order to fully understand what's under the hood for GNSS Compare, we must introduce a few terms we are using through the application. It's going to be a very general explanation -- if something will be not clear, please take a look at our :ref:`Glossary`. We hope you'll find answers to more detailed questions there. This section aims to provide a bridge between general GNSS knowledge, software practices, and GNSS Compare.
 
 
-.. contents::
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
 
     um_gnss_basics
     um_code_basics
