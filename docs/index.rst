@@ -22,7 +22,7 @@ Please stay tuned, as this is still a demo version...
     :caption: GNSS Compare
 
     description
-    amazing_team
+    team
     android_gnssMeasurements
     glossary
 
