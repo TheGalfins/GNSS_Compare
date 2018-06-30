@@ -24,7 +24,8 @@ Please stay tuned, as this is still a demo version...
     description
     team
     android_gnssMeasurements
-    glossary    
+    glossary
+    credits    
 
 
 .. toctree::
