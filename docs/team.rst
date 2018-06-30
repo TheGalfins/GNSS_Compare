@@ -18,10 +18,15 @@ And here they are!
     :alt: TheGalfins
 
 From the left to right we have: Mareike Burba, Sebastian Ciuban, Dominika Perz and Mateusz Krainski. They all have
-have an impressive set of skills that brought the 1st prize of *GNSS Compare* at the European Space Agency `Galileo Smartphone App Challenge`_. Their knowledge and experience related to **Software Design** and **GNSS Signal Processing** are presented in short biographies so you can have an idea who is behind *GNSS Compare*! 
+have an impressive set of skills that brought the 1st prize for *GNSS Compare* at the European Space Agency `Galileo Smartphone App Challenge`_. Their knowledge and experience related to **Software Design** and **GNSS Signal Processing** are presented in short biographies so you can have an idea who is behind *GNSS Compare*!
+
+Software Design
+===============
 
 
 
+GNSS Signal Processing
+======================
 
 
 
