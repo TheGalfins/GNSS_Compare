@@ -113,7 +113,13 @@ In the above equation we can see that the satellite clock bias is also affected 
 
 where at the numerator we have the dot product between the satellite position vector and the velocity vector and at the denominator the speed of light squared.
 
-And for the satellite clock bias:
+And finally the satellite clock bias (without the relativistic effect) can be computed as:
+
+.. math::
+  \widetilde{\delta t}^{sat} = a_0 + a_1(t-t_0)+ a_2(t-t_0)^2,
+
+where the coefficients (a0, a1 and a2) are contained in the navigation message and t0 represents a given reference epoch.  
+
 
 
 
