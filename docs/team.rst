@@ -78,13 +78,13 @@ Sebastian Ciuban
 
 Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Center working
 on the Galileo project. He holds a Master of Science degree in Aerospace Systems – Navigation and Telecommunications
-granted by the French Civil Aviation University (ENAC) from Toulouse, France. He developed
+granted by the French Civil Aviation University (ENAC) from Toulouse, France. After his first year of master studies he worked
+a summer (2016) at Acorde Technologies in Spain in the area of GPS/INS integration. In the second year he developed
 his master thesis at the German Aerospace Center (DLR) in Oberpfaffenhofen. While
 being at DLR he was responsible with designing and implementing algorithms that fused the
 Precise Point Positioning (PPP) technique with Inertial Navigation Systems (INS) in a tight
 coupling setting. Moreover, he has also developed suitable integrity monitoring algorithms
-in order to measure the reliability of the designed fused systems. His research interests are
-related to precise positioning, sensor fusion, integrity monitoring and GNSS receiver signal
+in order to measure the reliability of the designed fused systems in terms of fault detection sensitivity and protection level stability. His research interests are related to precise positioning, sensor fusion, integrity monitoring and GNSS receiver signal
 processing.
 
 
@@ -104,7 +104,7 @@ Sounding Interferometer (IASI) on MetOp. Mareike previously joined the World
 Climate Research Program Joint Planning Staff in the World Meteorological Organization for
 a 6 months internship in the framework of the Carlo Schmid program. Thanks to her studies
 and jobs as student research assistent, she speaks fluently Python, Matlab, Bash and Fortran,
-is communicative in C, Java and IDL, and has some experience with parallel computing.    
+is communicative in C, Java and IDL, and has some experience with parallel computing.
 
 
 
