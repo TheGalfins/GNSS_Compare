@@ -26,7 +26,7 @@ Mateusz Krainski
 -----------------
 
 .. image:: img/Mat.jpg
-    :width: 40%
+    :width: 25%
     :align: center
     :alt: Mat
 
@@ -68,18 +68,44 @@ company GlobalLogic as a Junior Software Developer for embedded systems.
 GNSS Signal Processing
 ======================
 
+Sebastian Ciuban
+-----------------
+
 .. image:: img/Sebastian.jpg
     :width: 40%
     :align: center
     :alt: Sebastian
 
+Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Center working
+on the Galileo project. He holds a Master of Science degree in Aerospace Systems – Navigation and Telecommunications
+granted by the French Civil Aviation University (ENAC) from Toulouse, France. He developed
+his master thesis at the German Aerospace Center (DLR) in Oberpfaffenhofen. While
+being at DLR he was responsible with designing and implementing algorithms that fused the
+Precise Point Positioning (PPP) technique with Inertial Navigation Systems (INS) in a tight
+coupling setting. Moreover, he has also developed suitable integrity monitoring algorithms
+in order to measure the reliability of the designed fused systems. His research interests are
+related to precise positioning, sensor fusion, integrity monitoring and GNSS receiver signal
+processing.
 
-
-Sebastian Ciuban
------------------
 
 Mareike Burba
 -----------------
+
+.. image:: img/Mareike.jpg
+    :width: 40%
+    :align: center
+    :alt: Mareike
+
+German National Trainee with EOP-SMS, currently working on the atmospheric correction
+for the Fluorescence Explorer (FLEX). She holds a M.Sc. in Meteorology with a minor in
+Scientific Computing from the University of Hamburg. Her Master’s thesis was about optimizing
+the numerical computation of atmospheric radiative transfer for the Infrared Atmospheric
+Sounding Interferometer (IASI) on MetOp. Mareike previously joined the World
+Climate Research Program Joint Planning Staff in the World Meteorological Organization for
+a 6 months internship in the framework of the Carlo Schmid program. Thanks to her studies
+and jobs as student research assistent, she speaks fluently Python, Matlab, Bash and Fortran,
+is communicative in C, Java and IDL, and has some experience with parallel computing.    
+
 
 
 .. _`Galileo Smartphone App Challenge`: http://www.esa.int/Our_Activities/Navigation/ESA_trainees_compete_in_inaugural_Galileo_app_contest
