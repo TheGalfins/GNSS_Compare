@@ -79,7 +79,7 @@ Sebastian Ciuban
 Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Center working
 on the Galileo project. He holds a Master of Science degree in Aerospace Systems – Navigation and Telecommunications
 granted by the French Civil Aviation University (ENAC) from Toulouse, France. After his first year of master studies he worked
-a summer (2016) at Acorde Technologies in Spain in the area of GPS/INS integration. In the second year he developed
+a summer (2016) at Acorde Technologies in Spain in the area of GPS/INS integration. During the second year of studies he developed
 his master thesis at the German Aerospace Center (DLR) in Oberpfaffenhofen. While
 being at DLR he was responsible with designing and implementing algorithms that fused the
 Precise Point Positioning (PPP) technique with Inertial Navigation Systems (INS) in a tight
