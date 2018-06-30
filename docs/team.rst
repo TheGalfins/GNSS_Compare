@@ -106,6 +106,14 @@ a 6 months internship in the framework of the Carlo Schmid program. Thanks to he
 and jobs as student research assistent, she speaks fluently Python, Matlab, Bash and Fortran,
 is communicative in C, Java and IDL, and has some experience with parallel computing.
 
+Contact
+========
 
+If you would like to reach any of the *GNSS Compare* developers, here are their e-mails:
+
+- Mateusz Krainski: mt.krainski@gmail.com
+- Dominika Perz: -
+- Sebastian Ciuban: ciuban.sebastian@gmail.com
+- Mareike Burba: -
 
 .. _`Galileo Smartphone App Challenge`: http://www.esa.int/Our_Activities/Navigation/ESA_trainees_compete_in_inaugural_Galileo_app_contest
