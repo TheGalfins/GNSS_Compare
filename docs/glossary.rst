@@ -90,7 +90,7 @@ Position, Velocity and Time
 
 In GNSS we are mostly interested in the parameters of the user that describe the position, velocity and also time. Position is quite obvious - that's the whole point of navigation, to know where the user is located. Velocity can be estimated from consecutive postion measurements, but can also be calculated directly from the satellite signals, due to the Doppler's effect. It can be later used for more precise estimations of the user's position, for highly dynamic systems. Time is also crucial to be estimated, as the user's receiver clock contains a bias with respect to a certain GNSS Time System.
 
-For more clarification on how this process is handled, the reader is welcomed to check the *Implemented PVT algorithms* section.
+For more clarification on how this process is handled, the reader is welcomed to check the *Implemented PVT Algorithms* section.
 
 
 
@@ -101,13 +101,15 @@ Clock bias
 
 In GNSS, when we talk about *clock bias* we usually refer to the satellite clock bias and/or to the receiver's clock bias with respect to a certain GNSS Time System (e.g., Galileo System Time, GPS Time).
 
-Let's take a look on how we correct for the satellite clock bias as explained in `ESA GNSS Data Processing Volume I`_:
+Let's take a look on how we correct for the satellite clock bias as explained in `ESA GNSS Data Processing Volume I`_ (pages 104-105):
 
 .. math::
   \delta t^{sat} = \widetilde{\delta t}^{sat} + \Delta t_{\text{rel}}.
 
+In the above equation we can see that the satellite clock bias is also affected by a small relativistic effect caused by the orbit eccentricity. Is quite interesting to see that when dealing with time we do need to take into account these kind of phenomena! The correction for that relativistic effect is computed in the following way:
 
-
+.. math::
+  \Delta t_{\text{rel}} = -2~\frac{\mathbf{r}^{sat} \cdot \mathbf{v}^{sat}}{c^2}.
 
 
 Android Glossary
