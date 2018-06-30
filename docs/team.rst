@@ -12,6 +12,6 @@ enormous amounts of tea [*]_ in order to develop *GNSS Compare*!
 
 
 .. image:: img/Team.jpg
-    :width: 40%
+    :width: 60%
     :align: center
     :alt: TheGalfins
