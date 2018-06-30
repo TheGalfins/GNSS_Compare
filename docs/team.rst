@@ -22,6 +22,9 @@ They all have an impressive set of skills that brought the 1st prize for *GNSS C
 Software Design
 ===============
 
+Mateusz Krainski
+-----------------
+
 .. image:: img/Mat.jpg
     :width: 40%
     :align: center
@@ -39,11 +42,37 @@ Mateusz has developed highly his public speaking skills. He not only helped star
 first English speaking club in the area, but also received awards in presenting competitions
 on a semi-national level.
 
+Dominika Perz
+-----------------
+
+.. image:: img/Dominika.jpg
+    :width: 40%
+    :align: center
+    :alt: Mat
+
+
+Polish Young Graduate Trainee in the Technology, Engineering and Quality Directorate at
+ESTEC, ESA. Currently working as a Project Manager for the Lunar Exploration Mission
+- internal project to determine a preliminary GNC (Guidance, Navigation and Control) design
+for the ascent, rendezvous and docking with the Deep Space Gateway station orbiting a
+Moon in the highly elliptical orbit. Her background is mainly in robotics and programming.
+She completed Control Engineering and Robotics master studies in Poland, during which she
+spent one semester in Madrid, Spain as an Erasmus exchange student. As a first international
+carrier experience, Dominika did a 6 weeks internship in R&D team at Venderlande (Eindhoven,
+Netherlands), where she worked on optimisation of the search algorithm. During
+holidays in 2016 she participated in the Aerospace Information Technology Summer School
+in Würzburg, Germany. Before coming to ESA, Dominika worked for a year at a software
+company GlobalLogic as a Junior Software Developer for embedded systems.
+
 
 GNSS Signal Processing
 ======================
 
+Sebastian Ciuban
+-----------------
 
+Mareike Burba
+-----------------
 
 
 .. _`Galileo Smartphone App Challenge`: http://www.esa.int/Our_Activities/Navigation/ESA_trainees_compete_in_inaugural_Galileo_app_contest
