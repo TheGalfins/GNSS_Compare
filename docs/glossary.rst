@@ -65,7 +65,7 @@ Ephemeris
 
 The process of obtaining the position in a certain coordinate system using GNSS technologies is based on a rather simple principle, which is *trilateration* (not triangulation, please be aware of that). Given an unknown point in a coordinate sytem from which we know the distances towards some known points in the same coordinate system, we can work out the coordinates of our unknown point. One can try this concept by defining a 2D coordinate system in which a triangle can be drew with two of its verticies having known coordinates. And the problem relies on finding the coordinates of the third vertex.
 
-We have already seen in the *Pseudorange* section that we can obtain the range information towards the observed satellites. And what is missing is how to determine the coordinates of those satellites.
+We have already seen in the *Pseudorange* section that we can obtain the range information towards the observed satellites. And what is missing is how to determine the coordinates of those satellites. To compute the coordinates of the satellite we need some parameters that describe their orbits. For this we have to be grateful to the work of Johannes Kepler on his law of planetary motion as he discovered the six parameters also known as *Keplerian elements* that define an orbit:
 
 
 .. _pvt:
