@@ -120,7 +120,7 @@ And finally the satellite clock bias (without the relativistic effect) can be co
 
 where the coefficients (a0, a1 and a2) are contained in the navigation message and t0 represents a given reference epoch.
 
-Because we cannot account for the receiver clock bias beforehand we have to estimate it using the pseduorange equation:
+Because we cannot account for the receiver clock bias beforehand we have to estimate from the pseduorange equation:
 
 .. math::
   PR = \rho + c \cdot (\delta t_{R} - \delta t^{S}) + I + T + \epsilon.
