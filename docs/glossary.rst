@@ -17,16 +17,54 @@ Global Navigation Satellite Systems
 -----------------------------------
 
 A search on the internet about GNSS will give plenty of information about everything one needs to know. In this section we will
-briefly present the current status of the existing GNSS.
+briefly present the current status of the existing global satellite navigation systems.
 
 **Galileo**
+
+Galileo is the European GNSS with the following status and characteristics:
+
+- In orbit satellites: 22 ( *the launch of another 4 satellites being scheduled for 25th of July 2018*)
+- Satellites orbit: Medium Earth Orbit (MEO) with an altitude of approximately 23000 kilometers
+- Orbit inclination:  56 degrees to the equator
+- Orbital planes: 3
+- Time System : Galileo System Time (GST)
+- Used spread-spectrum technique: Code Division Multiple Access (CDMA)
+
 
 
 **GPS**
 
+GPS is the American GNSS with the following status and characteristics:
+
+- In orbit satellites: 31
+- Satellites orbit: MEO with an altitude of approximately 20000 kilometers
+- Orbit inclination:  55 degrees to the equator
+- Orbital planes: 6
+- Time System : GPS Time (GPST)
+- Used spread-spectrum technique: CDMA
+
+
 **GLONASS**
 
+GLONASS is the Russian GNSS with the following status and characteristics:
+
+- In orbit satellites: 25
+- Satellites orbit: MEO with an altitude of approximately 19000 kilometers
+- Orbit inclination:  65 degrees to the equator
+- Orbital planes: 3
+- Time System : GLONASS Time (GLONASST)
+- Used spread-spectrum technique: Frequency Division Multiple Access (FDMA) and CDMA (recently)
+
 **Beidou**
+
+Beidou is the Chinese GNSS with the following status and characteristics:
+
+- In orbit satellites: 28 ( *13 satellites are not included in operational orbital constellation*)
+- Satellites orbit: Geostationary Orbit (GEO) and MEO
+- Orbit inclination:  55.5 degrees to the equator for MEO
+- Orbital planes: 3 (24 MEO)
+- Time System : Beidou Time (BDT)
+- Used spread-spectrum technique: CDMA
 
 
 .. _pseudorange:
