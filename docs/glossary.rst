@@ -21,6 +21,14 @@ Global Navigation Satellite Systems
 Pseudorange
 -----------
 
+For someone making his or hers first steps in the GNSS Field, the term *pseduorange* might sound a little bit confusing. Afterall, the word *pseudo* is synonym with *false* and considering this one might ask: why use this type of information? At the end of this section we hope to answer this question and also to make things more clear regarding this subject.
+
+First let's start thinking (in general terms) how the receiver determines the distances towards the observed satellites. The range (R) is the difference between the time of signal reception and the time of signal transmission multiplied by the speed of light (c):
+
+
+
+
+
 .. _ephemeris:
 
 Ephemeris
@@ -32,6 +40,9 @@ Position, Velocity and Time
 ---------------------------
 
 In GNSS we are mostly interested in the parameters of the user that describe the position, velocity and also time. Position is quite obvious - that's the whole point of navigation, to know where the user is located. Velocity can be estimated from consecutive postion measurements, but can also be calculated directly from the satellite signals, due to the Doppler's effect. It can be later used for more precise estimations of the user's position, for highly dynamic systems. Time is also crucial, as the user's receiver contains a bias that has to be estimated.
+
+
+
 
 
 .. _clockBias:
