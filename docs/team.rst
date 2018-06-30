@@ -48,7 +48,7 @@ Dominika Perz
 .. image:: img/Dominika.jpg
     :width: 40%
     :align: center
-    :alt: Mat
+    :alt: Dominika
 
 
 Polish Young Graduate Trainee in the Technology, Engineering and Quality Directorate at
@@ -67,6 +67,13 @@ company GlobalLogic as a Junior Software Developer for embedded systems.
 
 GNSS Signal Processing
 ======================
+
+.. image:: img/Sebastian.jpg
+    :width: 40%
+    :align: center
+    :alt: Sebastian
+
+
 
 Sebastian Ciuban
 -----------------
