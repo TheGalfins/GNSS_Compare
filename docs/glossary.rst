@@ -26,32 +26,32 @@ For someone making his or hers first steps in the GNSS field, the term *pseduora
 First let's start thinking (in general terms) how the receiver determines the distances towards the observed satellites. The range (R) is the difference between the time of signal reception and the time of signal transmission multiplied by the speed of light (c):
 
 .. math::
-  R = c \cdot (t_{rx} - t^{sat}).
+  R = c \cdot (t_{R} - t^{S}).
 
 Although the clocks (atomic clocks) of the satellites are highly accurate, they are still not perfect which lead them to be biased with respect to a certain GNSS System Time. Furthermore, considering that the quality of the clocks used in the typical GNSS receiver is inferior to the ones of the satellites, there is also a (significantly larger) bias in its time measurements. Therefore, let's take this into account in our equation expressed above:
 
 .. math::
-  R = c \cdot [t_{rx}+\delta t_{rx} - (t^{sat} + \delta t^{sat})].
+  R = c \cdot [t_{R}+\delta t_{R} - (t^{S} + \delta t^{S})].
 
 If we arrange a bit the newly obtained expression, we get:
 
 .. math::
-  R = c \cdot (t_{rx}-t^{sat})+ c \cdot (\delta t_{rx} - \delta t^{sat}).
+  R = c \cdot (t_{R}-t^{S})+ c \cdot (\delta t_{R} - \delta t^{S}).
 
 Assuming that the time of signal reception and the time of signal transmission are free of their biases and other error sources, then their difference multiplied by the speed of light can be viewed as the equivalent of the geometric distance (rho) in 3D between the receiver and the observed satellite!
 
 .. math::
-  R = \rho + c \cdot (\delta t_{rx} - \delta t^{sat}).
+  R = \rho + c \cdot (\delta t_{R} - \delta t^{S}).
 
 Now that we got this settled, we also need to account for the effects that disturb the signal's travel from the satellite to the receiver such as the ionosphere (I), troposphere (T) and for the local effects like the receiver's noise, multipath which for the sake of simplicity we gather these terms in a single one (epsilon). The number of effects that introduce errors in the range measurements is larger and we don't cover them here.
 
 .. math::
-  R = \rho + c \cdot (\delta t_{rx} - \delta t^{sat}) + I + T + \epsilon.
+  R = \rho + c \cdot (\delta t_{R} - \delta t^{S}) + I + T + \epsilon.
 
 In the equation of the range above we correct for the effect of the satellite clock bias, ionosphere, troposphere mainly by mathematical models. However, what we can't remove directly is the receiver clock bias which is required to be estimated. And that term will always be present in our measurements! Therefore, our *range* equation becomes the *pseudorange* (PR) equation because of that.
 
 .. math::
-  PR = \rho + c \cdot (\delta t_{rx} - \delta t^{sat}) + I + T + \epsilon.
+  PR = \rho + c \cdot (\delta t_{R} - \delta t^{S}) + I + T + \epsilon.
 
 We do hope that the aspects related to this subject are more clear now.
 
@@ -104,21 +104,28 @@ In GNSS, when we talk about *clock bias* we usually refer to the satellite clock
 Let's take a look on how we correct for the satellite clock bias as explained in `ESA GNSS Data Processing Volume I`_ (pages 104-105):
 
 .. math::
-  \delta t^{sat} = \widetilde{\delta t}^{sat} + \Delta t_{\text{rel}}.
+  \delta t^{S} = \widetilde{\delta t}^{S} + \Delta t_{\text{rel}}.
 
 In the above equation we can see that the satellite clock bias is also affected by a small relativistic effect caused by the orbit eccentricity. Is quite interesting to see that when dealing with time we do need to take into account these kind of phenomena! The correction for that relativistic effect is computed in the following way:
 
 .. math::
-  \Delta t_{\text{rel}} = -2~\frac{\mathbf{r}^{sat} \cdot \mathbf{v}^{sat}}{c^2},
+  \Delta t_{\text{rel}} = -2~\frac{\mathbf{r}^{S} \cdot \mathbf{v}^{S}}{c^2},
 
 where at the numerator we have the dot product between the satellite position vector and the velocity vector and at the denominator the speed of light squared.
 
 And finally the satellite clock bias (without the relativistic effect) can be computed as:
 
 .. math::
-  \widetilde{\delta t}^{sat} = a_0 + a_1(t-t_0)+ a_2(t-t_0)^2,
+  \widetilde{\delta t}^{S} = a_0 + a_1(t-t_0)+ a_2(t-t_0)^2,
 
-where the coefficients (a0, a1 and a2) are contained in the navigation message and t0 represents a given reference epoch.  
+where the coefficients (a0, a1 and a2) are contained in the navigation message and t0 represents a given reference epoch.
+
+Because we cannot account for the receiver clock bias beforehand we have to estimate it using the pseduorange equation:
+
+.. math::
+  PR = \rho + c \cdot (\delta t_{R} - \delta t^{S}) + I + T + \epsilon.
+
+This one is more straight forward.
 
 
 
