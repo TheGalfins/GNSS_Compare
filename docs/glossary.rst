@@ -101,7 +101,11 @@ Clock bias
 
 In GNSS, when we talk about *clock bias* we usually refer to the satellite clock bias and/or to the receiver's clock bias with respect to a certain GNSS Time System (e.g., Galileo System Time, GPS Time).
 
-Let's take a look on how we correct for the satellite clock bias.
+Let's take a look on how we correct for the satellite clock bias as explained in `ESA GNSS Data Processing Volume I`_:
+
+.. math::
+  \delta t^{sat} = \widetilde{\delta t}^{sat} + \Delta t_{\text{rel}}.
+
 
 
 
