@@ -31,7 +31,7 @@ First let's start thinking (in general terms) how the receiver determines the di
 Although the clocks (atomic clocks) of the satellites are highly accurate, they are still not perfect which lead them to be biased with respect to a certain GNSS System Time. Furthermore, considering that the quality of the clocks used in the typical GNSS receiver is inferior to the ones of the satellites, there is also a (significantly larger) bias in its time measurements. Therefore, let's take this into account in our equation expressed above:
 
 .. math::
-  R = c \cdot [t_{rx}+\delta t_{rx} - (t^{tx} + \delta t^{tx}].
+  R = c \cdot [t_{rx}+\delta t_{rx} - (t^{tx} + \delta t^{tx})].
 
 
 
