@@ -9,9 +9,9 @@ the European GNSS Agency's (GSA) `White Paper on using GNSS Raw Measurements on 
 
 At the code level, you can find the algorithms in the following Java classes:
 
-*GalileoConstellation*
+- ``GalileoConstellation``
 
-*GpsConstellation*
+- ``GpsConstellation``
 
 The variable names used in the description of the algorithms are the same as the ones in the GNSS Compare's code. Moreover,
 the definition of each used variable (e.g., *ReceivedSvTimeNanos*) can be found on the `Android Developer`_ webpage or in the white paper mentioned above. We will keep things
