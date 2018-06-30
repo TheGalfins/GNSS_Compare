@@ -46,11 +46,14 @@ Assuming that the time of signal reception and the time of signal transmission a
 Now that we got this settled, we also need to account for the effects that disturb the signal's travel from the satellite to the receiver such as the ionosphere (I), troposphere (T) and for the local effects like the receiver's noise, multipath which for the sake of simplicity we gather these terms in a single one (epsilon). The number of effects that introduce errors in the range measurements is larger and we don't cover them here.
 
 .. math::
-  R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.  
+  R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.
 
+In the equation of the range above we can take into account the effect of the satellite clock bias, ionosphere, troposphere mainly by mathematical models. However, what we can't remove directly is the receiver clock bias being required to be estimated. And that term will always be present in our measurements! Therefore, our *range* equation becomes the *pseudorange* (PR) equation because of that. And that's why it's called *pseudorange*.
 
+.. math::
+  PR = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.
 
-
+We do hope that the aspects related to this subject are more clear now.
 
 
 
