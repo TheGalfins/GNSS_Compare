@@ -79,7 +79,9 @@ We have already seen in the *Pseudorange* section that we can obtain the range i
 
 - True anomaly
 
-The definition of...
+The definition of all of the above elements can be easily found with a quick search on any internet search engine. The idea is that those parameters (and many others) are contained in the navigation message that is modulated on the transmissed GNSS signals. The receiver will extract this information from the signal itself or get them from external means (e.g., concept of Assisted GNSS) and feed them into specific algorithms that will determine the satellite coordinates.
+
+A good source for the satellite coordinate computation algorithms for Galileo and GPS is the `ESA GNSS Data Processing Volume I`_
 
 
 .. _pvt:
@@ -115,3 +117,4 @@ According to Wikipedia_, *Polymorphism is the provision of a single interface to
 
 
 .. _Wikipedia: https://en.wikipedia.org/wiki/Polymorphism_(computer_science)
+.. _`ESA GNSS Data Processing Volume I`: https://gssc.esa.int/navipedia/GNSS_Book/ESA_GNSS-Book_TM-23_Vol_I.pdf
