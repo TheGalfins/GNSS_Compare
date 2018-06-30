@@ -21,9 +21,17 @@ Global Navigation Satellite Systems
 Pseudorange
 -----------
 
-For someone making his or hers first steps in the GNSS Field, the term *pseduorange* might sound a little bit confusing. Afterall, the word *pseudo* is synonym with *false* and considering this one might ask: why use this type of information? At the end of this section we hope to answer this question and also to make things more clear regarding this subject.
+For someone making his or hers first steps in the GNSS field, the term *pseduorange* might sound a little bit confusing. Afterall, the word *pseudo* is synonym with *false* and considering this, one might ask: why use this type of information? At the end of this section we hope to answer this question and also to make things more clear regarding this subject.
 
 First let's start thinking (in general terms) how the receiver determines the distances towards the observed satellites. The range (R) is the difference between the time of signal reception and the time of signal transmission multiplied by the speed of light (c):
+
+.. math::
+  R = c \cdot (t_rx - t^tx).
+
+Although the clocks (atomic clocks) of the satellites are highly accurate, they are still not perfect which lead them to be biased with respect to a certain GNSS System Time. Furthermore, considering that the quality of the clocks used in the typical GNSS receiver is inferior to the ones of the satellites, there is also a (significantly larger) bias in its time measurements. Therefore, let's take this into account in our equation expressed above:
+
+.. math::
+  R = c \cdot [t_rx+\delta t_{rx} - (t^tx + \delta t^{tx}].  
 
 
 
