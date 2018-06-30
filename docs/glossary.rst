@@ -81,8 +81,7 @@ We have already seen in the *Pseudorange* section that we can obtain the range i
 
 The definition of all of the above elements can be easily found with a quick search on any internet search engine. The idea is that those parameters (and many others) are contained in the navigation message that is modulated on the transmissed GNSS signals. The receiver will extract this information from the signal itself or get them from external means (e.g., concept of Assisted GNSS) and feed them into specific algorithms that will determine the satellite coordinates.
 
-A good source for the satellite coordinate computation algorithms for Galileo and GPS is the `ESA GNSS Data Processing Volume I`_
-
+A good source for the satellite coordinate computation algorithms for Galileo and GPS is the book called `ESA GNSS Data Processing Volume I`_ starting with page 57.
 
 .. _pvt:
 
