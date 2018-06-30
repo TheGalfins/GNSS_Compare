@@ -16,6 +16,19 @@ Global Navigation Satellite Systems Glossary
 Global Navigation Satellite Systems
 -----------------------------------
 
+A search on the internet about GNSS will give plenty of information about everything one needs to know. In this section we will
+briefly present the current status of the existing GNSS.
+
+**Galileo**
+
+
+**GPS**
+
+**GLONASS**
+
+**Beidou**
+
+
 .. _pseudorange:
 
 Pseudorange
