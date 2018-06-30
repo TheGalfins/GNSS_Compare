@@ -38,6 +38,13 @@ If we arrange a bit the newly obtained expression, we get:
 .. math::
   R = c \cdot (t_{rx}-t^{tx})+ c \cdot (\delta t_{rx} - \delta t^{tx}).
 
+Assuming that the time of signal reception and the time of signal transmission are free of their biases and other error sources, then their difference multiplied by the speed of light can be viewed as the equivalent of the geometric distance in 3D!
+
+.. math::
+  R = \sqrt{(X_{rx}-X^{tx})^2+(Y_{rx}-Y^{tx})^2+(Z_{rx}-Z^{tx})^2} + c \cdot (\delta t_{rx} - \delta t^{tx}).
+
+
+
 
 
 
