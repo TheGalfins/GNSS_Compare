@@ -26,32 +26,32 @@ For someone making his or hers first steps in the GNSS field, the term *pseduora
 First let's start thinking (in general terms) how the receiver determines the distances towards the observed satellites. The range (R) is the difference between the time of signal reception and the time of signal transmission multiplied by the speed of light (c):
 
 .. math::
-  R = c \cdot (t_{rx} - t^{tx}).
+  R = c \cdot (t_{rx} - t^{sat}).
 
 Although the clocks (atomic clocks) of the satellites are highly accurate, they are still not perfect which lead them to be biased with respect to a certain GNSS System Time. Furthermore, considering that the quality of the clocks used in the typical GNSS receiver is inferior to the ones of the satellites, there is also a (significantly larger) bias in its time measurements. Therefore, let's take this into account in our equation expressed above:
 
 .. math::
-  R = c \cdot [t_{rx}+\delta t_{rx} - (t^{tx} + \delta t^{tx})].
+  R = c \cdot [t_{rx}+\delta t_{rx} - (t^{sat} + \delta t^{sat})].
 
 If we arrange a bit the newly obtained expression, we get:
 
 .. math::
-  R = c \cdot (t_{rx}-t^{tx})+ c \cdot (\delta t_{rx} - \delta t^{tx}).
+  R = c \cdot (t_{rx}-t^{sat})+ c \cdot (\delta t_{rx} - \delta t^{sat}).
 
 Assuming that the time of signal reception and the time of signal transmission are free of their biases and other error sources, then their difference multiplied by the speed of light can be viewed as the equivalent of the geometric distance (rho) in 3D between the receiver and the observed satellite!
 
 .. math::
-  R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}).
+  R = \rho + c \cdot (\delta t_{rx} - \delta t^{sat}).
 
 Now that we got this settled, we also need to account for the effects that disturb the signal's travel from the satellite to the receiver such as the ionosphere (I), troposphere (T) and for the local effects like the receiver's noise, multipath which for the sake of simplicity we gather these terms in a single one (epsilon). The number of effects that introduce errors in the range measurements is larger and we don't cover them here.
 
 .. math::
-  R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.
+  R = \rho + c \cdot (\delta t_{rx} - \delta t^{sat}) + I + T + \epsilon.
 
 In the equation of the range above we correct for the effect of the satellite clock bias, ionosphere, troposphere mainly by mathematical models. However, what we can't remove directly is the receiver clock bias which is required to be estimated. And that term will always be present in our measurements! Therefore, our *range* equation becomes the *pseudorange* (PR) equation because of that.
 
 .. math::
-  PR = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.
+  PR = \rho + c \cdot (\delta t_{rx} - \delta t^{sat}) + I + T + \epsilon.
 
 We do hope that the aspects related to this subject are more clear now.
 
@@ -98,6 +98,12 @@ For more clarification on how this process is handled, the reader is welcomed to
 
 Clock bias
 ----------
+
+In GNSS, when we talk about *clock bias* we usually refer to the satellite clock bias and/or to the receiver's clock bias with respect to a certain GNSS Time System (e.g., Galileo System Time, GPS Time).
+
+Let's take a look on how we correct for the satellite clock bias.
+
+
 
 
 Android Glossary
