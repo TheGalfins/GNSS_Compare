@@ -4,7 +4,7 @@ Glossary
 ********
 
 
-This section is to provide a small glossay on the subject of satellite navigation, Android and software engineering in general. You can find below short descriptions of all used technical terms in this documentation.
+This section is to provide a small glossay on the subject of satellite navigation, Android and software engineering in general. You can find below descriptions of all used technical terms in this documentation.
 
 
 Global Navigation Satellite Systems Glossary
@@ -109,7 +109,12 @@ Let's take a look on how we correct for the satellite clock bias as explained in
 In the above equation we can see that the satellite clock bias is also affected by a small relativistic effect caused by the orbit eccentricity. Is quite interesting to see that when dealing with time we do need to take into account these kind of phenomena! The correction for that relativistic effect is computed in the following way:
 
 .. math::
-  \Delta t_{\text{rel}} = -2~\frac{\mathbf{r}^{sat} \cdot \mathbf{v}^{sat}}{c^2}.
+  \Delta t_{\text{rel}} = -2~\frac{\mathbf{r}^{sat} \cdot \mathbf{v}^{sat}}{c^2},
+
+where at the numerator we have the dot product between the satellite position vector and the velocity vector and at the denominator the speed of light squared.
+
+And for the satellite clock bias:
+
 
 
 Android Glossary
