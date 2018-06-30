@@ -7,9 +7,7 @@ In this section we would like to mention the libraries that we are using in the 
 
 - `Efficient Java Matrix Library`_ (EJML) for linear algebra operations,
 
-- `goGPS`_ for GNSS related computations (satellite coordinates, pseudorange corrections, etc.)
-
-
+- `goGPS`_ for GNSS related computations (satellite coordinates and velocities, etc.).
 
 
 
