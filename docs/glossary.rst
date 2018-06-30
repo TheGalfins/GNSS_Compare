@@ -90,7 +90,7 @@ Position, Velocity and Time
 
 In GNSS we are mostly interested in the parameters of the user that describe the position, velocity and also time. Position is quite obvious - that's the whole point of navigation, to know where the user is located. Velocity can be estimated from consecutive postion measurements, but can also be calculated directly from the satellite signals, due to the Doppler's effect. It can be later used for more precise estimations of the user's position, for highly dynamic systems. Time is also crucial to be estimated, as the user's receiver clock contains a bias with respect to a certain GNSS Time System.
 
-
+For more clarification on how this process is handled, the reader is welcomed to check the *Implemented PVT algorithms* section.
 
 
 
