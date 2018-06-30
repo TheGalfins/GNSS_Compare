@@ -9,3 +9,9 @@ enormous amounts of tea [*]_ in order to develop *GNSS Compare*!
 
 
 .. [*] Typically it's coffee, but we like to approach things differently. 😊
+
+
+.. image:: img/Team.jpg
+    :width: 40%
+    :align: center
+    :alt: TheGalfins
