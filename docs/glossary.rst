@@ -33,6 +33,12 @@ Although the clocks (atomic clocks) of the satellites are highly accurate, they 
 .. math::
   R = c \cdot [t_{rx}+\delta t_{rx} - (t^{tx} + \delta t^{tx})].
 
+If we arrange a bit the newly obtained expression, we get:
+
+.. math::
+  R = c \cdot (t_{rx}-t^{tx})+ c \cdot (\delta t_{rx} - \delta t^{tx}).
+
+
 
 
 
