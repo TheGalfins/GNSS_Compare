@@ -43,7 +43,10 @@ Assuming that the time of signal reception and the time of signal transmission a
 .. math::
   R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}).
 
-  
+Now that we got this settled, we also need to account for the effects that disturb the signal's travel from the satellite to the receiver such as the ionosphere (I), troposphere (T) and for the local effects like the receiver's noise, multipath which for the sake of simplicity we gather these terms in a single one (epsilon). The number of effects that introduce errors in the range measurements is larger and we don't cover them here.
+
+.. math::
+  R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.  
 
 
 
