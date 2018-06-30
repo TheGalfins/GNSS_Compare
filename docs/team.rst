@@ -83,7 +83,7 @@ a summer (2016) at Acorde Technologies in Spain in the area of GPS/INS integrati
 his master thesis at the German Aerospace Center (DLR) in Oberpfaffenhofen. While
 being at DLR he was responsible with designing and implementing algorithms that fused the
 Precise Point Positioning (PPP) technique with Inertial Navigation Systems (INS) in a tight
-coupling setting. Moreover, he has also developed suitable integrity monitoring algorithms
+coupling architecture. Moreover, he has also developed suitable integrity monitoring algorithms
 in order to measure the reliability of the designed fused systems in terms of fault detection sensitivity and protection level stability. His research interests are related to precise positioning, sensor fusion, integrity monitoring and GNSS receiver signal
 processing.
 
