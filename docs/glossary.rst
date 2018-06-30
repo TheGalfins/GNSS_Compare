@@ -48,7 +48,7 @@ Now that we got this settled, we also need to account for the effects that distu
 .. math::
   R = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.
 
-In the equation of the range above we can take into account the effect of the satellite clock bias, ionosphere, troposphere mainly by mathematical models. However, what we can't remove directly is the receiver clock bias being required to be estimated. And that term will always be present in our measurements! Therefore, our *range* equation becomes the *pseudorange* (PR) equation because of that. And that's why it's called *pseudorange*.
+In the equation of the range above we correct for the effect of the satellite clock bias, ionosphere, troposphere mainly by mathematical models. However, what we can't remove directly is the receiver clock bias which is required to be estimated. And that term will always be present in our measurements! Therefore, our *range* equation becomes the *pseudorange* (PR) equation because of that. And that's why it's called *pseudorange*.
 
 .. math::
   PR = \rho + c \cdot (\delta t_{rx} - \delta t^{tx}) + I + T + \epsilon.
