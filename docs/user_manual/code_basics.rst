@@ -29,6 +29,8 @@ After you have the key (it will look like a string of random characters, startin
 
 And replace ``YOUR_API_KEY`` with your API key (the quotation marks should remain).
 
+Remember not to share the api code with anyone!
+
 
 
 .. _`Android Studio`: https://developer.android.com/studio/
