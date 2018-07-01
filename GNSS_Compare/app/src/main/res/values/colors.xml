@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryBright">#C5CAE9</color>
+    <color name="colorPrimaryDark">#1A237E</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="snrPlotRangeGridColor">#30000000</color>
+    <color name="galileoBlue">#3F51B5</color>
+    <color name="gpsGrey">#607D8B</color>
+    <color name="unknownSatelliteRed">#b71c1c</color>
+    <color name="ap_light_gray">#BDBDBD</color>
+</resources>

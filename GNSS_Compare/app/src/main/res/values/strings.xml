@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">GNSS Compare</string>
+    <string name="button_bottom_description">settings_bottom</string>
+    <string name="button_top_description">settings_top</string>
+    <string name="snr_plot_title">C/N0</string>
+    <string name="settings_button_title">add new</string>
+    <string name="action_favorite">Add to favourites</string>
+    <string name="constellation_summary">This allows you to select what GNSS satellite constellations you\'d like to use</string>
+    <string name="correction_modules_summary">Select which corrections to apply</string>
+    <string name="positioning_method_summary">Select which position, velocity and time estimation method you\'d like to use</string>
+    <string name="positioning_method_title">Positioning method</string>
+    <string name="correction_modules_title">Correction modules</string>
+    <string name="constellation_title">Constellation</string>
+    <string name="preference_title_summary">Below you can configure how the results are calculated</string>
+    <string name="preference_title">Settings for the calculations</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget scelerisque metus. Quisque sit amet cursus lectus. Praesent condimentum, purus quis fermentum pellentesque, ante orci blandit ligula, ut accumsan leo urna quis lectus. Nulla maximus dolor quis eros consectetur tempor. Curabitur vitae condimentum dolor, ac tincidunt dolor. Aliquam nibh nisi, consectetur non mi et, porta convallis tellus. Nam id mattis turpis.  Nunc iaculis dolor leo, ut ullamcorper augue hendrerit eget. Integer eget nisi vitae massa ullamcorper malesuada. Nunc posuere lacinia diam et vestibulum. Praesent ut porttitor diam. Vivamus interdum lorem eget tortor interdum, ut imperdiet massa tincidunt. Proin ac sapien pretium, bibendum enim ac, varius elit. Sed elementum aliquam turpis, eu laoreet velit aliquam nec. Aenean imperdiet ligula ligula, ut pellentesque leo eleifend non. Curabitur at massa non ex tincidunt aliquam. Suspendisse purus massa, venenatis sed euismod ac, dapibus quis elit. Fusce tempus consequat tortor, ac ornare nisi porttitor at. Etiam cursus, neque rhoncus condimentum iaculis, massa lectus rhoncus nibh, nec gravida lorem ante ac dui. Ut lacus metus, facilisis eget venenatis vel, gravida in ex. Interdum et malesuada fames ac ante ipsum primis in faucibus.  Sed velit elit, laoreet in ultricies ut, aliquam sit amet mauris. Vivamus a imperdiet tortor. Curabitur sed ante vitae justo facilisis cursus. Sed est libero, volutpat eu imperdiet quis, blandit id dolor. Pellentesque quis leo eget mi accumsan consequat ac vel purus. Duis at odio et ipsum sagittis gravida et quis enim. Phasellus orci nisl, consectetur id ex sed, congue faucibus ipsum. Nam eu dui dapibus, porta nunc sed, sodales urna.  Maecenas quis turpis iaculis, sagittis nulla at, gravida lorem. Pellentesque volutpat posuere tellus, vel commodo arcu facilisis non. Vestibulum nulla ligula, aliquam a sollicitudin ac, vehicula in metus. Pellentesque et sem ipsum. Etiam dictum eu mauris eget dapibus. Praesent ornare mollis massa et aliquam. Vivamus ultricies tortor vitae augue consequat finibus. Praesent sodales scelerisque leo sit amet consectetur. In hac habitasse platea dictumst. Nunc volutpat erat nunc, in commodo ex convallis ac. Maecenas fermentum tincidunt quam, ut tristique arcu viverra sit amet.  Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam a arcu ac quam pulvinar commodo. Nam rutrum in ligula id porta. Aenean molestie nibh in finibus scelerisque. Nulla urna tortor, pellentesque sed felis et, molestie sodales ex. Duis ullamcorper lectus vitae nunc fringilla egestas. Aliquam ut venenatis felis. Mauris ac dui vehicula, consectetur mauris et, tempus felis. Fusce dictum malesuada augue. Duis gravida neque nisi, in fringilla lectus fermentum quis. Curabitur vel enim pulvinar, tincidunt neque a, gravida quam. Etiam augue massa, hendrerit rutrum risus ut, posuere sollicitudin libero. Aenean eu ligula ac erat vestibulum porta. Ut sit amet ligula vitae ligula consequat congue ac eu dolor. Nullam facilisis tristique mi at sagittis.</string>
+    <string name="preferences_name">preferences</string>
+    <string name="start_log_button_description">Start\n raw log</string>
+    <string name="stop_log_button_description">Stop raw log</string>
+
+    <!--    Permissions    -->
+    <string name="permission_rationale_location">Access to the location service is required.</string>
+    <string name="location_permission_denied">This application requires location permission to calculate the positioning error. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'GNSS Compare\'.</string>
+    <string name="permission_required_toast">Location permission is required for this demo.</string>
+    <string name="create_module_button">createModuleButton</string>
+    <string name="app_motto">Research lab in your pocket</string>
+    <string name="constellation_grid_title">Constellation status</string>
+    <string name="pose_title">Calculation results</string>
+    <string name="support_text">Developed with support of the European Space Agency</string>
+    <string name="map_disabled_description">Map Viewer disabled! \nCheck out our <a href="https://gnss-compare.readthedocs.io/en/latest/user_manual/code_basics.html#using-the-google-maps-viewer">docs</a> to find out why</string>
+    <string name="map_disabled_icon_description">Google Maps icon</string>
+</resources>
