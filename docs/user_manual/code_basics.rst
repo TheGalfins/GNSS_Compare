@@ -24,7 +24,7 @@ After you have the key (it will look like a string of random characters, startin
 
   <string name="map_api_key">YOUR_API_KEY</string>
 
-And replace ``YOUR_API_KEY`` with your API key.
+And replace ``YOUR_API_KEY`` with your API key. It should work right away. If not -- you might need to clean and rebuild your project, or manually uninstall the application on your phone. 
 
 Remember not to share the api code with anyone! If you're using git, you can mark that file as one which should not be tracked with
 
