@@ -112,7 +112,7 @@ Contact
 If you would like to reach any of the *GNSS Compare* developers, here are their e-mails:
 
 - Mateusz Krainski: mateusz@krainski.eu
-- Dominika Perz: -
+- Dominika Perz: dominika.perz@gmail.com
 - Sebastian Ciuban: ciuban.sebastian@gmail.com
 - Mareike Burba: -
 
