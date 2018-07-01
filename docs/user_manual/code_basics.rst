@@ -18,18 +18,21 @@ In order to use the Google Maps Viewer in GNSS Comapre, you'll need to get your 
 
 To get the Google Maps SDK key, follow this `guide`_.
 
-After you have the key (it will look like a string of random characters, starting with ``AIza``), you'll have to copy and paste it to the ``AndroidManifest.xml`` file. If you're using Android Studio, you can find ``AndroidManifest.xml`` by double-tapping shift and typing the name of the file. Find the lines containing the following:
+After you have the key (it will look like a string of random characters, starting with ``AIza``), you'll have to make a new resource file. copy and paste it to the ``map_api_key.xml`` file located in the ``res/values`` directory. Find the lines containing the following:
 
 .. code-block:: xml
 
-  <meta-data
-    android:name="com.google.android.geo.API_KEY"
-    android:value="YOUR_API_KEY" />
+  <string name="map_api_key">YOUR_API_KEY</string>
 
+And replace ``YOUR_API_KEY`` with your API key.
 
-And replace ``YOUR_API_KEY`` with your API key (the quotation marks should remain).
+Remember not to share the api code with anyone! If you're using git, you can mark that file as one which should not be tracked with
 
-Remember not to share the api code with anyone!
+.. code-block:: bash
+
+	git update-index --assume-unchanged app/src/main/res/values/map_api_key.xml
+
+This way, the file will remain in your repository, but any changes made to it will be ignored, so e.g. your API key will not be pushed to the remote.
 
 
 
