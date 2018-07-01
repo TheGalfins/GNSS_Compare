@@ -9,6 +9,8 @@ It's not necessary to use `Android Studio`_ to make modifications and build code
 
 
 
+.. Don't change the title below, as it is linked to the app's map_disabled_layout and map_disabled_description string resource!
+
 Using the Google Maps Viewer
 ----------------------------
 
@@ -16,7 +18,7 @@ In order to use the Google Maps Viewer in GNSS Comapre, you'll need to get your 
 
 To get the Google Maps SDK key, follow this `guide`_.
 
-After you have the key (it should start with ``AIza``), copy it and paste to the ``AndroidManifest.xml``. If you're using Android Studio, you can find ``AndroidManifest.xml`` by double-tapping shift and typing the name of the file. Find this line in the manifest file:
+After you have the key (it will look like a string of random characters, starting with ``AIza``), you'll have to copy and paste it to the ``AndroidManifest.xml`` file. If you're using Android Studio, you can find ``AndroidManifest.xml`` by double-tapping shift and typing the name of the file. Find the lines containing the following:
 
 .. code-block:: xml
 
@@ -25,7 +27,7 @@ After you have the key (it should start with ``AIza``), copy it and paste to the
     android:value="YOUR_API_KEY" />
 
 
-And replace ``"YOUR_API_KEY"`` with your API key.
+And replace ``YOUR_API_KEY`` with your API key (the quotation marks should remain).
 
 
 
