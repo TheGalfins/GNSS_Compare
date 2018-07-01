@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pose_name"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAlignment="center"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/lat"
+        android:layout_width="70dp"
+        app:layout_constraintStart_toEndOf="@id/pose_name"
+        app:layout_constraintEnd_toStartOf="@id/lon"
+        app:layout_constraintTop_toTopOf="@id/pose_name"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Lat"/>
+
+    <TextView
+        android:id="@+id/lon"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/lat"
+        app:layout_constraintEnd_toStartOf="@id/alt"
+        app:layout_constraintTop_toTopOf="@id/pose_name"
+        android:textAlignment="center"
+        android:text="Lon"/>
+
+    <TextView
+        android:id="@+id/alt"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/lon"
+        app:layout_constraintEnd_toStartOf="@id/clock_bias"
+        android:textAlignment="center"
+        android:text="Alt"/>
+
+    <TextView
+        android:id="@+id/clock_bias"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/alt"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        android:text="Clock bias"/>
+
+</android.support.constraint.ConstraintLayout>

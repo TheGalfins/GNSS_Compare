@@ -1,0 +1,115 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/preference_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dip">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/list_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start|top"
+        android:textSize="10pt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/ap_black"
+        android:text="NAME"/>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="150dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start|top"
+        android:textSize="6pt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_content"
+        android:text="Module description\nModule description\nModule description"/>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/on_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start|top"
+        android:textSize="6pt"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="@id/save_to_file_description"
+        app:layout_constraintBaseline_toBaselineOf="@+id/on_switch"
+        android:text="Activate: "/>
+
+    <Switch
+        android:id="@+id/on_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/save_to_file_switch"
+        android:focusable="false"/>
+
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/save_to_file_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start|top"
+        android:textSize="6pt"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@id/save_to_file_switch"
+        app:layout_constraintBaseline_toBaselineOf="@+id/save_to_file_switch"
+        android:text="Save log: "/>
+
+    <Switch
+        android:id="@+id/save_to_file_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/on_switch"
+        app:layout_constraintBottom_toTopOf="@id/modify_button"
+        android:focusable="false"/>
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_height="40sp"
+        android:layout_width="120sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/save_to_file_description"
+        app:layout_constraintTop_toBottomOf="@id/modify_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="2dp"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:text="Delete"/>
+
+    <Button
+        android:id="@+id/modify_button"
+        android:layout_height="40sp"
+        android:layout_width="120sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/save_to_file_description"
+        app:layout_constraintTop_toBottomOf="@id/save_to_file_switch"
+        app:layout_constraintBottom_toTopOf="@id/delete_button"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="0dp"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:text="Modify"/>
+
+</android.support.constraint.ConstraintLayout>
+

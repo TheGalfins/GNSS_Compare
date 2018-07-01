@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/preference_title">
+
+        <ListPreference
+            android:title="@string/constellation_title"
+            android:summary="@string/constellation_summary"
+            android:key="constellation"/>
+
+        <MultiSelectListPreference
+            android:title="@string/correction_modules_title"
+            android:summary="@string/correction_modules_summary"
+            android:key="correction_module"/>
+
+        <ListPreference
+            android:title="@string/positioning_method_title"
+            android:summary="@string/positioning_method_summary"
+            android:key="pvt_method"/>
+
+        <ListPreference
+            android:title="Logging format"
+            android:summary="Select the format in which calculated position should be logged."
+            android:key="file_logger"/>
+
+        <EditTextPreference
+            android:title="Name"
+            android:summary="Enter name for this processing scheme"
+            android:key="name"/>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.galfins.gnss_compare.MainActivity"
+    android:id="@+id/main_view">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.rd.PageIndicatorView
+        android:id="@+id/pageIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_above="@+id/pager"
+        android:layout_marginBottom="20dp"
+        app:piv_animationType="slide"
+        app:piv_viewPager="@id/pager"
+        app:piv_dynamicCount="true"
+        app:piv_interactiveAnimation="true"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/pager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:piv_selectedColor="@color/colorPrimary"
+        app:piv_unselectedColor="@color/colorPrimaryBright"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
+
+</android.support.constraint.ConstraintLayout>
