@@ -15,7 +15,18 @@ Introduction
 
 Welcome to GNSS Compare's documentation!
 
-Please stay tuned, as this is still a demo version...
+Please stay tuned, this is still a beta version, and we're making updates on a daily basis...
+
+The latest apk to download and install on your phone always available :download:`here <https://raw.githubusercontent.com/TheGalfins/GNSS_Compare/master/release_apk/GNSS_Compare.apk>`.
+
+Please note that you need Android 7.0+ to run the application. Also, please note that not all Android 7.0+ phones support the Galileo Satellite System. List of Galileo compatible phones can be found `here <http://galileognss.eu/is-your-phone-using-galileo/>`_.
+
+So far we've been testing the application on:
+
+- Samsung Galaxy S8
+- Samsung Galaxy S8+
+
+And we are very happy with the results!
 
 .. toctree::
     :maxdepth: 2
@@ -25,7 +36,7 @@ Please stay tuned, as this is still a demo version...
     team
     android_gnssMeasurements
     glossary
-    credits    
+    credits
 
 
 .. toctree::
