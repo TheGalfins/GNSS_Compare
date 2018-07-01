@@ -26,7 +26,7 @@ Mateusz Krainski
 -----------------
 
 .. image:: img/Mat.png
-    :width: 25%
+    :width: 30%
     :align: center
     :alt: Mat
 
@@ -46,7 +46,7 @@ Dominika Perz
 -----------------
 
 .. image:: img/Dominika.png
-    :width: 40%
+    :width: 30%
     :align: center
     :alt: Dominika
 
@@ -72,7 +72,7 @@ Sebastian Ciuban
 -----------------
 
 .. image:: img/Sebastian.png
-    :width: 40%
+    :width: 30%
     :align: center
     :alt: Sebastian
 
@@ -92,7 +92,7 @@ Mareike Burba
 -----------------
 
 .. image:: img/Mareike.png
-    :width: 40%
+    :width: 30%
     :align: center
     :alt: Mareike
 
