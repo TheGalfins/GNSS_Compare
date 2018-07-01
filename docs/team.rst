@@ -76,7 +76,7 @@ Sebastian Ciuban
     :align: center
     :alt: Sebastian
 
-Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Center working
+Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Centre working
 on the Galileo project. He holds a Master of Science degree in Aerospace Systems – Navigation and Telecommunications
 granted by the French Civil Aviation University (ENAC) from Toulouse, France. After his first year of master studies he worked
 a summer (2016) at Acorde Technologies in Spain in the area of GPS/INS integration. During the second year of studies he developed
