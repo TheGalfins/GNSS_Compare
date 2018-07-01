@@ -25,7 +25,7 @@ Software Design
 Mateusz Krainski
 -----------------
 
-.. image:: img/Mat.jpg
+.. image:: img/Mat.png
     :width: 25%
     :align: center
     :alt: Mat
@@ -45,7 +45,7 @@ on a semi-national level.
 Dominika Perz
 -----------------
 
-.. image:: img/Dominika.jpg
+.. image:: img/Dominika.png
     :width: 40%
     :align: center
     :alt: Dominika
@@ -71,7 +71,7 @@ GNSS Signal Processing
 Sebastian Ciuban
 -----------------
 
-.. image:: img/Sebastian.jpg
+.. image:: img/Sebastian.png
     :width: 40%
     :align: center
     :alt: Sebastian
@@ -91,7 +91,7 @@ processing.
 Mareike Burba
 -----------------
 
-.. image:: img/Mareike.jpg
+.. image:: img/Mareike.png
     :width: 40%
     :align: center
     :alt: Mareike
