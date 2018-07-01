@@ -17,7 +17,7 @@ Welcome to GNSS Compare's documentation!
 
 Please stay tuned, this is still a beta version, and we're making updates on a daily basis...
 
-The latest apk to download and install on your phone always available :download: `here <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
+The latest apk to download and install on your phone always available :download:`here <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
 
 Please note that you need Android 7.0+ to run the application. Also, please note that not all Android 7.0+ phones support the Galileo Satellite System. List of Galileo compatible phones can be found `here <http://galileognss.eu/is-your-phone-using-galileo/>`_.
 
