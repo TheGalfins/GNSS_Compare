@@ -6,7 +6,7 @@ Work in progress...
 
 Check out the [docs](https://gnss-compare.readthedocs.io).
 
-Or dive straight into using the app -- The latest release always [here](https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk).
+Or dive straight into using the app - The latest release always [here](https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk).
 
 
 The main ``app`` module of this work is released under the Apache 2.0 license.
