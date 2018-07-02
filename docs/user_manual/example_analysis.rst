@@ -30,7 +30,7 @@ Let's take a look at some details about this scenario:
 After the results of the PVT estimations were obtained from the logged files of *GNSS Compare*, they were projected
 in Google Earth as seen in the figure below for an initial analysis.
 
-.. image:: imgAnalysis/StaticGoogleEarth.PNG
+.. image:: imgAnalysis/StaticGoogleEarth.jpg
     :width: 70%
     :align: center
     :alt: StaticGoogleEarth
