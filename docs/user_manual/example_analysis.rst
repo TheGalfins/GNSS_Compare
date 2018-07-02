@@ -24,7 +24,7 @@ Let's take a look at some details about this scenario:
 
 - Reference location: Latitude 52.16954469, Longitude 4.48089101, Altitude 55.48 m
 - Data collection duration: approximately 4 minutes
-- Enabled constellations: Galileo, GPS, Galileo+GPS
+- Enabled constellations: GPS, Galileo+GPS
 - Number of used satellites: 4 Galileo and 5 GPS
 
 After the results of the PVT estimations were obtained from the logged files of *GNSS Compare*, they were projected
@@ -35,19 +35,11 @@ in Google Earth as seen in the figure below for an initial analysis.
     :align: center
     :alt: TheGalfins
 
-In this scenario one can observe in the above figure that the computations based on Galileo only are closer to
-the reference when compared with GPS only or Galileo+GPS. In order to understand these aspects in a more
+In this scenario one can observe in the above figure that the computations based on Galileo+GPS are closer to
+the reference when compared with GPS only. In order to understand these aspects in a more
 detailed manner, the behavior of the errors with respect to the reference can be studied.
 The errors are computed based on the cartesian coordinates within the Earth Centered Earth Fixed (ECEF)
 frame.
-
-.. image:: imgAnalysis/static_ekfGalileo_ecefErrors.png
-    :width: 70%
-    :align: center
-    :alt: TheGalfins
-
-In the above figure the errors converge to a stable evolution after approximately 1 minute and a half. This is as expected taking into account that the designed Extended Kalman Filter for a static user was selected in the application. What is also
-interesting to notice is that after the convergence time the errors reached a constant-like evolution.
 
 .. image:: imgAnalysis/static_ekfGPS_ecefErrors.png
     :width: 70%
@@ -55,11 +47,7 @@ interesting to notice is that after the convergence time the errors reached a co
     :alt: TheGalfins
 
 The error evolutions for GPS only PVT are presented in the above figure and it can be directly observed that they are
-significantly larger and with a higher variance when compared with the ones from Galileo. A plausible
-explanation for the results of this scenario relies on the Galileo signal structure that is based on more modern
-modulations, like Binary Offset Carrier (BOC), that have an increased resilience to interference and multipath
-leading to a better ranging performance in comparison with signals that have Binary Phase Shift Keying (BPSK)
-modulations like GPS L1 C/A.
+quite large and with a high variance. Let's see what happens if we add Galileo in the processing.
 
 .. image:: imgAnalysis/static_ekfGalileo+GPS_ecefErrors.png
     :width: 70%
@@ -78,7 +66,7 @@ This scenario is defined in the following way:
 - User dynamics: Walking pedestrian
 - Location: The European Space Research and Technology Centre (ESTEC)’s parking lot
 - Data collection duration: approximately 4 and half minutes
-- Enabled constellations: Galileo, GPS, Galileo+GPS
+- Enabled constellations:GPS, Galileo+GPS
 - PVT estimator: Extended Kalman Filter
 - Number of satellites: On average 3 Galileo and 8 GPS
 
@@ -108,7 +96,7 @@ And the last scenario has the following characteristics:
 - User dynamics: Cycling user
 - Location: ESTEC
 - Data collection duration: approximately 3 minutes
-- Enabled constellations: Galileo, GPS, Galileo+GPS
+- Enabled constellations: GPS, Galileo+GPS
 - PVT estimator: Extended Kalman Filter
 - Number of satellites: On average 4 Galileo and 8 GPS
 
@@ -123,4 +111,4 @@ And the last scenario has the following characteristics:
     :alt: TheGalfins
 
 Even with this rather simplistic analysis one can gain some interesting insights. We do hope
-that you have now a more clear idea about the possibilities that *GNSS Compare* can open!    
+that you have now a more clear idea about the possibilities that *GNSS Compare* can open!
