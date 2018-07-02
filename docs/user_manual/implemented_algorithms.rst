@@ -329,5 +329,4 @@ To estimate the vector of unknowns (x) in the WLS sense, we proceed in the follo
 .. math::
   \hat{\mathbf{x}}_{\text{WLS}} = \left(\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{H} \right)^{-1}\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{z}.
 
-*Practical advise: In the WLS case, as the position is concerned, we are estimating the difference between the approximated position and the true position until this difference is below a certain threshold. We encourage you to check the
-WeightedLeastSquares class to see how this is handled.*
+*Practical advise: In the WLS case, as the position is concerned, we are estimating the difference between the approximated position and the true position until this difference is below a certain threshold. We encourage you to check the ``WeightedLeastSquares`` class to see how this is handled.*
