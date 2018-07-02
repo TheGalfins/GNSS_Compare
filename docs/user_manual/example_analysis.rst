@@ -21,7 +21,6 @@ Static user
 ================
 
 Let's take a look at some details about this scenario:
-
 - Reference location: Latitude 52.16954469, Longitude 4.48089101, Altitude 55.48 m
 - Data collection duration: approximately 4 minutes
 - Enabled constellations: Galileo, GPS, Galileo+GPS
@@ -31,9 +30,21 @@ After the results of the PVT estimations were obtained from the logged files of 
 in Google Earth as seen in the figure below for an initial analysis.
 
 .. image:: imgAnalysis/StaticgoogleEarth.PNG
-    :width: 60%
+    :width: 70%
     :align: center
     :alt: TheGalfins
+
+In this scenario one can observe in the above figure that the computations based on Galileo only are closer to
+the reference when compared with GPS only or Galileo+GPS. In order to understand these aspects in a more
+detailed manner, the behavior of the errors with respect to the reference can be studied.
+The errors are computed based on the cartesian coordinates within the Earth Centered Earth Fixed (ECEF)
+frame.
+
+.. image:: imgAnalysis/static_ekfGalileo_ecefErrors.png
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
 
 
 Pedestrian user
