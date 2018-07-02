@@ -48,3 +48,4 @@ And we are very happy with the results!
     user_manual/code_basics.rst
     user_manual/android_gnssMeasurements.rst
     user_manual/implemented_algorithms.rst
+    user_manual/example_analysis.rst
