@@ -21,6 +21,7 @@ Static user
 ================
 
 Let's take a look at some details about this scenario:
+
 - Reference location: Latitude 52.16954469, Longitude 4.48089101, Altitude 55.48 m
 - Data collection duration: approximately 4 minutes
 - Enabled constellations: Galileo, GPS, Galileo+GPS
@@ -72,6 +73,54 @@ with the solution based only on GPS.
 Pedestrian user
 ===============
 
+This scenario is defined in the following way:
+
+- User dynamics: Walking pedestrian
+- Location: The European Space Research and Technology Centre (ESTEC)’s parking lot
+- Data collection duration: approximately 4 and half minutes
+- Enabled constellations: Galileo, GPS, Galileo+GPS
+- PVT estimator: Extended Kalman Filter
+- Number of satellites: On average 3 Galileo and 8 GPS
+
+As for this case there is no reference trajectory available the results are analyzed at the observed satellite level
+and at the projection of the estimated position in Google Earth.
+
+.. image:: imgAnalysis/pedestrian_observedSV.png
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
+.. image:: imgAnalysis/pedestrian_googleEarth.PNG
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
+In the above figure the estimation of the trajectory that is based only on GPS does not follow too accurately the real
+pedestrian motion. However when both Galileo and GPS satellites are used together the position estimation is
+improved obtaining a pedestrian path closer to reality.
+
 
 Dynamic user
 ============
+
+And the last scenario has the following characteristics:
+
+- User dynamics: Cycling user
+- Location: ESTEC
+- Data collection duration: approximately 3 minutes
+- Enabled constellations: Galileo, GPS, Galileo+GPS
+- PVT estimator: Extended Kalman Filter
+- Number of satellites: On average 4 Galileo and 8 GPS
+
+.. image:: imgAnalysis/bike_obsSV.png
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
+.. image:: imgAnalysis/bike_googleEarth.PNG
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
+Even with this rather simplistic analysis one can gain some interesting insights. We do hope
+that you have now a more clear idea about the possibilities that *GNSS Compare* can open!    
