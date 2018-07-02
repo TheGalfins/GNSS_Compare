@@ -33,7 +33,7 @@ in Google Earth as seen in the figure below for an initial analysis.
 .. image:: imgAnalysis/StaticGoogleEarth.PNG
     :width: 30%
     :align: center
-    :alt: TheGalfins
+    :alt: StaticGoogleEarth
 
 In this scenario one can observe in the above figure that the computations based on Galileo+GPS are closer to
 the reference when compared with GPS only. In order to understand these aspects in a more
@@ -44,7 +44,7 @@ frame.
 .. image:: imgAnalysis/static_ekfGPS_ecefErrors.png
     :width: 70%
     :align: center
-    :alt: TheGalfins
+    :alt: staticEKFgps
 
 The error evolutions for GPS only PVT are presented in the above figure and it can be directly observed that they are
 quite large and with a high variance. Let's see what happens if we add Galileo in the processing.
@@ -52,7 +52,7 @@ quite large and with a high variance. Let's see what happens if we add Galileo i
 .. image:: imgAnalysis/static_ekfGalileo+GPS_ecefErrors.png
     :width: 70%
     :align: center
-    :alt: TheGalfins
+    :alt: staticGalGPS
 
 For the case when the PVT is computed using both Galileo and GPS, the above figure shows improvements when compared
 with the solution based only on GPS.
@@ -76,12 +76,12 @@ and at the projection of the estimated position in Google Earth.
 .. image:: imgAnalysis/pedestrian_observedSV.png
     :width: 70%
     :align: center
-    :alt: TheGalfins
+    :alt: pedestrianObsSV
 
 .. image:: imgAnalysis/pedestrian_googleEarth.PNG
     :width: 70%
     :align: center
-    :alt: TheGalfins
+    :alt: pedestrianGoogle
 
 In the above figure the estimation of the trajectory that is based only on GPS does not follow too accurately the real
 pedestrian motion. However when both Galileo and GPS satellites are used together the position estimation is
@@ -103,12 +103,12 @@ And the last scenario has the following characteristics:
 .. image:: imgAnalysis/bike_obsSV.png
     :width: 70%
     :align: center
-    :alt: TheGalfins
+    :alt: bikeObsSV
 
 .. image:: imgAnalysis/bike_googleEarth.PNG
     :width: 70%
     :align: center
-    :alt: TheGalfins
+    :alt: bikeGoogleEarth
 
 Even with this rather simplistic analysis one can gain some interesting insights. We do hope
 that you have now a more clear idea about the possibilities that *GNSS Compare* can open!
