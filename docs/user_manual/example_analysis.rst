@@ -31,7 +31,7 @@ After the results of the PVT estimations were obtained from the logged files of 
 in Google Earth as seen in the figure below for an initial analysis.
 
 .. image:: imgAnalysis/StaticGoogleEarth.PNG
-    :width: 30%
+    :width: 10%
     :align: center
     :alt: StaticGoogleEarth
 
