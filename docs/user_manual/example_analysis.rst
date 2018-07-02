@@ -45,6 +45,28 @@ frame.
     :align: center
     :alt: TheGalfins
 
+In the above figure the errors converge to a stable evolution after approximately 1 minute and a half. This is as expected taking into account that the designed Extended Kalman Filter for a static user was selected in the application. What is also
+interesting to notice is that after the convergence time the errors reached a constant-like evolution.
+
+.. image:: imgAnalysis/static_ekfGPS_ecefErrors.png
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
+The error evolutions for GPS only PVT are presented in the above figure and it can be directly observed that they are
+significantly larger and with a higher variance when compared with the ones from Galileo. A plausible
+explanation for the results of this scenario relies on the Galileo signal structure that is based on more modern
+modulations, like Binary Offset Carrier (BOC), that have an increased resilience to interference and multipath
+leading to a better ranging performance in comparison with signals that have Binary Phase Shift Keying (BPSK)
+modulations like GPS L1 C/A.
+
+.. image:: imgAnalysis/static_ekfGalileo+GPS_ecefErrors.png
+    :width: 70%
+    :align: center
+    :alt: TheGalfins
+
+For the case when the PVT is computed using both Galileo and GPS, the above figure shows improvements when compared
+with the solution based only on GPS.
 
 
 Pedestrian user
