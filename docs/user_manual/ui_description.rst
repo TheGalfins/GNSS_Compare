@@ -14,6 +14,18 @@ We refer to a *view* as the current content displayed by the application. The us
 can change these views by swiping on the phone's screen. Curently we have the following
 views: **Main View**, **Satellite signal stregth**, **Positioning error plot** and **Google Maps view**
 
+Main View
+---------
+
 .. image:: img/MainView.gif
       :width: 50%
       :align: center
+
+Satellite signal strength
+--------------------------
+
+Positioning error plot
+----------------------
+
+Google Maps view
+----------------
