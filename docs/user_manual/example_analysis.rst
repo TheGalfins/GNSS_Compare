@@ -66,7 +66,7 @@ This scenario is defined in the following way:
 - User dynamics: Walking pedestrian
 - Location: The European Space Research and Technology Centre (ESTEC)’s parking lot
 - Data collection duration: approximately 4 and half minutes
-- Enabled constellations:GPS, Galileo+GPS
+- Enabled constellations: GPS, Galileo+GPS
 - PVT estimator: Extended Kalman Filter
 - Number of satellites: On average 3 Galileo and 8 GPS
 
