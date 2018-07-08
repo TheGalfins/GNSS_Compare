@@ -12,7 +12,7 @@ Each of those constellations consists of a set of 20-30 satellites orbiting abov
 
 In the context of GNSS Compare, a ``Constellation``, is a class, which defines those two properties:
 
-- is capable of converting raw measurements, extracted from the phone, into pseudoranges
+- is capable of converting the raw measurements extracted from the phone into pseudoranges,
 - is able to calculate satellite's position in the time of transmission.
 
 In this context, the constellations can be treated individually, e.g. we separate GPS from Galileo, and perform position determinating calculations for them separately, or they can be treated together, as in our ``Galileo+GPS`` example. Developers must take care as combining constellations is not always that easy!
@@ -23,7 +23,7 @@ Corrections
 
 As the signal travels from the satellite, it's prone to a number of sources of error (e.g., ionosphere, troposphere), which the user will have to take into account. For a more accurate positioning, we need to estimate the distance to the satellite with as good as possible, so we need to remove from the signal any disturbances we might know of.
 
-Those disturbances are estimated using various, more or less complicated, mathematical models of the natural phenomena. Those models allow us to calculate corrections, which are later applied to the pseudorances. The most commonly used corrections are ionospheric, tropospheric and those including the relativistic effects.
+Those disturbances are estimated using various, more or less complicated, mathematical models of the natural phenomena. Those models allow us to calculate corrections, which are later applied to the pseudoranges. The most commonly used corrections are for the ionosphere, troposphere and for those including the relativistic effects.
 
 In the context of GNSS Compare, a ``Correction`` is a class, which provides a method to calculate the value of the correction, based on few parameters, which include:
 
@@ -38,7 +38,7 @@ The general rule is simple -- the more corrections are applied, the more accurat
 PVT Estimator
 -------------
 
-The idea is quite simple. PVT estimators are algorithms which take as input satellite positions and pseudoranges to those satellites and aim to estimate the receiver's position, velocity and time. In some applications, it's sufficient to estimate just the position and time. Let's take a look at the parameters we wish to estimate. Position is quite obvious - that's what we would want to get from this whole process. In some cases, we can use the signal characteristics to improve the estimation of the receiver's velocity (e.g., using doppler measurements), thus increasing the accuracy of the position estimations. Additionally to the position related parameters we also need to estimate the receiver :ref:`clock bias<clockBias>` with respect to a certain GNSS Time System (e.g, Galileo System Time). This is handled by having the clock bias as one of the paramters to be estimated alongside with the position and velocity.
+The PVT estimators are algorithms which take as input satellite positions and pseudoranges to those satellites and aim to estimate the receiver's position, velocity and time. In some applications, it's sufficient to estimate just the position and time. Let's take a look at the parameters we wish to estimate. Position is quite obvious - that's what we would want to get from this whole process. In some cases, we can use the signal characteristics to improve the estimation of the receiver's velocity (e.g., using doppler measurements), thus increasing the accuracy of the position estimations. Additionally to the position related parameters we also need to estimate the receiver :ref:`clock bias<clockBias>` with respect to a certain GNSS time frame (e.g., Galileo System Time). This is handled by having the clock bias as one of the paramters to be estimated alongside with the position and velocity.
 
 In the context of GNSS Compare, the ``PvtMethod`` class does exactly that. It's supposed to calculate the receiver's position, based on observed satellite parameters. Internally, it should be storing the calculated velocity and clock bias for enhanced processing, but from the point of view of GNSS Compare's framework, at the moment, the only value used outside of the ``PvtMethod`` class is the calculated position. But hey -- there's of course room to improve.
 

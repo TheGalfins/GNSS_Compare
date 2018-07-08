@@ -4,7 +4,7 @@ Glossary
 ********
 
 
-This section is to provide a small glossay on the subject of satellite navigation, Android and software engineering in general. You can find below descriptions of all used technical terms in this documentation.
+The aim of this section is to provide a small glossary on the subject of satellite navigation, Android and software engineering in general. You can find below descriptions of all used technical terms in this documentation.
 
 
 Global Navigation Satellite Systems Glossary
@@ -79,7 +79,7 @@ First let's start thinking (in general terms) how the receiver determines the di
 .. math::
   R = c \cdot (t_{R} - t^{S}).
 
-Although the clocks (atomic clocks) of the satellites are highly accurate, they are still not perfect which lead them to be biased with respect to a certain GNSS System Time. Furthermore, considering that the quality of the clocks used in the typical GNSS receiver is inferior to the ones of the satellites, there is also a (significantly larger) bias in its time measurements. Therefore, let's take this into account in our equation expressed above:
+Although the clocks (atomic clocks) of the satellites are highly accurate, they are still not perfect which lead them to be biased with respect to a certain GNSS time frame. Furthermore, considering that the quality of the clocks used in the typical GNSS receiver is inferior to the ones of the satellites, there is also a (significantly larger) bias in its time measurements. Therefore, let's take this into account in our equation expressed above:
 
 .. math::
   R = c \cdot [t_{R}+\delta t_{R} - (t^{S} + \delta t^{S})].
@@ -94,7 +94,7 @@ Assuming that the time of signal reception and the time of signal transmission a
 .. math::
   R = \rho + c \cdot (\delta t_{R} - \delta t^{S}).
 
-Now that we got this settled, we also need to account for the effects that disturb the signal's travel from the satellite to the receiver such as the ionosphere (I), troposphere (T) and for the local effects like the receiver's noise, multipath which for the sake of simplicity we gather these terms in a single one (epsilon). The number of effects that introduce errors in the range measurements is larger and we don't cover them here.
+Now that we got this settled, we also need to account for the effects that disturb the signal's travel from the satellite to the receiver such as the ionosphere (I) and troposphere (T). The local effects like the receiver's noise and multipath which for the sake of simplicity we gather them in a single term (epsilon). The number of effects that introduce errors in the range measurements is larger and we don't cover them here.
 
 .. math::
   R = \rho + c \cdot (\delta t_{R} - \delta t^{S}) + I + T + \epsilon.
@@ -118,17 +118,17 @@ The process of obtaining the position in a certain coordinate system using GNSS 
 
 We have already seen in the *Pseudorange* section that we can obtain the range information towards the observed satellites. And what is missing is how to determine the coordinates of those satellites. To compute the coordinates of the satellite we need some parameters that describe their orbits. For this we have to be grateful to the work of Johannes Kepler on his law of planetary motion as he discovered the six parameters also known as the *Keplerian elements* that define an orbit:
 
-- Eccentricity
+- Eccentricity,
 
-- Semimajor axis
+- Semimajor axis,
 
-- Inclination
+- Inclination,
 
-- Longitude of the ascending node
+- Longitude of the ascending node,
 
-- Argument of periapsis
+- Argument of periapsis,
 
-- True anomaly
+- True anomaly.
 
 The definition of all of the above elements can be easily found with a quick search on any internet search engine. The idea is that those parameters (and many others) are contained in the navigation message that is modulated on the transmissed GNSS signals. The receiver will extract this information from the signal itself or get them from external means (e.g., concept of Assisted GNSS) and feed them into specific algorithms that will determine the satellite coordinates.
 
@@ -139,9 +139,9 @@ A good source for the satellite coordinate computation algorithms for Galileo an
 Position, Velocity and Time
 ---------------------------
 
-In GNSS we are mostly interested in the parameters of the user that describe the position, velocity and also time. Position is quite obvious - that's the whole point of navigation, to know where the user is located. Velocity can be estimated from consecutive postion measurements, but can also be calculated directly from the satellite signals, due to the Doppler's effect. It can be later used for more precise estimations of the user's position, for highly dynamic systems. Time is also crucial to be estimated, as the user's receiver clock contains a bias with respect to a certain GNSS Time System.
+In GNSS we are mostly interested in the parameters of the user that describe the position, velocity and also time. Position is quite obvious - that's the whole point of navigation, to know where the user is located. Velocity can be estimated from consecutive postion measurements, but can also be calculated directly from the satellite signals, due to the Doppler's effect. It can be later used for more precise estimations of the user's position, for highly dynamic systems. Time is also crucial to be estimated, as the user's receiver clock contains a bias with respect to a certain GNSS time frame.
 
-For more clarification on how this process is handled, the reader is welcomed to check the *Implemented PVT Algorithms* section.
+For more clarifications on how this process is handled, the reader is welcomed to check the *Implemented PVT Algorithms* section.
 
 
 
@@ -150,7 +150,7 @@ For more clarification on how this process is handled, the reader is welcomed to
 Clock bias
 ----------
 
-In GNSS, when we talk about *clock bias* we usually refer to the satellite clock bias and/or to the receiver's clock bias with respect to a certain GNSS Time System (e.g., Galileo System Time, GPS Time).
+In GNSS, when we talk about *clock bias* we usually refer to the satellite clock bias and/or to the receiver's clock bias with respect to a certain GNSS time frame (e.g., Galileo System Time, GPS Time).
 
 Let's take a look on how we correct for the satellite clock bias as explained in `ESA GNSS Data Processing Volume I`_ (pages 104-105):
 
