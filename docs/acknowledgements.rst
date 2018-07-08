@@ -1,7 +1,7 @@
 
-********
-Credits
-********
+****************
+Acknowledgements
+****************
 
 In this section we would like to mention the libraries that we are using in the *GNSS Compare* software framework:
 
