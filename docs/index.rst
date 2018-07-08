@@ -36,7 +36,7 @@ And we are very happy with the results!
     team
     android_gnssMeasurements
     glossary
-    credits
+    acknowledgements
 
 
 .. toctree::

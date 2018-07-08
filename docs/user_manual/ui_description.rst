@@ -64,8 +64,17 @@ errors are expressed in meters in the north and east direction (local frame).
 
 Below the plot there is the legend with the specific colors for the chosen processing schemes/configurations.
 
+To get to the next view just swipe from right to left or to return to the previous one, from left to right.
+
+
 Google Maps view
 ----------------
+
+
+
+
+To get to the the previous view swipe from left to right.
+
 
 Setting a processing scheme
 ===========================
