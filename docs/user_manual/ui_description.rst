@@ -26,14 +26,29 @@ When you launch the application this is the first view.
 On top you have a blue "stripe" with the name of the application, a "+" and a "gearbox" icons. What are the
 functionalities of those icons, we will see in the *Setting a processing scheme* part.
 
-Next is the **Constellation status** header that tells you what GNSS constellations and how many satellites are used to compute
-PVT. In the example above we can see that a combination of Galileo+GPS, GPS only and Galileo only are considered
-in the algorithms. Moreover, you can see that there that not all *Visible* satellites are being *Used* in the calculations.
+Next is the **Constellation status** header and the information below of it shows you what GNSS constellations and how many satellites are used to compute PVT. In the GIF above we can see that a combination of Galileo+GPS, GPS only and Galileo only are considered in the algorithms. Moreover, you can notice that not all *Visible* satellites are being *Used* in the calculations.
 The reason behind this is exaplined in a dedicated chapter of this documentation called *Android GNSS raw measurements*. Shortly,
-it is because not obtained pseudoranges pass a criteria that would allow them to be used in the PVT estimation.
+it is because not all obtained pseudoranges pass a criteria that would allow them to be used in the PVT estimation.
+
+Below the header called **Calculation results** are the results of the PVT estimators (EKF) in terms of: latitude ( *Lat* ), longitude ( *Lon* ), altitude ( *Alt* ) and the receiver's clock bias ( *C.bias* ). The UI allows it's user to make some interesting analysis
+and to gain some intuitions about the importance of the number of the used satellites in PVT. As example, because there are only 3 Galileo satellites used in the EKF we do expect the estimations of the unknowns to be degraded, which is the case.
+
+To get to the next view just swipe from right to left.
+
 
 Satellite signal strength
 --------------------------
+
+This view is quite straight forward. Here you can monitor the signal strenght of the satellites that are *Used*
+in the calculations
+
+.. image:: img/SatellieSignalStrenght.gif
+      :width: 50%
+      :align: center
+
+
+
+
 
 Positioning error plot
 ----------------------
