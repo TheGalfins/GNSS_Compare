@@ -71,7 +71,7 @@ Google Maps view
 
 In the last view there is the Google Maps on which the position estimations are displayed to be monitored. This can be useful
 especially when you are testing new PVT algorithms or change the settings of the existing ones (e.g., tunning the EKF). In the
-GIF below is presented the position estimations by the EKF while the user was in a bus. In this way you can study if your
+GIF below are presented the position estimations by the EKF while the user was in a bus. In this way you can study if your
 algorithms and their tunning are able to output estimations that follow your dynamics in real-time.
 
 .. image:: img/BusEkf.gif

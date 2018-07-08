@@ -86,8 +86,7 @@ On the left side of the equation we have moved every term that can be computed. 
 by using the approximate receiver position information. On the right hand side we have the unknowns (dX, dY, dZ, dtR) and their coefficients. Based on the linearized
 pseudorange equation one can form the observation matrix (H).
 
-*Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns
-that we are estimating directly in the EKF state vector. Check the GNSS Compare code (e.g., StaticExtendedKalmanFilter class) to understand how this is handled*.
+*Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns that we are estimating directly in the EKF state vector. Check the GNSS Compare code ( e.g.,* ``StaticExtendedKalmanFilter`` * class ) to understand how this is handled*.
 
 Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*!
 
@@ -103,8 +102,7 @@ In the case of a static user we have the following state vector at the epoch *k*
 In the above expression X, Y and Z are the coordinates in Earth Centered Earth Fixed (ECEF) frame and the last two parameters
 are the receiver clock bias and the receiver clock drift. All the parameters are expressed in units of meters.
 
-Now that the state vector is defined, we can move on by choosing the dynamic model. However first, let's think a bit about this
-aspect. A static user doesn't *change* his/hers position, therefore this means that over time the X, Y, Z coordinates remain
+Now that the state vector is defined, we can move on by choosing the dynamic model. Before moving further let's think a bit about this aspect. A static user doesn't *change* his/hers position, therefore this means that over time the X, Y, Z coordinates remain
 the same! We only have to take care of how we model the dynamic behavior of the receiver's clock, which is approximated to be:
 
 .. math::
@@ -127,8 +125,7 @@ Having in view all of this information we can define the transition matrix (F) o
 We are almost done with the dynamic model elements. The only thing that we need now is the process noise matrix (Q). Because
 the process noise matrix contains the uncertainty we have in the dynamic model that we consider, we have to define it accordingly.
 In the static case we can assume that the user is not moving and that the receiver clock has some frequency and phase errors. In order to
-fully understand this reasoning, the interested reader is advised to check the following book: *Introduction to Random Signals and Applied Kalman Filtering*
-by Robert Grover Brown and Patrick Y. C. Hwang. Therefore, the process noise matrix is approximated to be:
+fully understand this reasoning, the interested reader is advised to check the following book: *Introduction to Random Signals and Applied Kalman Filtering by Robert Grover Brown and Patrick Y. C. Hwang*.Therefore, the process noise matrix is approximated to be:
 
 .. math::
   \mathbf{Q}_k =
@@ -152,7 +149,7 @@ Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practi
 is to take care that we are dealing with the parameters of a variance-covariance matrix and also that they have
 to be converted in units of meters (remember that we have expressed the receiver clock states in units of meters).
 
-So basically we are done with the *static user* case! That's great as we can move to the dynamic one!
+So basically we are done with the *static user* case. That's great as we can move to the dynamic one!
 
 Dynamic user
 -----------------------------
@@ -245,7 +242,7 @@ In the above we use the *c* notation for the speed of light.
 **Pedestrian tunning**
 
 Intuitively we should have used the EKF designed for a dynamic user in this situation. It would only make sense as a pedestrian *changes* his/hers
-position over time. However, one must take into account that the pseudoranges delivered by the smartphone's GNSS receiver are quite noisy and if
+position over time. However, one must take into account that the raw measurements delivered by the smartphone's GNSS receiver are quite noisy and if
 there are no other means to detect the motion of the user (e.g., using an Inertial Measurement Unit) then estimating the velocities can make our results not soo accurate.
 Having this situation in view we have found a workaround: we use the EKF designed for a static user and we let some process noise for the X and Y coordinates ( *unless
 one of our users is not Superman we are not that interested in the Z direction* ). This means that we have the following Q matrix:
@@ -260,8 +257,7 @@ one of our users is not Superman we are not that interested in the Z direction* 
            0~~~~& 0~~~~& 0 & \frac{S_g~\Delta T^2}{2} & S_g~\Delta T \\
    \end{pmatrix}.
 
-The value 0.2 was chosen by trial and error and it fits a *slow* walking pedestrian. We hope that the name of the Java class
-*PedestrianStaticExtendedKalmanFilter* makes a little bit more sense now.
+The value 0.2 was chosen by trial and error and it fits a *slow* walking pedestrian. We hope that the name of the Java class ``PedestrianStaticExtendedKalmanFilter`` makes a little bit more sense now.
 
 **Dynamic tunning**
 
@@ -284,7 +280,7 @@ requires a minimum number of measurements (typically 4 if we want to estimate th
 Nevertheless is useful to have such an estimator as its behavior can be studied in real-time/post-processing in comparison with an EKF.
 And all this thanks to *GNSS Compare*!
 
-Altough the pseudorange measurement model was presented in the EKF description we will do it once more time just for the
+Altough the pseudorange measurement model was presented in the EKF description we will do it one more time just for the
 sake of completion.
 
 Pseudorange measurement model
