@@ -12,7 +12,7 @@ Application's Views
 
 We refer to a *view* as the current content displayed by the application. The user
 can change these views by swiping on the phone's screen. Curently we have the following
-views: **Main View**, **Satellite signal stregth**, **Positioning error plot** and **Google Maps view**
+views: **Main View**, **Satellite signal stregth**, **Positioning error plot** and **Google Maps view**.
 
 Main View
 ---------
@@ -70,6 +70,22 @@ To get to the next view just swipe from right to left or to return to the previo
 Google Maps view
 ----------------
 
+In the last view there is the Google Maps on which the position estimations are displayed to be monitored. This can be useful
+especially when you are testing new PVT algorithms or change the settings of the existing ones (e.g., tunning the EKF). In the
+GIF below is presented the position estimations by the EKF while the user was in a bus. In this way you can study if your
+algorithms and their tunning are able to output estimations that follow your dynamics in real-time.
+
+.. image:: img/BusEkf.gif
+      :width: 50%
+      :align: center
+
+Another useful study that can be made in this view is the comparison of different PVT algorithms. In the example below, one can
+gain insights about the difference between WLS and EKF. It is interesting to see the performance of an estimator that relies
+only on measurements relative to an estimator that uses a dynamic model in addition.
+
+.. image:: img/WlsVsEkf.gif
+      :width: 50%
+      :align: center
 
 
 
