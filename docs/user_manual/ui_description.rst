@@ -45,7 +45,7 @@ Satellite signal strength
 This view is quite straight forward. Here you can monitor the signal strenght of the satellites that are *Used*
 in the calculations.
 
-.. image:: img/SatellieSignalStrenght.gif
+.. image:: img/SatelliteSignalStrenght.gif
       :width: 50%
       :align: center
 
