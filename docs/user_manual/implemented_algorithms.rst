@@ -86,7 +86,7 @@ On the left side of the equation we have moved every term that can be computed. 
 by using the approximate receiver position information. On the right hand side we have the unknowns (dX, dY, dZ, dtR) and their coefficients. Based on the linearized
 pseudorange equation one can form the observation matrix (H).
 
-*Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns that we are estimating directly in the EKF state vector. Check the GNSS Compare code ( e.g.,* ``StaticExtendedKalmanFilter`` * class ) to understand how this is handled*.
+*Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns that we are estimating directly in the EKF state vector. Check the GNSS Compare code ( e.g.,* ``StaticExtendedKalmanFilter`` *class ) to understand how this is handled*.
 
 Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*!
 
