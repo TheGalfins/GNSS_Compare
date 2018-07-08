@@ -3,7 +3,7 @@
 Description
 ***********
 
-The purpose of GNSS Compare is to make the life of developers and reasearchers easier. It's an easy to use and easy to extend Android-based framework for calculating the :ref:`PVT<pvt>` based on raw GNSS measurements.
+The purpose of GNSS Compare is to make the life of developers and reasearchers easier. It's an easy to use and easy to extend Android-based framework for calculating the :ref:`PVT<pvt>` based on the raw GNSS measurements.
 
 
 Project history

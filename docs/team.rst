@@ -33,7 +33,7 @@ Mateusz Krainski
 Polish Young Graduate Trainee in the Directorate of Human Spaceflight and Robotic Exploration,
 at ESTEC, where he supports the European Robotic Arm (ERA) team. His main duties
 regard designing, developing and validating a robotic testbed for testing of ERA’s on-board
-smart cameras. During studies, Mateusz was one of the key board members of a robotic
+smart cameras. During his studies, Mateusz was one of the key board members of a robotic
 student society, where he managed numerous projects ranging from small teams for quick
 projects (this includes a Space Startup Weekend, an Android app hackathon and few duringstudies
 assignments), organizing robotic tournaments (with a team of over 15 people), up to
@@ -76,7 +76,7 @@ Sebastian Ciuban
     :align: center
     :alt: Sebastian
 
-Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Centre working
+Romanian Young Graduate Trainee in the Directorate of Navigation at the European Space Research and Technology Centre (ESTEC) working
 on the Galileo project. He holds a Master of Science degree in Aerospace Systems – Navigation and Telecommunications
 granted by the French Civil Aviation University (ENAC) from Toulouse, France. After his first year of master studies he worked
 a summer (2016) at Acorde Technologies in Spain in the area of GPS/INS integration. During the second year of studies he developed

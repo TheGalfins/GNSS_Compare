@@ -3,7 +3,7 @@
 Acknowledgements
 ****************
 
-In this section we would like to mention the libraries that we are using in the *GNSS Compare* software framework:
+We would like to mention the libraries that we are using in the *GNSS Compare* software framework:
 
 - `Efficient Java Matrix Library`_ (EJML) for linear algebra operations,
 

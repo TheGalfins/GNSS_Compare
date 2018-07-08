@@ -12,7 +12,7 @@ Application's Views
 
 We refer to a *view* as the current content displayed by the application. The user
 can change these views by swiping on the phone's screen. Curently we have the following
-views: **Main View**, **Satellite signal stregth**, **Positioning error plot** and **Google Maps view**.
+views: **Main View**, **Satellite signal strength**, **Positioning error plot** and **Google Maps view**.
 
 Main View
 ---------
@@ -23,12 +23,11 @@ When you launch the application this is the first view.
       :width: 50%
       :align: center
 
-On top you have a blue "stripe" with the name of the application, a "+" and a "gearbox" icons. What are the
-functionalities of those icons, we will see in the *Setting a processing scheme* part.
+On top you have a blue "stripe" with the name of the application, a "+" and a "gearbox" icon. What are the
+functionalities of those icons we will see in the :ref:`Setting a processing scheme` part.
 
 Next is the **Constellation status** header and the information below of it shows you what GNSS constellations and how many satellites are used to compute PVT. In the GIF above we can see that a combination of Galileo+GPS, GPS only and Galileo only are considered in the algorithms. Moreover, you can notice that not all *Visible* satellites are being *Used* in the calculations.
-The reason behind this is exaplined in a dedicated chapter of this documentation called *Android GNSS raw measurements*. Shortly,
-it is because not all obtained pseudoranges pass a criteria that would allow them to be used in the PVT estimation.
+The reason behind this is exaplined in a dedicated chapter of this documentation called :ref:`Android GNSS raw measurements`. Shortly, it is because not all obtained pseudoranges pass a criteria that would allow them to be used in the PVT estimation.
 
 Below the header called **Calculation results** are the results of the PVT estimators (EKF for this particular example) in terms of: latitude ( *Lat* ), longitude ( *Lon* ), altitude ( *Alt* ) and the receiver's clock bias ( *C.bias* ). The UI allows it's user to make some interesting analysis
 and to gain some intuitions about the importance of the number of the used satellites in PVT. As example, because there are only 3 Galileo satellites used in the EKF we do expect the estimations of the unknowns to be degraded, which is the case.
