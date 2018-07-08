@@ -29,7 +29,7 @@ In order to use the Google Maps Viewer in GNSS Comapre, you'll need to get your 
 
 To get the Google Maps SDK key, follow this `guide`_.
 
-After you have the key (it will look like a string of random characters, starting with ``AIza``), you'll have to make a new resource file. copy and paste it to the ``map_api_key.xml`` file located in the ``res/values`` directory. Find the lines containing the following:
+After you have the key (it will look like a string of random characters, starting with ``AIza``), you'll have to make a new resource file. Copy and paste it to the ``map_api_key.xml`` file located in the ``res/values`` directory. Find the lines containing the following:
 
 .. code-block:: xml
 
