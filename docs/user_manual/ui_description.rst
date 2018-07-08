@@ -54,8 +54,15 @@ To get to the next view just swipe from right to left or to return to the previo
 Positioning error plot
 ----------------------
 
+To have an idea of how well the position is estimated, we provide this view that contains a plot with the horizontal
+position errors using as reference the *Android FINE location* (i.e., the best location output by the phone). The
+errors are expressed in meters in the north and east direction (local frame).
 
+.. image:: img/PosErrorPhone.gif
+      :width: 50%
+      :align: center
 
+Below the plot there is the legend with the specific colors for the chosen processing schemes/configurations.
 
 Google Maps view
 ----------------
