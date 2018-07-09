@@ -112,11 +112,25 @@ We will continue to show how to create a processing scheme or modify an existing
 Creating a new one
 ------------------
 
-From the *Main View* select the "+" icon on the top right corner as shown below.
+From the *Main View* select the "+" icon on the top right corner as shown below. A new view will prompt that will
+allow you to select among the available options.
 
 .. image:: img/MainViewCreate2.jpg
       :width: 90%
       :align: center
+
+Let's begin by selecting the desired *Constellation* and *Correction modules*, one at a time.
+
+.. image:: img/Const_CorrModule.jpg
+      :width: 90%
+      :align: center
+
+Next we would like to select the *Positioning method* and the *Logging format*.
+
+.. image:: img/Pos_Log.jpg
+      :width: 90%
+      :align: center
+
 
 
 
