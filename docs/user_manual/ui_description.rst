@@ -94,7 +94,7 @@ To get to the the previous view swipe from left to right.
 Processing schemes
 ===================
 
-By processing scheme or calculation module we refer to a set of settings that are considered for the estimation of the
+By a processing scheme or a calculation module we refer to a set of settings that are considered for the estimation of the
 smartphone's position. The user can create a processing scheme in which he/she can choose the following:
 
 - Constellation: *Galileo+GPS, GPS, Galileo*
@@ -111,6 +111,13 @@ We will continue to show how to create a processing scheme or modify an existing
 
 Creating a new one
 ------------------
+
+From the *Main View* select the "+" icon on the top right corner as shown below.
+
+.. image:: img/MainViewCreate2.jpg
+      :width: 50%
+      :align: center
+
 
 
 Modifying an existing one
