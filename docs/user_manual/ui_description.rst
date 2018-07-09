@@ -4,7 +4,7 @@ Getting started with the User Interface
 ***************************************
 
 Here we show what you can see at the User Interface (UI) level and we also
-describe how to set up different processing schemes, effect of which can be studied in
+describe how to set up different processing schemes/calculation module, effect of which can be studied in
 real-time.
 
 Application's Views
@@ -91,10 +91,30 @@ only on measurements relative to an estimator that uses a dynamic model in addit
 To get to the the previous view swipe from left to right.
 
 
-Setting a processing scheme
-===========================
+Processing schemes
+===================
+
+By processing scheme or calculation module we refer to a set of settings that are considered for the estimation of the
+smartphone's position. The user can create a processing scheme in which he/she can choose the following:
+
+- Constellation: *Galileo+GPS, GPS, Galileo*
+
+- Correction modules: *Tropospheric correction, Klobuchar Iono Correction (only for GPS), Relativistic path range correction*
+
+- Positioning method: *Weighted Least Squares, Static EKF, Dynamic EKF, Pedestrian EKF*
+
+- Logging format: *Simple format, NMEA*
+
+- Name: *The user shall specify the name of the processing scheme*
+
+We will continue to show how to create a processing scheme or modify an existing one at the UI level.
+
+Creating a new one
+------------------
 
 
+Modifying an existing one
+-------------------------
 
 
 .. _`GNSS Logger`: https://github.com/google/gps-measurement-tools/tree/master/GNSSLogger
