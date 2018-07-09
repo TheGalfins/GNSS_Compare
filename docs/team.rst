@@ -114,6 +114,6 @@ If you would like to reach any of the *GNSS Compare* developers, here are their 
 - Mateusz Krainski: mateusz@krainski.eu
 - Dominika Perz: dominika.perz@gmail.com
 - Sebastian Ciuban: ciuban.sebastian@gmail.com
-- Mareike Burba: -
+- Mareike Burba: mareikeburba@gmail.com
 
 .. _`Galileo Smartphone App Challenge`: http://www.esa.int/Our_Activities/Navigation/ESA_trainees_compete_in_inaugural_Galileo_app_contest
