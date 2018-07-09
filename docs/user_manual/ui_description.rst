@@ -115,7 +115,7 @@ Creating a new one
 From the *Main View* select the "+" icon on the top right corner as shown below.
 
 .. image:: img/MainViewCreate2.jpg
-      :width: 50%
+      :width: 70%
       :align: center
 
 
