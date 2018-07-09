@@ -4,7 +4,7 @@ Getting started with the User Interface
 ***************************************
 
 Here we show what you can see at the User Interface (UI) level and we also
-describe how to set up different processing schemes/calculation module, effect of which can be studied in
+describe how to set up different processing schemes/calculation modules, effect of which can be studied in
 real-time.
 
 Application's Views
@@ -23,19 +23,19 @@ When you launch the application this is the first view.
       :width: 50%
       :align: center
 
-On top you have a blue "stripe" with the name of the application, a "+" and a "gearbox" icon. What are the
-functionalities of those icons we will see in the :ref:`Setting a processing scheme` part.
+On top there is a blue "stripe" with the name of the application, a "+" and a "gearbox" icon. What are the
+functionalities of those icons we will see in the :ref:`Processing schemes` part.
 
-Next is the **Constellation status** header and the information below of it shows you what GNSS constellations and how many satellites are used to compute PVT. In the GIF above we can see that a combination of Galileo+GPS, GPS only and Galileo only are considered in the algorithms. Moreover, you can notice that not all *Visible* satellites are being *Used* in the calculations.
-The reason behind this is exaplined in a dedicated chapter of this documentation called :ref:`Android GNSS raw measurements`. Shortly, it is because not all obtained pseudoranges pass a criteria that would allow them to be used in the PVT estimation.
+Next is the **Constellation status** header and the information below that shows what GNSS constellations and how many satellites are used to compute PVT. In the GIF above we can see that a combination of Galileo+GPS, GPS only and Galileo only are considered in the algorithms. Moreover, you can notice that not all *Visible* satellites are being *Used* in the calculations.
+The reason behind this is explained in a dedicated chapter of this documentation called :ref:`Android GNSS raw measurements`. Shortly, it is because not all obtained pseudoranges pass a criteria that would allow them to be used in the PVT estimation.
 
 Below the header called **Calculation results** are the results of the PVT estimators (EKF for this particular example) in terms of: latitude ( *Lat* ), longitude ( *Lon* ), altitude ( *Alt* ) and the receiver's clock bias ( *C.bias* ). The UI allows it's user to make some interesting analysis
 and to gain some intuitions about the importance of the number of the used satellites in PVT. As example, because there are only 3 Galileo satellites used in the EKF we do expect the estimations of the unknowns to be degraded, which is the case.
 
 And lastly, the *START RAW LOG* allows the logging of the Android GNSS raw measurements in the exact same format as the
-Google's Application `GNSS Logger`_. This feature allows you also to do analyze your data in post-processing!
+Google's Application `GNSS Logger`_. This feature allows you also to analyze your data in post-processing!
 
-To get to the next view just swipe from right to left.
+To get to the next view swipe from right to left.
 
 
 Satellite signal strength
@@ -48,7 +48,7 @@ in the calculations.
       :width: 50%
       :align: center
 
-To get to the next view just swipe from right to left or to return to the previous one, from left to right.
+To get to the next view swipe from right to left or to return to the previous one, from left to right.
 
 Positioning error plot
 ----------------------
@@ -61,9 +61,9 @@ errors are expressed in meters in the north and east direction (local frame).
       :width: 50%
       :align: center
 
-Below the plot there is the legend with the specific colors for the chosen processing schemes/configurations.
+Below the plot there is the legend with the specific colors for the chosen processing schemes.
 
-To get to the next view just swipe from right to left or to return to the previous one, from left to right.
+To get to the next view swipe from right to left or to return to the previous one, from left to right.
 
 
 Google Maps view
@@ -147,7 +147,7 @@ To modify an existing processing scheme, from the *Main View* press the "gearbox
       :width: 90%
       :align: center
 
-In the left image you can find the created processing schemes. Additionally, there is a summary for each
+In the right image you can find the created processing schemes. Additionally, there is a summary for each
 scheme with the chosen options. To change the settings of an existing scheme, press *Modify* and choose among
 the existing options. Moreover, in this view you also can enable/disable a processing scheme by pressing the  *Activate*
 switch or enable/disable data logging with the *Save log* switch. A dedicated section will be made regarding the logging
