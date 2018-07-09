@@ -147,5 +147,11 @@ To modify an existing processing scheme, from the *Main View* press the "gearbox
       :width: 90%
       :align: center
 
+In the left image you can find the created processing schemes. Additionally, there is a summary for each
+scheme with the chosen options. To change the settings of an existing scheme, press *Modify* and choose among
+the existing options. Moreover, in this view you also can enable/disable a processing scheme by pressing the  *Activate*
+switch or enable/disable data logging with the *Save log* switch. A dedicated section will be made regarding the logging
+formats of GNSS Compare.
+
 
 .. _`GNSS Logger`: https://github.com/google/gps-measurement-tools/tree/master/GNSSLogger
