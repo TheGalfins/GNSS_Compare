@@ -131,11 +131,21 @@ Next we would like to select the *Positioning method* and the *Logging format*.
       :width: 90%
       :align: center
 
+Finally we have to give a *Name* to the processing scheme and then press *Create*.
 
+.. image:: img/Name_Create.jpg
+      :width: 90%
+      :align: center
 
 
 Modifying an existing one
 -------------------------
+
+To modify an existing processing scheme, from the *Main View* press the "gearbox" icon as shown below.
+
+.. image:: img/Gear_Existing.jpg
+      :width: 90%
+      :align: center
 
 
 .. _`GNSS Logger`: https://github.com/google/gps-measurement-tools/tree/master/GNSSLogger
