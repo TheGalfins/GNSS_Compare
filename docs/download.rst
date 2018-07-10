@@ -3,7 +3,7 @@
 Download
 *********
 
-The latest Android PacKage (APK) to download and install on your phone is always available at the following link:
+The latest Android PacKage (APK) to download and install *GNSS Compare* on your phone is always available at the following link:
 
  `Download <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
 
