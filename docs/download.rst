@@ -3,7 +3,6 @@
 Download
 *********
 
-
 The latest Android PacKage (APK) to download and install on your phone always available:
 
  `Download <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
