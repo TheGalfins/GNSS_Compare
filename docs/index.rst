@@ -33,6 +33,7 @@ And we are very happy with the results!
     :caption: GNSS Compare
 
     description
+    download
     team
     android_gnssMeasurements
     glossary
