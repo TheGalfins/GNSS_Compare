@@ -28,6 +28,8 @@ So far we've been testing the application on:
 
 And we are very happy with the results!
 
+If you want to be kept up to date with our updates, you can sign up to our `newsletter <https://goo.gl/forms/Ws96HE3J703Khrdp2>`_!
+
 .. toctree::
     :maxdepth: 2
     :caption: GNSS Compare
@@ -38,6 +40,7 @@ And we are very happy with the results!
     android_gnssMeasurements
     glossary
     acknowledgements
+    newsletter
 
 
 .. toctree::
