@@ -23,7 +23,7 @@ import com.galfins.gogpsextracts.Coordinates;
  * Created by Mateusz Krainski on 1/20/2018.
  * This class is for performing all of the calculations and retrieving GNSS data from the chip.
  */
-public class CalculationModule implements Runnable{
+public class CalculationModule{
 
     /**
      * Proper implementation of the CalculationModule observable.
@@ -489,12 +489,11 @@ public class CalculationModule implements Runnable{
     }
 
     /**
-     * notifies observers about the new data. This is separate, because it's meant to be executed on
-     * UI thread.
+     * notifies observers about the new data. This is separate, to give the opportunity to execute this
+     * on UI thread
      */
-    @Override
-    public void run() {
-        Log.d(TAG, "run: invoked!");
+    public void notifyObservers() {
+        Log.d(TAG, "notifyObservers: invoked!");
         if(measurementsUpdated) {
             poseUpdatedNotifier.notifyObservers();
             measurementsUpdated = false;

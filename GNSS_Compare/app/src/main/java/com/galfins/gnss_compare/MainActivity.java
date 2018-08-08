@@ -18,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +37,8 @@ import com.rd.PageIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoConstellation;
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean add(final CalculationModule calculationModule) {
 
             if(pagerAdapterReference != null)
-                for (final DataViewer viewer : pagerAdapterReference.getViewers()) {
+                for (DataViewer viewer : pagerAdapterReference.getViewers()) {
                     viewer.addSeries(calculationModule);
                 }
 
@@ -237,13 +238,13 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Start threads associated with added CalculationModules. This is a single execution
-         * of a calculation module's run() method
+         * of a calculation module's notifyObservers() method
          */
         public void notifyObservers() {
             Log.d(TAG, "notifyObservers: invoked");
             synchronized (this) {
                 for (CalculationModule calculationModule : this) {
-                    calculationModule.run();
+                    calculationModule.notifyObservers();
                 }
             }
 
@@ -255,11 +256,21 @@ public class MainActivity extends AppCompatActivity {
          */
         public void reinitialize() {
             if(pagerAdapterReference != null)
-                for (final CalculationModule calculationModule : this)
-                    for (final DataViewer viewer : mPagerAdapter.getViewers())
+                for (CalculationModule calculationModule : this)
+                    for (DataViewer viewer : mPagerAdapter.getViewers())
                         viewer.addSeries(calculationModule);
+        }
 
+        public void addObserver(Observer observer){
+            for (CalculationModule calculationModule : this){
+                calculationModule.addObserver(observer);
+            }
+        }
 
+        public void removeObserver(Observer observer){
+            for (CalculationModule calculationModule : this){
+                calculationModule.removeObserver(observer);
+            }
         }
     }
 
@@ -438,20 +449,15 @@ public class MainActivity extends AppCompatActivity {
      * Creates default, initial calculation modules
      */
     private void createInitialCalculationModules(){
-        runOnUiThread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 Looper.prepare();
                 while (true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
                     try {
 
-                        List<CalculationModule> initialModules = new ArrayList<>();
+                        final List<CalculationModule> initialModules = new ArrayList<>();
 
                         initialModules.add(new CalculationModule(
                                 "Galileo+GPS",
@@ -483,23 +489,39 @@ public class MainActivity extends AppCompatActivity {
                                 }},
                                 DynamicExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
-                        try {
-                            for(CalculationModule module : initialModules)
-                                createdCalculationModules.add(module);
-                        } catch (Exception e){
-                            for(CalculationModule module : initialModules) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
                                 try {
-                                    createdCalculationModules.remove(module);
-                                } catch (Exception e2){
-                                    e2.printStackTrace();
-                                    Log.e(TAG, "run: Removal of initial module failed");
+                                    for(CalculationModule module : initialModules)
+                                        createdCalculationModules.add(module);
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                    Log.e(TAG, "createInitalCalculationModules: adding modules failed");
+                                    for(CalculationModule module : initialModules) {
+                                        try {
+                                            createdCalculationModules.remove(module);
+                                        } catch (Exception e2){
+                                            e2.printStackTrace();
+                                            Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
+                                        }
+                                    }
+                                    CalculationModule.clear();
                                 }
                             }
-                            CalculationModule.clear();
+                        });
+
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
 
-                        Log.i(TAG, "run: Calculation modules initialized");
-                        break;
+                        if(createdCalculationModules.size() > 0) {
+                            Log.i(TAG, "createInitalCalculationModules: Calculation modules initialized");
+                            break;
+                        }
                     } catch (CalculationModule.NameAlreadyRegisteredException e) {
                         CalculationModule.clear();
                         e.printStackTrace();
@@ -508,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        }).start();
     }
 
     @Override
