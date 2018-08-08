@@ -449,7 +449,7 @@ public class MainViewer extends Fragment implements DataViewer {
     @Override
     public void addSeries(CalculationModule calculationModule) {
 
-        if(poseGridView == null){
+        if(poseGridView==null || constellationGrid==null){
             seriesAddedBeforeInitialization.add(calculationModule);
         } else {
 
@@ -460,9 +460,9 @@ public class MainViewer extends Fragment implements DataViewer {
                     poseGridView,
                     poseGridView.getRowCount() - 1
             ));
-        }
 
-        constellationGrid.addSeries(calculationModule);
+            constellationGrid.addSeries(calculationModule);
+        }
     }
 
     private void removeSeriesFromGrid(

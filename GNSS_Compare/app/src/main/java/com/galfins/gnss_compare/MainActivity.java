@@ -449,88 +449,147 @@ public class MainActivity extends AppCompatActivity {
      * Creates default, initial calculation modules
      */
     private void createInitialCalculationModules(){
-        new Thread(new Runnable() {
+
+        final List<CalculationModule> initialModules = new ArrayList<>();
+
+        try {
+            initialModules.add(new CalculationModule(
+                    "Galileo+GPS",
+                    GalileoGpsConstellation.class,
+                    new ArrayList<Class<? extends Correction>>() {{
+                        add(ShapiroCorrection.class);
+                        add(TropoCorrection.class);
+                    }},
+                    DynamicExtendedKalmanFilter.class,
+                    NmeaFileLogger.class));
+
+            initialModules.add(new CalculationModule(
+                    "GPS",
+                    GpsConstellation.class,
+                    new ArrayList<Class<? extends Correction>>() {{
+                        add(ShapiroCorrection.class);
+                        add(TropoCorrection.class);
+                    }},
+                    DynamicExtendedKalmanFilter.class,
+                    NmeaFileLogger.class));
+
+            initialModules.add(new CalculationModule(
+                    "Galileo",
+                    GalileoConstellation.class,
+                    new ArrayList<Class<? extends Correction>>() {{
+                        add(ShapiroCorrection.class);
+                        add(TropoCorrection.class);
+                    }},
+                    DynamicExtendedKalmanFilter.class,
+                    NmeaFileLogger.class));
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(TAG, "createInitialCalculationModules: Exception when creating modules");
+        }
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Looper.prepare();
-                while (true) {
-
-                    try {
-
-                        final List<CalculationModule> initialModules = new ArrayList<>();
-
-                        initialModules.add(new CalculationModule(
-                                "Galileo+GPS",
-                                GalileoGpsConstellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                DynamicExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
-
-                        initialModules.add(new CalculationModule(
-                                "GPS",
-                                GpsConstellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-//                                    add(IonoCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                DynamicExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
-
-                        initialModules.add(new CalculationModule(
-                                "Galileo",
-                                GalileoConstellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                DynamicExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    for(CalculationModule module : initialModules)
-                                        createdCalculationModules.add(module);
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                    Log.e(TAG, "createInitalCalculationModules: adding modules failed");
-                                    for(CalculationModule module : initialModules) {
-                                        try {
-                                            createdCalculationModules.remove(module);
-                                        } catch (Exception e2){
-                                            e2.printStackTrace();
-                                            Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
-                                        }
-                                    }
-                                    CalculationModule.clear();
-                                }
-                            }
-                        });
-
-
+                try {
+                    for(CalculationModule module : initialModules)
+                        createdCalculationModules.add(module);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Log.e(TAG, "createInitalCalculationModules: adding modules failed");
+                    for(CalculationModule module : initialModules) {
                         try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            createdCalculationModules.remove(module);
+                        } catch (Exception e2){
+                            e2.printStackTrace();
+                            Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
                         }
-
-                        if(createdCalculationModules.size() > 0) {
-                            Log.i(TAG, "createInitalCalculationModules: Calculation modules initialized");
-                            break;
-                        }
-                    } catch (CalculationModule.NameAlreadyRegisteredException e) {
-                        CalculationModule.clear();
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                    CalculationModule.clear();
                 }
             }
-        }).start();
+        });
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Looper.prepare();
+//                while (true) {
+//
+//                    try {
+//
+//                        final List<CalculationModule> initialModules = new ArrayList<>();
+//
+//                        initialModules.add(new CalculationModule(
+//                                "Galileo+GPS",
+//                                GalileoGpsConstellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+//
+//                        initialModules.add(new CalculationModule(
+//                                "GPS",
+//                                GpsConstellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+////                                    add(IonoCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+//
+//                        initialModules.add(new CalculationModule(
+//                                "Galileo",
+//                                GalileoConstellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    for(CalculationModule module : initialModules)
+//                                        createdCalculationModules.add(module);
+//                                } catch (Exception e){
+//                                    e.printStackTrace();
+//                                    Log.e(TAG, "createInitalCalculationModules: adding modules failed");
+//                                    for(CalculationModule module : initialModules) {
+//                                        try {
+//                                            createdCalculationModules.remove(module);
+//                                        } catch (Exception e2){
+//                                            e2.printStackTrace();
+//                                            Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
+//                                        }
+//                                    }
+//                                    CalculationModule.clear();
+//                                }
+//                            }
+//                        });
+//
+//
+//                        try {
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        if(createdCalculationModules.size() > 0) {
+//                            Log.i(TAG, "createInitalCalculationModules: Calculation modules initialized");
+//                            break;
+//                        }
+//                    } catch (CalculationModule.NameAlreadyRegisteredException e) {
+//                        CalculationModule.clear();
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     @Override
