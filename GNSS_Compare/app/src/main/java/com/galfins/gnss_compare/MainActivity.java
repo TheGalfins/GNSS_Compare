@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -138,7 +139,12 @@ public class MainActivity extends AppCompatActivity {
      * Method to synchronize execution of calculations.
      */
     public void notifyCalculationObservers() {
-        createdCalculationModules.notifyObservers();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createdCalculationModules.notifyObservers();
+            }
+        });
     }
 
     /**
@@ -196,17 +202,22 @@ public class MainActivity extends AppCompatActivity {
      */
     public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
 
+        private DataViewerAdapter pagerAdapterReference = null;
+
+        public CalculationModulesArrayList(DataViewerAdapter pagerAdapter){
+            pagerAdapterReference = pagerAdapter;
+        }
+
+        public CalculationModulesArrayList(){
+        }
+
         @Override
         public boolean add(final CalculationModule calculationModule) {
 
-            for (final DataViewer viewer : mPagerAdapter.getViewers()) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewer.addSeries(calculationModule);
-                    }
-                });
-            }
+            if(pagerAdapterReference != null)
+                for (final DataViewer viewer : pagerAdapterReference.getViewers()) {
+                    viewer.addSeries(calculationModule);
+                }
 
             synchronized (this) {
                 return super.add(calculationModule);
@@ -215,9 +226,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean remove(Object o){
-            for (DataViewer viewer : mPagerAdapter.getViewers()) {
-                viewer.removeSeries((CalculationModule)o);
-            }
+            if(pagerAdapterReference != null)
+                for (DataViewer viewer : pagerAdapterReference.getViewers())
+                    viewer.removeSeries((CalculationModule)o);
 
             synchronized (this) {
                 return super.remove(o);
@@ -232,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "notifyObservers: invoked");
             synchronized (this) {
                 for (CalculationModule calculationModule : this) {
-                    runOnUiThread(calculationModule);
+                    calculationModule.run();
                 }
             }
 
@@ -243,16 +254,12 @@ public class MainActivity extends AppCompatActivity {
          * where created calculation modules stay in memory, but data viewers are recreated
          */
         public void reinitialize() {
-            for (final CalculationModule calculationModule : this) {
-                for (final DataViewer viewer : mPagerAdapter.getViewers()) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewer.addSeries(calculationModule);
-                        }
-                    });
-                }
-            }
+            if(pagerAdapterReference != null)
+                for (final CalculationModule calculationModule : this)
+                    for (final DataViewer viewer : mPagerAdapter.getViewers())
+                        viewer.addSeries(calculationModule);
+
+
         }
     }
 
@@ -282,14 +289,20 @@ public class MainActivity extends AppCompatActivity {
      */
     public void initializeCalculationModules(){
         if(createdCalculationModules==null) {
-            createdCalculationModules = new CalculationModulesArrayList();
+            createdCalculationModules = new CalculationModulesArrayList(mPagerAdapter);
             if(savedState == null)
                 createInitialCalculationModules();
             else if (savedState != null){
                 createCalculationModulesFromBundle(savedState);
             }
-        } else
-            createdCalculationModules.reinitialize();
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    createdCalculationModules.reinitialize();
+                }
+            });
+        }
     }
 
 
@@ -377,17 +390,22 @@ public class MainActivity extends AppCompatActivity {
      * TODO - Add flags for status of "Active" and "Log"
      * @param savedInstanceState bundle describing created calculation modules
      */
-    private void createCalculationModulesFromBundle(Bundle savedInstanceState) {
+    private void createCalculationModulesFromBundle(final Bundle savedInstanceState) {
 
-        ArrayList<String> modulesNames = savedInstanceState.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
+        final ArrayList<String> modulesNames = savedInstanceState.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
 
-        for(String name : modulesNames){
-            try {
-                createdCalculationModules.add(CalculationModule.fromConstructorArrayList(savedInstanceState.getStringArrayList(name)));
-            } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
-                e.printStackTrace();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for(String name : modulesNames){
+                    try {
+                        createdCalculationModules.add(CalculationModule.fromConstructorArrayList(savedInstanceState.getStringArrayList(name)));
+                    } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
+        });
     }
 
     @Override
@@ -420,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
      * Creates default, initial calculation modules
      */
     private void createInitialCalculationModules(){
-        new Thread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Looper.prepare();
@@ -465,7 +483,6 @@ public class MainActivity extends AppCompatActivity {
                                 }},
                                 DynamicExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
-
                         try {
                             for(CalculationModule module : initialModules)
                                 createdCalculationModules.add(module);
@@ -491,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        }).start();
+        });
     }
 
     @Override
@@ -616,15 +633,22 @@ public class MainActivity extends AppCompatActivity {
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-            CalculationModule newModule;
-
             try {
-                newModule = CalculationModule.createFromDescriptions(
+                final CalculationModule newModule = CalculationModule.createFromDescriptions(
                         sharedPreferences.getString(CreateModulePreference.KEY_NAME, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_CONSTELLATION, null),
                         sharedPreferences.getStringSet(CreateModulePreference.KEY_CORRECTION_MODULES, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_PVT_METHOD, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_FILE_LOGGER, null));
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createdCalculationModules.add(newModule);
+                        CreateModulePreference.notifyModuleCreated();
+                        makeNotification("Module " + newModule.getName() + " created...");
+                    }
+                });
 
             } catch (CalculationModule.NameAlreadyRegisteredException
                     | CalculationModule.NumberOfSeriesExceededLimitException
@@ -634,12 +658,7 @@ public class MainActivity extends AppCompatActivity {
                         .make(mainView, e.getMessage(), Snackbar.LENGTH_LONG);
 
                 snackbar.show();
-                return;
             }
-
-            createdCalculationModules.add(newModule);
-            CreateModulePreference.notifyModuleCreated();
-            makeNotification("Module " + newModule.getName() + " created...");
 
         }
     }
