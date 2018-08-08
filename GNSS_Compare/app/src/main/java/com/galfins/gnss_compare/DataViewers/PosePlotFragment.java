@@ -183,6 +183,11 @@ public class PosePlotFragment extends Fragment implements DataViewer {
 
     }
 
+    @Override
+    public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
+
     private void preformatPlot(XYPlot plot){
         final double[] PLOT_BOUNDARY_X = {51.0, 53.0};
         final double[] PLOT_BOUNDARY_Y = {3.0, 5.0};

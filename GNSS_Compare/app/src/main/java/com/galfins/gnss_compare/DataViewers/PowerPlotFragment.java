@@ -157,6 +157,11 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
 
     }
 
+    @Override
+    public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
+
 
     private void preformatPlot(XYPlot plot){
         final double SNR_PLOT_X_EXTENSION = 0.0;

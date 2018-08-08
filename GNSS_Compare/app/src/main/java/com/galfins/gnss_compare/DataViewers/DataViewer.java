@@ -4,6 +4,8 @@ import android.location.Location;
 
 import com.galfins.gnss_compare.CalculationModule;
 
+import java.util.Observable;
+
 /**
  * Created by Mateusz Krainski on 25/03/2018.
  * This class is defining an interface for date viewers
@@ -32,4 +34,6 @@ public interface DataViewer {
     interface CalculationModuleDataSeries{
         CalculationModule getCalculationModuleReference();
     }
+
+    void registerToUiThreadedUpdates(Observable UiTheadObservable);
 }
