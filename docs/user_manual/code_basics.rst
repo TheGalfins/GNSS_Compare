@@ -41,7 +41,7 @@ Remember not to share the api code with anyone! If you're using git, you can mar
 
 .. code-block:: bash
 
-	git update-index --assume-unchanged app/src/main/res/values/map_api_key.xml
+	git update-index --assume-unchanged GNSS_Compare/app/src/main/res/values/map_api_key.xml
 
 This way, the file will remain in your repository, but any changes made to it will be ignored, so e.g. your API key will not be pushed to the remote.
 
