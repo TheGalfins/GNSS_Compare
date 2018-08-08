@@ -507,4 +507,9 @@ public class MainViewer extends Fragment implements DataViewer {
     public void onLocationFromGoogleServicesResult(Location location) {
 
     }
+
+    @Override
+    public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
 }

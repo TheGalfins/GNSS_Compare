@@ -192,6 +192,11 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     }
 
+    @Override
+    public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
+
     private void preformatPlot(XYPlot plot){
 
         double plotBoundary = (double)getResources().getInteger(R.integer.error_plot_range);

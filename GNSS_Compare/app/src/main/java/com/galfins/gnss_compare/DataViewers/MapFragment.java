@@ -56,6 +56,8 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
     boolean mapCameraLocationInitialized = false;
     float mapCameraZoom = 12;
 
+    Observable uiThreadObservableReference;
+
     CameraUpdate mapCameraUpdateAnimation;
 
     ArrayList<MapDataSeries> dataSeries = new ArrayList<>();
@@ -220,7 +222,8 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
     public void addSeries(CalculationModule calculationModule) {
         registerSeries(calculationModule);
         addLocationSource();
-        calculationModule.addObserver(getSeries(calculationModule).getDataObserver());
+        uiThreadObservableReference.addObserver(getSeries(calculationModule).getDataObserver());
+//        calculationModule.addObserver(getSeries(calculationModule).getDataObserver());
     }
 
     /**
@@ -284,7 +287,8 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
                         marker.remove();
 
                     itr.remove();
-                    calculationModule.removeObserver(reference.getDataObserver());
+                    uiThreadObservableReference.deleteObserver(reference.getDataObserver());
+//                    calculationModule.removeObserver(reference.getDataObserver());
                 }
             }
         }
@@ -305,6 +309,14 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
             }
         }
 
+    }
+
+    @Override
+    public void registerToUiThreadedUpdates(Observable uiTheadObservable) {
+        for(MapDataSeries series : dataSeries)
+            uiTheadObservable.addObserver(series.getDataObserver());
+
+        uiThreadObservableReference = uiTheadObservable;
     }
 
     private void addLocationSource(){

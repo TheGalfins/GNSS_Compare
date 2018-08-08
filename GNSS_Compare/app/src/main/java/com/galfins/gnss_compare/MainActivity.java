@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -124,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private static Bundle savedState;
 
+    private Observer calculationModuleObserver;
+
+    private Observable uiThreadObservable;
+
     /**
      * Callback used for receiving phone's location
      */
@@ -179,22 +182,24 @@ public class MainActivity extends AppCompatActivity {
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
                 super.onGnssMeasurementsReceived(eventArgs);
 
-                Log.d(TAG, "onGnssMeasurementsReceived: invoked!");
+                Log.d(TAG, "onGnssMeasurementsReceived (MainActivity): invoked!");
 
-                    for (CalculationModule calculationModule : createdCalculationModules)
-                        calculationModule.updateMeasurements(eventArgs);
+//                for (CalculationModule calculationModule : createdCalculationModules)
+//                    calculationModule.updateMeasurements(eventArgs);
+//
+//                notifyCalculationObservers();
 
-                    notifyCalculationObservers();
-
-                    if (rawMeasurementsLogger.isStarted())
-                        rawMeasurementsLogger.onGnssMeasurementsReceived(eventArgs);
-                }
+                if (rawMeasurementsLogger.isStarted())
+                    rawMeasurementsLogger.onGnssMeasurementsReceived(eventArgs);
+            }
         };
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
+
+            mLocationManager.registerGnssMeasurementsCallback(createdCalculationModules.getGnssCallback());
         }
     }
 
@@ -205,8 +210,29 @@ public class MainActivity extends AppCompatActivity {
 
         private DataViewerAdapter pagerAdapterReference = null;
 
+        GnssMeasurementsEvent.Callback gnssCallback;
+
         public CalculationModulesArrayList(DataViewerAdapter pagerAdapter){
             pagerAdapterReference = pagerAdapter;
+
+            gnssCallback = new GnssMeasurementsEvent.Callback() {
+                @Override
+                public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
+                    super.onGnssMeasurementsReceived(eventArgs);
+
+                    Log.d(TAG, "onGnssMeasurementsReceived (CalculationModulesArrayList): invoked!");
+
+                    for (CalculationModule calculationModule : CalculationModulesArrayList.this)
+                        calculationModule.updateMeasurements(eventArgs);
+
+//                    notifyCalculationObservers();
+                    createdCalculationModules.notifyObservers();
+                }
+            };
+        }
+
+        public GnssMeasurementsEvent.Callback getGnssCallback() {
+            return gnssCallback;
         }
 
         public CalculationModulesArrayList(){
@@ -247,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
                     calculationModule.notifyObservers();
                 }
             }
-
         }
 
         /**
@@ -282,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new DataViewerAdapter(getSupportFragmentManager());
         mPagerAdapter.initialize();
+        mPagerAdapter.registerUiThreadObservable(uiThreadObservable);
         mPager.setAdapter(mPagerAdapter);
         PageIndicatorView pageIndicatorView = findViewById(R.id.pageIndicatorView);
         pageIndicatorView.setViewPager(mPager);
@@ -314,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        createdCalculationModules.addObserver(calculationModuleObserver);
     }
 
 
@@ -321,6 +348,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        uiThreadObservable = new Observable(){
+            @Override
+            public void notifyObservers() {
+                setChanged();
+                super.notifyObservers();
+            }
+        };
+
+        calculationModuleObserver = new Observer() {
+
+            Runnable notifyObservers = new Runnable() {
+                @Override
+                public void run() {
+                    uiThreadObservable.notifyObservers();
+                }
+            };
+
+            @Override
+            public void update(Observable o, Object arg) {
+                runOnUiThread(notifyObservers);
+            }
+        };
 
         initializeMetaDataHandler();
 
