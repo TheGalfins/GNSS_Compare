@@ -16,7 +16,7 @@ public class DataViewerAdapter extends FragmentStatePagerAdapter {
      * ArrayList storing the viewers. This is of type Object
      * because the abstract type needs to both implement DataViewer and extend Fragment.
      */
-    ArrayList<Object> registeredViewers;
+    private ArrayList<Object> registeredViewers;
 
     /**
      *
