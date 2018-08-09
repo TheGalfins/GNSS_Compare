@@ -184,11 +184,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "onGnssMeasurementsReceived (MainActivity): invoked!");
 
-//                for (CalculationModule calculationModule : createdCalculationModules)
-//                    calculationModule.updateMeasurements(eventArgs);
-//
-//                notifyCalculationObservers();
-
                 if (rawMeasurementsLogger.isStarted())
                     rawMeasurementsLogger.onGnssMeasurementsReceived(eventArgs);
             }
@@ -661,11 +656,6 @@ public class MainActivity extends AppCompatActivity {
                             + lastLocation.getLongitude() + ", "
                             + lastLocation.getAltitude());
 
-//                    synchronized (MainActivity.this) {
-//                        for (CalculationModule calculationModule : createdCalculationModules)
-//                            calculationModule.updateLocationFromGoogleServices(lastLocation);
-//
-//                    }
                 }
             }
         };
@@ -695,6 +685,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         mFusedLocationClient.removeLocationUpdates(locationCallback);
+        mFusedLocationClient.removeLocationUpdates(createdCalculationModules.getLocationCallback());
 
         Log.d(TAG, "onPause: invoked");
     }
