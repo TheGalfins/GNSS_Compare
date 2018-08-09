@@ -176,7 +176,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Registers GNSS measurement event manager callback.
      */
-    private void registerLocationManagerCallbacks() {
+    private void registerLocationManager() {
+
+        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         gnssCallback = new GnssMeasurementsEvent.Callback() {
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
@@ -189,14 +193,56 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        final LocationRequest locationRequest = new LocationRequest();
+
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setMaxWaitTime(500);
+        locationRequest.setInterval(100);
+
+        locationCallback = new LocationCallback(){
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+
+                final Location lastLocation = locationResult.getLocations().get(locationResult.getLocations().size()-1);
+
+                if(lastLocation != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(DataViewer dataViewer : mPagerAdapter.getViewers()) {
+                                dataViewer.onLocationFromGoogleServicesResult(lastLocation);
+                            }
+                        }
+                    });
+
+                    Log.i(TAG, "locationFromGoogleServices: New location (phone): "
+                            + lastLocation.getLatitude() + ", "
+                            + lastLocation.getLongitude() + ", "
+                            + lastLocation.getAltitude());
+
+                }
+            }
+        };
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            mFusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    null);
+
+            mFusedLocationClient.requestLocationUpdates(
+                    createdCalculationModules.getLocationRequest(),
+                    createdCalculationModules.getLocationCallback(),
+                    null);
 
             mLocationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
 
             mLocationManager.registerGnssMeasurementsCallback(
                     createdCalculationModules.getGnssCallback());
+
         }
     }
 
@@ -204,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
      * Initializes ViewPager, it's adapter and page indicator view
      */
     private void initializePager(){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new DataViewerAdapter(getSupportFragmentManager());
         mPagerAdapter.initialize();
@@ -246,6 +291,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void initializeGnssCompare(){
+        Constellation.initialize();
+        Correction.initialize();
+        PvtMethod.initialize();
+        FileLogger.initialize();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -284,16 +336,17 @@ public class MainActivity extends AppCompatActivity {
 
         PixelUtils.init(this);
 
-        Constellation.initialize();
-        Correction.initialize();
-        PvtMethod.initialize();
-        FileLogger.initialize();
+        initializeGnssCompare();
 
         initializePager();
         initializeToolbar();
         initializeCalculationModules();
 
-        requestPermission(this);
+        if (hasGnssAndLogPermissions()) {
+            registerLocationManager();
+        } else {
+            requestGnssAndLogPermissions();
+        }
 
         mainView = findViewById(R.id.main_view);
 
@@ -501,52 +554,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Log.d(TAG, "onResume: invoked");
-
-        final LocationRequest locationRequest = new LocationRequest();
-
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setMaxWaitTime(500);
-        locationRequest.setInterval(100);
-
-        locationCallback = new LocationCallback(){
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-
-                final Location lastLocation = locationResult.getLocations().get(locationResult.getLocations().size()-1);
-
-                if(lastLocation != null) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(DataViewer dataViewer : mPagerAdapter.getViewers()) {
-                                dataViewer.onLocationFromGoogleServicesResult(lastLocation);
-                            }
-                        }
-                    });
-
-                    Log.i(TAG, "locationFromGoogleServices: New location (phone): "
-                            + lastLocation.getLatitude() + ", "
-                            + lastLocation.getLongitude() + ", "
-                            + lastLocation.getAltitude());
-
-                }
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            mFusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    null);
-
-            mFusedLocationClient.requestLocationUpdates(
-                    createdCalculationModules.getLocationRequest(),
-                    createdCalculationModules.getLocationCallback(),
-                    null);
-
-        }
     }
 
     /**
@@ -556,9 +563,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-
-        mFusedLocationClient.removeLocationUpdates(locationCallback);
-        mFusedLocationClient.removeLocationUpdates(createdCalculationModules.getLocationCallback());
 
         Log.d(TAG, "onPause: invoked");
     }
@@ -570,8 +574,11 @@ public class MainActivity extends AppCompatActivity {
         savedState = new Bundle();
         saveInstanceState(savedState);
 
-        mLocationManager.unregisterGnssMeasurementsCallback(createdCalculationModules.getGnssCallback());
         mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
+        mLocationManager.unregisterGnssMeasurementsCallback(createdCalculationModules.getGnssCallback());
+
+        mFusedLocationClient.removeLocationUpdates(locationCallback);
+        mFusedLocationClient.removeLocationUpdates(createdCalculationModules.getLocationCallback());
 
         while(createdCalculationModules.size() > 0) {
             createdCalculationModules.remove(createdCalculationModules.get(0));
@@ -619,51 +626,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Creates a reference to the location manager service
-     */
-    private void registerLocationManagerReference() {
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-    }
-
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                registerLocationManagerReference();
-                registerLocationManagerCallbacks();
+                registerLocationManager();
             }
         }
     }
 
     /**
      * Checks if the permission has been granted
-     * @param activity The activity asking for permission
      * @return True of false depending on if permission has been granted
      */
     @SuppressLint("ObsoleteSdkInt")
-    private boolean hasPermissions(Activity activity) {
+    private boolean hasGnssAndLogPermissions() {
         // Permissions granted at install time.
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
-                (ContextCompat.checkSelfPermission(activity, GNSS_REQUIRED_PERMISSIONS)
+                (ContextCompat.checkSelfPermission(this, GNSS_REQUIRED_PERMISSIONS)
                             == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(activity, LOG_REQUIRED_PERMISSIONS)
+                        ContextCompat.checkSelfPermission(this, LOG_REQUIRED_PERMISSIONS)
                                 == PackageManager.PERMISSION_GRANTED);
     }
 
     /**
      * Requests permission to access GNSS measurements
-     * @param activity The activity asking for the permission
      */
-    private void requestPermission(final Activity activity) {
-        if (hasPermissions(activity)) {
-            registerLocationManagerReference();
-            registerLocationManagerCallbacks();
-        } else {
-            ActivityCompat.requestPermissions(activity, new String[]{GNSS_REQUIRED_PERMISSIONS, LOG_REQUIRED_PERMISSIONS}, PERMISSION_REQUEST_CODE);
-        }
+    private void requestGnssAndLogPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{GNSS_REQUIRED_PERMISSIONS, LOG_REQUIRED_PERMISSIONS}, PERMISSION_REQUEST_CODE);
     }
 
     public static void makeNotification(final String note){
