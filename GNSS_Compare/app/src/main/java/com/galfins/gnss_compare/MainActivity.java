@@ -57,24 +57,17 @@ import com.galfins.gnss_compare.PvtMethods.PvtMethod;
 public class MainActivity extends AppCompatActivity {
 
     public class DataViewerCalculationModulesArrayList extends CalculationModulesArrayList{
-        private DataViewerAdapter pagerAdapterReference = null;
-
-        public DataViewerCalculationModulesArrayList(DataViewerAdapter pagerAdapter){
-            super();
-            pagerAdapterReference = pagerAdapter;
-        }
 
         public boolean add(final CalculationModule calculationModule) {
 
-            if(pagerAdapterReference != null)
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (DataViewer viewer : pagerAdapterReference.getViewers()) {
-                            viewer.addSeries(calculationModule);
-                        }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (DataViewer viewer : mPagerAdapter.getViewers()) {
+                        viewer.addSeries(calculationModule);
                     }
-                });
+                }
+            });
 
             synchronized (this) {
                 return super.add(calculationModule);
@@ -86,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(pagerAdapterReference != null)
-                        for (DataViewer viewer : pagerAdapterReference.getViewers())
-                            viewer.removeSeries((CalculationModule) o);
+                    for (DataViewer viewer : mPagerAdapter.getViewers())
+                        viewer.removeSeries((CalculationModule) o);
                 }
             });
 
@@ -101,16 +93,15 @@ public class MainActivity extends AppCompatActivity {
          * Adds all created modules to viewers. This should be called on reset of the application
          * where created calculation modules stay in memory, but data viewers are recreated
          */
-        public void reinitialize() {
-            if(pagerAdapterReference != null)
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (CalculationModule calculationModule : DataViewerCalculationModulesArrayList.this)
-                            for (DataViewer viewer : pagerAdapterReference.getViewers())
-                                viewer.addSeries(calculationModule);
-                    }
-                });
+        void reinitialize() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (CalculationModule calculationModule : DataViewerCalculationModulesArrayList.this)
+                        for (DataViewer viewer : mPagerAdapter.getViewers())
+                            viewer.addSeries(calculationModule);
+                }
+            });
         }
     }
 
@@ -325,12 +316,12 @@ public class MainActivity extends AppCompatActivity {
      */
     public void initializeCalculationModules(){
         if(createdCalculationModules==null) {
-            createdCalculationModules = new DataViewerCalculationModulesArrayList(mPagerAdapter);
+            createdCalculationModules = new DataViewerCalculationModulesArrayList();
             if(savedState == null)
                 createInitialCalculationModules();
-            else if (savedState != null){
+            else
                 createCalculationModulesFromBundle(savedState);
-            }
+
             createdCalculationModules.addObserver(calculationModuleObserver);
         } else {
             createdCalculationModules.reinitialize();
@@ -472,7 +463,9 @@ public class MainActivity extends AppCompatActivity {
         if(modulesNames != null) {
             for (String name : modulesNames) {
                 try {
-                    createdCalculationModules.add(CalculationModule.fromConstructorArrayList(savedInstanceState.getStringArrayList(name)));
+                    ArrayList<String> constructorArrayList = savedInstanceState.getStringArrayList(name);
+                    if(constructorArrayList!=null)
+                        createdCalculationModules.add(CalculationModule.fromConstructorArrayList(constructorArrayList));
                 } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
                     e.printStackTrace();
                 }
@@ -483,7 +476,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
-
         saveInstanceState(bundle);
     }
 
@@ -547,22 +539,26 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e(TAG, "createInitialCalculationModules: Exception when creating modules");
         }
-            try {
-                for(CalculationModule module : initialModules)
-                    createdCalculationModules.add(module);
-            } catch (Exception e){
-                e.printStackTrace();
-                Log.e(TAG, "createInitalCalculationModules: adding modules failed");
-                for(CalculationModule module : initialModules) {
-                    try {
-                        createdCalculationModules.remove(module);
-                    } catch (Exception e2){
-                        e2.printStackTrace();
-                        Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
-                    }
-                }
-                CalculationModule.clear();
+
+        try {
+            for(CalculationModule calculationModule : initialModules) {
+                createdCalculationModules.add(calculationModule); // when simplified to addAll, doesn't work properly
             }
+        } catch (Exception e){
+
+            //todo: leaving this out just as a contingency
+            e.printStackTrace();
+            Log.e(TAG, "createInitalCalculationModules: adding modules failed");
+            for(CalculationModule module : initialModules) {
+                try {
+                    createdCalculationModules.remove(module);
+                } catch (Exception e2){
+                    e2.printStackTrace();
+                    Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
+                }
+            }
+            CalculationModule.clear();
+        }
     }
 
     @Override
