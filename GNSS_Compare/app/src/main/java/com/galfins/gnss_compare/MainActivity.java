@@ -196,10 +196,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
             mLocationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
 
-            mLocationManager.registerGnssMeasurementsCallback(createdCalculationModules.getGnssCallback());
+            mLocationManager.registerGnssMeasurementsCallback(
+                    createdCalculationModules.getGnssCallback());
         }
     }
 
@@ -210,7 +212,9 @@ public class MainActivity extends AppCompatActivity {
 
         private DataViewerAdapter pagerAdapterReference = null;
 
-        GnssMeasurementsEvent.Callback gnssCallback;
+        private GnssMeasurementsEvent.Callback gnssCallback;
+        private LocationCallback locationCallback;
+        private LocationRequest locationRequest;
 
         public CalculationModulesArrayList(DataViewerAdapter pagerAdapter){
             pagerAdapterReference = pagerAdapter;
@@ -225,14 +229,43 @@ public class MainActivity extends AppCompatActivity {
                     for (CalculationModule calculationModule : CalculationModulesArrayList.this)
                         calculationModule.updateMeasurements(eventArgs);
 
-//                    notifyCalculationObservers();
                     createdCalculationModules.notifyObservers();
+                }
+            };
+
+            locationRequest = new LocationRequest();
+
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setMaxWaitTime(500);
+            locationRequest.setInterval(100);
+
+            locationCallback = new LocationCallback(){
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+
+                    final Location lastLocation = locationResult.getLocations().get(locationResult.getLocations().size()-1);
+
+                    if(lastLocation != null) {
+                        synchronized (this) {
+                            for (CalculationModule calculationModule : createdCalculationModules)
+                                calculationModule.updateLocationFromGoogleServices(lastLocation);
+
+                        }
+                    }
                 }
             };
         }
 
         public GnssMeasurementsEvent.Callback getGnssCallback() {
             return gnssCallback;
+        }
+
+        public LocationCallback getLocationCallback() {
+            return locationCallback;
+        }
+
+        public LocationRequest getLocationRequest() {
+            return locationRequest;
         }
 
         public CalculationModulesArrayList(){
@@ -332,15 +365,17 @@ public class MainActivity extends AppCompatActivity {
             else if (savedState != null){
                 createCalculationModulesFromBundle(savedState);
             }
+            createdCalculationModules.addObserver(calculationModuleObserver);
         } else {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     createdCalculationModules.reinitialize();
+                    createdCalculationModules.addObserver(calculationModuleObserver);
                 }
             });
         }
-        createdCalculationModules.addObserver(calculationModuleObserver);
+
     }
 
 
@@ -626,11 +661,11 @@ public class MainActivity extends AppCompatActivity {
                             + lastLocation.getLongitude() + ", "
                             + lastLocation.getAltitude());
 
-                    synchronized (MainActivity.this) {
-                        for (CalculationModule calculationModule : createdCalculationModules)
-                            calculationModule.updateLocationFromGoogleServices(lastLocation);
-
-                    }
+//                    synchronized (MainActivity.this) {
+//                        for (CalculationModule calculationModule : createdCalculationModules)
+//                            calculationModule.updateLocationFromGoogleServices(lastLocation);
+//
+//                    }
                 }
             }
         };
@@ -638,7 +673,15 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            mFusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    null);
+
+            mFusedLocationClient.requestLocationUpdates(
+                    createdCalculationModules.getLocationRequest(),
+                    createdCalculationModules.getLocationCallback(),
+                    null);
 
         }
     }
@@ -663,14 +706,15 @@ public class MainActivity extends AppCompatActivity {
         savedState = new Bundle();
         saveInstanceState(savedState);
 
+        mLocationManager.unregisterGnssMeasurementsCallback(createdCalculationModules.getGnssCallback());
+        mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
+
         while(createdCalculationModules.size() > 0) {
             createdCalculationModules.remove(createdCalculationModules.get(0));
         }
 
         createdCalculationModules = null;
         CalculationModule.clear();
-
-        mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
     }
 
     @Override
