@@ -2,7 +2,6 @@ package com.galfins.gnss_compare;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -291,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void initializeGnssCompare(){
+    public void initializeGnssCompareModules(){
         Constellation.initialize();
         Correction.initialize();
         PvtMethod.initialize();
@@ -302,8 +301,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null)
+            savedState = savedInstanceState;
+
         setContentView(R.layout.activity_main);
 
+        initializeGnssCompareMainActivity();
+
+        initializeGnssCompareModules();
+
+        initializeCalculationModules();
+
+        if (hasGnssAndLogPermissions()) {
+            registerLocationManager();
+        } else {
+            requestGnssAndLogPermissions();
+        }
+
+        mainView = findViewById(R.id.main_view);
+
+        showInitializationDisclamer();
+    }
+
+    private void initializeGnssCompareMainActivity() {
         uiThreadObservable = new Observable(){
             @Override
             public void notifyObservers() {
@@ -329,27 +350,15 @@ public class MainActivity extends AppCompatActivity {
 
         initializeMetaDataHandler();
 
-        if(savedInstanceState != null)
-            savedState = savedInstanceState;
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         PixelUtils.init(this);
 
-        initializeGnssCompare();
-
         initializePager();
         initializeToolbar();
-        initializeCalculationModules();
+    }
 
-        if (hasGnssAndLogPermissions()) {
-            registerLocationManager();
-        } else {
-            requestGnssAndLogPermissions();
-        }
-
-        mainView = findViewById(R.id.main_view);
-
+    private void showInitializationDisclamer() {
         final Snackbar snackbar = Snackbar
                 .make(mainView,
                         "All calculations are initialized with phone's FINE location",
