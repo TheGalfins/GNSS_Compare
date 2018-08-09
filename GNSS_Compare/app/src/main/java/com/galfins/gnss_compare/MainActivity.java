@@ -547,27 +547,22 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e(TAG, "createInitialCalculationModules: Exception when creating modules");
         }
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-                try {
-                    for(CalculationModule module : initialModules)
-                        createdCalculationModules.add(module);
-                } catch (Exception e){
-                    e.printStackTrace();
-                    Log.e(TAG, "createInitalCalculationModules: adding modules failed");
-                    for(CalculationModule module : initialModules) {
-                        try {
-                            createdCalculationModules.remove(module);
-                        } catch (Exception e2){
-                            e2.printStackTrace();
-                            Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
-                        }
+            try {
+                for(CalculationModule module : initialModules)
+                    createdCalculationModules.add(module);
+            } catch (Exception e){
+                e.printStackTrace();
+                Log.e(TAG, "createInitalCalculationModules: adding modules failed");
+                for(CalculationModule module : initialModules) {
+                    try {
+                        createdCalculationModules.remove(module);
+                    } catch (Exception e2){
+                        e2.printStackTrace();
+                        Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
                     }
-                    CalculationModule.clear();
                 }
-//            }
-//        });
+                CalculationModule.clear();
+            }
     }
 
     @Override
@@ -658,14 +653,9 @@ public class MainActivity extends AppCompatActivity {
                         sharedPreferences.getString(CreateModulePreference.KEY_PVT_METHOD, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_FILE_LOGGER, null));
 
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-                        createdCalculationModules.add(newModule);
-                        CreateModulePreference.notifyModuleCreated();
-                        makeNotification("Module " + newModule.getName() + " created...");
-//                    }
-//                });
+                    createdCalculationModules.add(newModule);
+                    CreateModulePreference.notifyModuleCreated();
+                    makeNotification("Module " + newModule.getName() + " created...");
 
             } catch (CalculationModule.NameAlreadyRegisteredException
                     | CalculationModule.NumberOfSeriesExceededLimitException
