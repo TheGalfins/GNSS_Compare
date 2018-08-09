@@ -2,10 +2,12 @@ package com.galfins.gnss_compare;
 
 import android.location.GnssMeasurementsEvent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import com.galfins.gnss_compare.DataViewers.DataViewer;
 import com.galfins.gnss_compare.DataViewers.DataViewerAdapter;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -23,18 +25,6 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
     private GnssMeasurementsEvent.Callback gnssCallback;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-
-    public GnssMeasurementsEvent.Callback getGnssCallback() {
-        return gnssCallback;
-    }
-
-    public LocationCallback getLocationCallback() {
-        return locationCallback;
-    }
-
-    public LocationRequest getLocationRequest() {
-        return locationRequest;
-    }
 
     public CalculationModulesArrayList(){
         gnssCallback = new GnssMeasurementsEvent.Callback() {
@@ -97,5 +87,26 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
         for (CalculationModule calculationModule : this){
             calculationModule.removeObserver(observer);
         }
+    }
+
+    public void registerForGnssUpdates(FusedLocationProviderClient fusedLocationClient, LocationManager locationManager){
+        try {
+
+            fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    null);
+
+            locationManager.registerGnssMeasurementsCallback(
+                    gnssCallback);
+
+        } catch (SecurityException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void unregisterFromGnssUpdates(FusedLocationProviderClient fusedLocationClient, LocationManager locationManager){
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+        locationManager.unregisterGnssMeasurementsCallback(gnssCallback);
     }
 }

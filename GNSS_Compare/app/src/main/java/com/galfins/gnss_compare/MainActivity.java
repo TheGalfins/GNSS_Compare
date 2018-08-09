@@ -289,16 +289,12 @@ public class MainActivity extends AppCompatActivity {
                     locationCallback,
                     null);
 
-            mFusedLocationClient.requestLocationUpdates(
-                    createdCalculationModules.getLocationRequest(),
-                    createdCalculationModules.getLocationCallback(),
-                    null);
-
             mLocationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
 
-            mLocationManager.registerGnssMeasurementsCallback(
-                    createdCalculationModules.getGnssCallback());
+            createdCalculationModules.registerForGnssUpdates(
+                    mFusedLocationClient,
+                    mLocationManager);
 
         }
     }
@@ -634,10 +630,9 @@ public class MainActivity extends AppCompatActivity {
         saveInstanceState(savedState);
 
         mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
-        mLocationManager.unregisterGnssMeasurementsCallback(createdCalculationModules.getGnssCallback());
-
         mFusedLocationClient.removeLocationUpdates(locationCallback);
-        mFusedLocationClient.removeLocationUpdates(createdCalculationModules.getLocationCallback());
+
+        createdCalculationModules.unregisterFromGnssUpdates(mFusedLocationClient, mLocationManager);
 
         while(createdCalculationModules.size() > 0) {
             createdCalculationModules.remove(createdCalculationModules.get(0));
