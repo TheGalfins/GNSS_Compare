@@ -18,16 +18,25 @@ import java.util.Observer;
  */
 public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
 
-    private DataViewerAdapter pagerAdapterReference = null;
     private final String TAG="CalculationModulesArrayList";
 
     private GnssMeasurementsEvent.Callback gnssCallback;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
 
-    public CalculationModulesArrayList(DataViewerAdapter pagerAdapter){
-        pagerAdapterReference = pagerAdapter;
+    public GnssMeasurementsEvent.Callback getGnssCallback() {
+        return gnssCallback;
+    }
 
+    public LocationCallback getLocationCallback() {
+        return locationCallback;
+    }
+
+    public LocationRequest getLocationRequest() {
+        return locationRequest;
+    }
+
+    public CalculationModulesArrayList(){
         gnssCallback = new GnssMeasurementsEvent.Callback() {
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
@@ -38,7 +47,7 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
                 for (CalculationModule calculationModule : CalculationModulesArrayList.this)
                     calculationModule.updateMeasurements(eventArgs);
 
-                MainActivity.createdCalculationModules.notifyObservers();
+                notifyObservers();
             }
         };
 
@@ -56,52 +65,13 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
 
                 if(lastLocation != null) {
                     synchronized (this) {
-                        for (CalculationModule calculationModule : MainActivity.createdCalculationModules)
+                        for (CalculationModule calculationModule : CalculationModulesArrayList.this)
                             calculationModule.updateLocationFromGoogleServices(lastLocation);
 
                     }
                 }
             }
         };
-    }
-
-    public GnssMeasurementsEvent.Callback getGnssCallback() {
-        return gnssCallback;
-    }
-
-    public LocationCallback getLocationCallback() {
-        return locationCallback;
-    }
-
-    public LocationRequest getLocationRequest() {
-        return locationRequest;
-    }
-
-    public CalculationModulesArrayList(){
-    }
-
-    @Override
-    public boolean add(final CalculationModule calculationModule) {
-
-        if(pagerAdapterReference != null)
-            for (DataViewer viewer : pagerAdapterReference.getViewers()) {
-                viewer.addSeries(calculationModule);
-            }
-
-        synchronized (this) {
-            return super.add(calculationModule);
-        }
-    }
-
-    @Override
-    public boolean remove(Object o){
-        if(pagerAdapterReference != null)
-            for (DataViewer viewer : pagerAdapterReference.getViewers())
-                viewer.removeSeries((CalculationModule)o);
-
-        synchronized (this) {
-            return super.remove(o);
-        }
     }
 
     /**
@@ -115,17 +85,6 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
                 calculationModule.notifyObservers();
             }
         }
-    }
-
-    /**
-     * Adds all created modules to viewers. This should be called on reset of the application
-     * where created calculation modules stay in memory, but data viewers are recreated
-     */
-    public void reinitialize() {
-        if(pagerAdapterReference != null)
-            for (CalculationModule calculationModule : this)
-                for (DataViewer viewer : pagerAdapterReference.getViewers())
-                    viewer.addSeries(calculationModule);
     }
 
     public void addObserver(Observer observer){
