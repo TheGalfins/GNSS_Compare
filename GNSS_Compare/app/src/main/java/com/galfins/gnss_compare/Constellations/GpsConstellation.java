@@ -180,6 +180,9 @@ public class GpsConstellation extends Constellation {
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
 
+                    if(measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
+
                     observedSatellites.add(satelliteParameters);
 
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGPS + ", " + pseudorange);

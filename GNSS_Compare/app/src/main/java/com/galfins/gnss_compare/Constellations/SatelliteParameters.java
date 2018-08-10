@@ -28,6 +28,8 @@ public class SatelliteParameters {
      */
     protected Pseudorange pseudorange;
 
+    private double carrierFrequency;
+
 
     /**
      * Position of the satellite
@@ -210,5 +212,13 @@ public class SatelliteParameters {
      */
     public void setConstellationType(int constellationType) {
         this.constellationType = constellationType;
+    }
+
+    public double getCarrierFrequency() {
+        return carrierFrequency;
+    }
+
+    public void setCarrierFrequency(double carrierFrequency) {
+        this.carrierFrequency = carrierFrequency;
     }
 }

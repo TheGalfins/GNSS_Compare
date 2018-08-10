@@ -189,6 +189,9 @@ public class GalileoConstellation extends Constellation {
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
 
+                    if(measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
+
                     observedSatellites.add(satelliteParameters);
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGalileoTOW + ", " + pseudorangeTOW);
                     Log.d(TAG, "updateConstellations: Passed with measurement state: " + measState);
@@ -205,6 +208,9 @@ public class GalileoConstellation extends Constellation {
                     satelliteParameters.setUniqueSatId("E" + satelliteParameters.getSatId());
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
+
+                    if(measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
 
                     observedSatellites.add(satelliteParameters);
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGalileoTOW + ", " + pseudorangeE1_2nd);
