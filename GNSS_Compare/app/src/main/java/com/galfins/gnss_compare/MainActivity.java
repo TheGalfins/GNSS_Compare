@@ -28,6 +28,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.androidplot.util.PixelUtils;
+import com.galfins.gnss_compare.Constellations.GalileoE1Constellation;
+import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -435,9 +437,19 @@ public class MainActivity extends AppCompatActivity {
 
                         List<CalculationModule> initialModules = new ArrayList<>();
 
+//                        initialModules.add(new CalculationModule(
+//                                "Galileo+GPS",
+//                                GalileoGpsConstellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+
                         initialModules.add(new CalculationModule(
-                                "Galileo+GPS",
-                                GalileoGpsConstellation.class,
+                                "Galileo E1",
+                                GalileoE1Constellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -446,11 +458,10 @@ public class MainActivity extends AppCompatActivity {
                                 NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
-                                "GPS",
-                                GpsConstellation.class,
+                                "Galileo E5a",
+                                GalileoE5aConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
-//                                    add(IonoCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
                                 DynamicExtendedKalmanFilter.class,

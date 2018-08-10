@@ -35,6 +35,8 @@ public abstract class Constellation {
         if(!initialized) {
             GpsConstellation.registerClass();
             GalileoConstellation.registerClass();
+            GalileoE1Constellation.registerClass();
+            GalileoE5aConstellation.registerClass();
             GalileoGpsConstellation.registerClass();
             initialized = true;
         }
