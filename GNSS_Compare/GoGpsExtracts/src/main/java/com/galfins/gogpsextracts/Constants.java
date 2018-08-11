@@ -57,6 +57,7 @@ public class Constants {
 	public static final long NUMBER_NANO_SECONDS_PER_WEEK = 604800000000000L;
 
 	public static final double NumberNanoSeconds100Milli = 1e8;         // 100 ms expressed in nanoseconds
+	public static final double NumberNanoSeconds1Milli = 1e6;           // 100 ms expressed in nanoseconds
 
 	// Standard atmosphere - Berg, 1948 (Bernese)
 	public static final double STANDARD_PRESSURE = 1013.25;

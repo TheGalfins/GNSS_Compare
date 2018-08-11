@@ -32,6 +32,7 @@ import com.galfins.gnss_compare.Constellations.GalileoE1Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
+import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -43,9 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
-import com.galfins.gnss_compare.Constellations.GalileoConstellation;
-import com.galfins.gnss_compare.Constellations.GalileoGpsConstellation;
-import com.galfins.gnss_compare.Constellations.GpsConstellation;
 import com.galfins.gnss_compare.Corrections.Correction;
 import com.galfins.gnss_compare.Corrections.ShapiroCorrection;
 import com.galfins.gnss_compare.Corrections.TropoCorrection;
@@ -450,14 +448,26 @@ public class MainActivity extends AppCompatActivity {
 //                                NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
+                                "Galileo E5a",
+                                GalileoE5aConstellation.class,
+                                new ArrayList<Class<? extends Correction>>() {{
+                                    add(ShapiroCorrection.class);
+                                    add(TropoCorrection.class);
+                                }},
+                                PedestrianStaticExtendedKalmanFilter.class,
+                                NmeaFileLogger.class));
+
+
+                        initialModules.add(new CalculationModule(
                                 "GPS L5",
                                 GpsL5Constellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
-                                DynamicExtendedKalmanFilter.class,
+                                PedestrianStaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
+
 
 //                        initialModules.add(new CalculationModule(
 //                                "GPS L1",
