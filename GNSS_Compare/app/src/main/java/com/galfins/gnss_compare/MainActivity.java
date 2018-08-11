@@ -450,16 +450,6 @@ public class MainActivity extends AppCompatActivity {
 //                                NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
-                                "GPS L1",
-                                GpsL1Constellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                DynamicExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
-
-                        initialModules.add(new CalculationModule(
                                 "GPS L5",
                                 GpsL5Constellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
@@ -469,15 +459,25 @@ public class MainActivity extends AppCompatActivity {
                                 DynamicExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
 
-                        initialModules.add(new CalculationModule(
-                                "GPS",
-                                GpsConstellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                DynamicExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
+//                        initialModules.add(new CalculationModule(
+//                                "GPS L1",
+//                                GpsL1Constellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+
+//                        initialModules.add(new CalculationModule(
+//                                "Galileo",
+//                                GalileoConstellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
 
                         try {
                             for(CalculationModule module : initialModules)
