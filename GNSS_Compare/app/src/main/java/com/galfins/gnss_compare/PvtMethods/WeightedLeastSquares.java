@@ -86,8 +86,8 @@ public class WeightedLeastSquares extends PvtMethod {
                 elevation = topo.getElevation();
 
                 // Set the variance of the measurement for each satellite
-                measVarC1phone = constellation.getSatellite(ii).getPseudorangeObject().getMeasurementVariance();
-//                measVarC1phone = 100.0;
+//                measVarC1phone = constellation.getSatellite(ii).getPseudorangeObject().getMeasurementVariance();
+                measVarC1phone = 100.0;
                 CN0 = (int)constellation.getSatelliteSignalStrength(ii);
 
                 // Use the measurement variance as given by the phone

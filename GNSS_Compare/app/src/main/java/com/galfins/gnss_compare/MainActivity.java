@@ -33,6 +33,7 @@ import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
 import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
+import com.galfins.gnss_compare.PvtMethods.WeightedLeastSquares;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -458,15 +459,15 @@ public class MainActivity extends AppCompatActivity {
                                 NmeaFileLogger.class));
 
 
-//                        initialModules.add(new CalculationModule(
-//                                "Galileo E1",
-//                                GalileoE1Constellation.class,
-//                                new ArrayList<Class<? extends Correction>>() {{
-//                                    add(ShapiroCorrection.class);
-//                                    add(TropoCorrection.class);
-//                                }},
-//                                PedestrianStaticExtendedKalmanFilter.class,
-//                                NmeaFileLogger.class));
+                        initialModules.add(new CalculationModule(
+                                "Galileo E1",
+                                GalileoE1Constellation.class,
+                                new ArrayList<Class<? extends Correction>>() {{
+                                    add(ShapiroCorrection.class);
+                                    add(TropoCorrection.class);
+                                }},
+                                PedestrianStaticExtendedKalmanFilter.class,
+                                NmeaFileLogger.class));
 
 
 //                        initialModules.add(new CalculationModule(
