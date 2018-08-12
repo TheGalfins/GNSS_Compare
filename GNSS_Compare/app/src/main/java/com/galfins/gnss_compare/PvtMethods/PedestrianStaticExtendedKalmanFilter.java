@@ -33,7 +33,7 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
     /** noise in the horizontal direction on the position to allow positioning at pedestrians
      * velocity. This value is already in units of meters squared.
      */
-    private static final double xyNoise = 0.2;
+    private static final double xyNoise = 0.4;
     /** name of the pvt method as it appears in the selection menu for pvt methods
      */
     private static final String NAME = "Pedestrian EKF";
