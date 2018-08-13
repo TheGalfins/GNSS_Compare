@@ -3,9 +3,9 @@
 Download
 *********
 
-The latest Android PacKage (APK) to download and install *GNSS Compare* on your phone is always available at the following link:
+ *GNSS Compare* is always available on the Google Play Store at the following link:
 
- `Download <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
+ `Download <https://play.google.com/store/apps/details?id=com.galfins.gnss_compare>`_.
 
 Please note that you need Android 7.0+ to run the application. Also, please note that not all Android 7.0+ phones support the Galileo Satellite System. The list of Galileo compatible phones can be found `here <http://galileognss.eu/is-your-phone-using-galileo/>`_.
 
