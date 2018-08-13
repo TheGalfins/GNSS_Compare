@@ -546,7 +546,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (Exception e){
 
-            //todo: leaving this out just as a contingency
+            //todo: leaving this just as a contingency, shouldn't happen
             e.printStackTrace();
             Log.e(TAG, "createInitalCalculationModules: adding modules failed");
             for(CalculationModule module : initialModules) {
