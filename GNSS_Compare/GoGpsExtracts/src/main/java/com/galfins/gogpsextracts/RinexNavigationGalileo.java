@@ -235,24 +235,20 @@ public class RinexNavigationGalileo implements NavigationProducer {
                         RinexNavigationParserGalileo rnp = null;
 
                         try {
-                            try {
-                                rnp = getFromSUPL(url, initialLocation);
-                            } catch (IndexOutOfBoundsException e){
+                            rnp = getFromSUPL(url, initialLocation);
+                        } catch (Exception e){
 //                                try {
 //                                    MainActivity.makeNotification("SUPL client exception...");
 //                                } catch (Exception e1){
 //                                    e1.printStackTrace();
 //                                }
-                                e.printStackTrace();
+                            e.printStackTrace();
+                        }
+                        synchronized (RinexNavigationGalileo.this) {
+                            if (rnp != null) {
+                                pool.put(url, rnp);
                             }
-                            synchronized (RinexNavigationGalileo.this) {
-                                if (rnp != null) {
-                                    pool.put(url, rnp);
-                                }
-                                retrievingFromServer.remove(url);
-                            }
-                        } catch (IOException e) {
-                            Log.e(TAG, "Supl Client error:", e);
+                            retrievingFromServer.remove(url);
                         }
                     }
                 })).start();
@@ -314,7 +310,8 @@ public class RinexNavigationGalileo implements NavigationProducer {
 
             Log.w(TAG, "getFromSUPL: Received data from SUPL server" );
 
-        } catch (IOException | NullPointerException | UnsupportedOperationException e) {
+//        } catch (IOException | NullPointerException | UnsupportedOperationException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Exception thrown getting msg from SUPL server", e);
         }
         return rnp;
