@@ -25,11 +25,11 @@ Mark it, click Ok. The project should open and gradle will start to synchronize 
 Using the Google Maps Viewer
 ----------------------------
 
-In order to use the Google Maps Viewer in GNSS Comapre, you'll need to get your own Google Maps API key and paste it into the Android manifest.
+In order to use the Google Maps Viewer in GNSS Comapre, you'll need to get your own Google Maps API key and paste it into the Android manifest (kind of).
 
 To get the Google Maps SDK key, follow this `guide`_.
 
-After you have the key (it will look like a string of random characters, starting with ``AIza``), you'll have to make a new resource file. Copy and paste it to the ``map_api_key.xml`` file located in the ``res/values`` directory. Find the lines containing the following:
+After you have the key (it will look like a string of random characters, starting with ``AIza``), all you need to do is to copy and paste it to the ``map_api_key.xml`` file located in the ``res/values`` directory. Find the lines containing the following:
 
 .. code-block:: xml
 
@@ -37,13 +37,13 @@ After you have the key (it will look like a string of random characters, startin
 
 And replace ``YOUR_API_KEY`` with your API key. It should work right away. If not -- you might need to clean and rebuild your project, or manually uninstall the application on your phone.
 
-Remember not to share the api code with anyone! If you're using git, you can mark that file as one which should not be tracked with
+Remember not to share the api key with anyone! If you're using git, you can mark that file as one which should not be tracked with
 
 .. code-block:: bash
 
 	git update-index --assume-unchanged app/src/main/res/values/map_api_key.xml
 
-This way, the file will remain in your repository, but any changes made to it will be ignored, so e.g. your API key will not be pushed to the remote.
+This way, the file will remain in your repository, but any changes made to it will be not pushed to the remote.
 
 
 
