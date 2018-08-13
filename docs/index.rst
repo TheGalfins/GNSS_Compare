@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. image:: img/GalileoIcon_blue.png
-    :width: 40%
+.. image:: img/full_logo_vertical_transparent.png
+    :width: 60%
     :align: center
     :alt: Project logo
 
