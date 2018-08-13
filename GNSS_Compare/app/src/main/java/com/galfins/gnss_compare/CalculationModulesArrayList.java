@@ -30,14 +30,14 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
         gnssCallback = new GnssMeasurementsEvent.Callback() {
             @Override
             public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
-                super.onGnssMeasurementsReceived(eventArgs);
+            super.onGnssMeasurementsReceived(eventArgs);
 
-                Log.d(TAG, "onGnssMeasurementsReceived: invoked!");
+            Log.d(TAG, "onGnssMeasurementsReceived: invoked!");
 
-                for (CalculationModule calculationModule : CalculationModulesArrayList.this)
-                    calculationModule.updateMeasurements(eventArgs);
+            for (CalculationModule calculationModule : CalculationModulesArrayList.this)
+                calculationModule.updateMeasurements(eventArgs);
 
-                notifyObservers();
+            notifyObservers();
             }
         };
 
@@ -51,15 +51,15 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
             @Override
             public void onLocationResult(LocationResult locationResult) {
 
-                final Location lastLocation = locationResult.getLocations().get(locationResult.getLocations().size()-1);
+            final Location lastLocation = locationResult.getLocations().get(locationResult.getLocations().size()-1);
 
-                if(lastLocation != null) {
-                    synchronized (this) {
-                        for (CalculationModule calculationModule : CalculationModulesArrayList.this)
-                            calculationModule.updateLocationFromGoogleServices(lastLocation);
+            if(lastLocation != null) {
+                synchronized (this) {
+                    for (CalculationModule calculationModule : CalculationModulesArrayList.this)
+                        calculationModule.updateLocationFromGoogleServices(lastLocation);
 
-                    }
                 }
+            }
             }
         };
     }
