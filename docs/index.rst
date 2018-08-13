@@ -17,7 +17,7 @@ Welcome to GNSS Compare's documentation!
 
 Please stay tuned, this is still a beta version, and we're making updates on a daily basis...
 
-Check out the app on `Google Play Store <https://play.google.com/store/apps/details?id=com.galfins.gnss_compare>`_.
+Check out the app on `Play Store <https://play.google.com/store/apps/details?id=com.galfins.gnss_compare>`_.
 
 The latest apk (beta version) to download and install on your phone always available `here <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
 
