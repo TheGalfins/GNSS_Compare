@@ -3,7 +3,7 @@
 Download
 *********
 
-*GNSS Compare* is always available on the `Google Play Store <https://play.google.com/store/apps/details?id=com.galfins.gnss_compare>`_. :
+*GNSS Compare* is always available on the `Google Play Store <https://play.google.com/store/apps/details?id=com.galfins.gnss_compare>`_:
 
 .. image:: img/get_it_on_play_store.png
     :width: 30%
