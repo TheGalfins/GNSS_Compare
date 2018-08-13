@@ -371,20 +371,27 @@ public class MainActivity extends AppCompatActivity {
                 setChanged();
                 super.notifyObservers();
             }
+
+            @Override
+            public void notifyObservers(Object arg) {
+                setChanged();
+                super.notifyObservers(arg);
+            }
         };
 
         calculationModuleObserver = new Observer() {
 
-            Runnable notifyObservers = new Runnable() {
-                @Override
-                public void run() {
-                    uiThreadObservable.notifyObservers();
-                }
-            };
-
             @Override
             public void update(Observable o, Object arg) {
-                runOnUiThread(notifyObservers);
+
+                final CalculationModule calculationModuleReference = (CalculationModule) arg;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        uiThreadObservable.notifyObservers(calculationModuleReference);
+                    }
+                });
             }
         };
 

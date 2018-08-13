@@ -116,6 +116,9 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
             observer = new Observer() {
                 @Override
                 public void update(Observable observable, Object o) {
+                    if (o != calculationModuleReference)
+                        return;
+
                     Coordinates currentPose = calculationModuleReference.getPose();
 
                     if (map != null) {

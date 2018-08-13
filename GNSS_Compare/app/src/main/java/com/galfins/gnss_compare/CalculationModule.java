@@ -35,22 +35,10 @@ public class CalculationModule{
 
         }
 
-        /**
-         * Reference to 'this'
-         */
-        private CalculationModule parentReference = CalculationModule.this;
-
         @Override
         public void notifyObservers() {
             setChanged();
-            super.notifyObservers();
-        }
-
-        /**
-         * @return reference to 'this' calculation module
-         */
-        public CalculationModule getParentReference() {
-            return parentReference;
+            super.notifyObservers(CalculationModule.this); // by default passing this reference as argument
         }
     }
 
