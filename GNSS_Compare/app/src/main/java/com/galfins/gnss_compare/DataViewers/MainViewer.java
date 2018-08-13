@@ -235,8 +235,8 @@ public class MainViewer extends Fragment implements DataViewer {
         private Observer calculationUpdatedObserver = new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                items.get(((CalculationModule.CalculationModuleObservable) o).getParentReference().getConstellation().getName())
-                    .updateViews(((CalculationModule.CalculationModuleObservable) o).getParentReference().getConstellation());
+                items.get(((CalculationModule) arg).getConstellation().getName())
+                    .updateViews(((CalculationModule) arg).getConstellation());
             }
         };
 
