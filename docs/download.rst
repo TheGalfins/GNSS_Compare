@@ -13,5 +13,7 @@ So far we've been testing the application on:
 
 - Samsung Galaxy S8
 - Samsung Galaxy S8+
+- Samsung Galaxy Note 8
+- Xiaomi Mi 8
 
 And we are very happy with the results!
