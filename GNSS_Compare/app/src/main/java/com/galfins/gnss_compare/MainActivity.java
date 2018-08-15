@@ -30,6 +30,7 @@ import android.view.WindowManager;
 import com.androidplot.util.PixelUtils;
 import com.galfins.gnss_compare.Constellations.GalileoE1Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
+import com.galfins.gnss_compare.Constellations.GalileoIonoFreeConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
 import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
@@ -438,30 +439,19 @@ public class MainActivity extends AppCompatActivity {
 
                         List<CalculationModule> initialModules = new ArrayList<>();
 
-                        initialModules.add(new CalculationModule(
-                                "Galileo E1",
-                                GalileoE1Constellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                PedestrianStaticExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
+//                        initialModules.add(new CalculationModule(
+//                                "Galileo E1",
+//                                GalileoE1Constellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                PedestrianStaticExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
-                                "Galileo E5a",
-                                GalileoE5aConstellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                PedestrianStaticExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
-
-
-                        initialModules.add(new CalculationModule(
-                                "GPS L1",
-                                GpsL1Constellation.class,
+                                "Galileo IonoFree",
+                                GalileoIonoFreeConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -470,15 +460,26 @@ public class MainActivity extends AppCompatActivity {
                                 NmeaFileLogger.class));
 
 
-                        initialModules.add(new CalculationModule(
-                                "GPS L5",
-                                GpsL5Constellation.class,
-                                new ArrayList<Class<? extends Correction>>() {{
-                                    add(ShapiroCorrection.class);
-                                    add(TropoCorrection.class);
-                                }},
-                                PedestrianStaticExtendedKalmanFilter.class,
-                                NmeaFileLogger.class));
+//                        initialModules.add(new CalculationModule(
+//                                "GPS L1",
+//                                GpsL1Constellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                PedestrianStaticExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+
+
+//                        initialModules.add(new CalculationModule(
+//                                "GPS L5",
+//                                GpsL5Constellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                PedestrianStaticExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
 
 //                        initialModules.add(new CalculationModule(
 //                                "Galileo",

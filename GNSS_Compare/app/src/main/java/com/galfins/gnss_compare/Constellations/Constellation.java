@@ -39,6 +39,7 @@ public abstract class Constellation {
             GalileoConstellation.registerClass();
             GalileoE1Constellation.registerClass();
             GalileoE5aConstellation.registerClass();
+            GalileoIonoFreeConstellation.registerClass();
             GalileoGpsConstellation.registerClass();
             initialized = true;
         }
@@ -48,6 +49,7 @@ public abstract class Constellation {
      * Additional definition of an ID for a new constellation type
      */
     public static final int CONSTELLATION_GALILEO_GPS = 999; //todo is there a better way to define this?
+    public static final int CONSTELLATION_GALILEO_IonoFree = 998; //todo is there a better way to define this?
 
     /**
      *
