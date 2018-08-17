@@ -1,5 +1,6 @@
 package com.galfins.gnss_compare.FileLoggers;
 
+import android.location.Location;
 import android.util.Log;
 import org.ejml.simple.SimpleMatrix;
 
@@ -15,12 +16,14 @@ public class KalmanFilterFileLogger extends FileLogger {
     public KalmanFilterFileLogger() {
         TAG = "KalmanFilterFileLogger";
         filePrefix = "";
-        initialLine = "E, Latitude error, Longitude error " +
+        initialLine = "E, Latitude error, Longitude error" +
                 "\nx, x_meas[0], ..., x_meas[numStates] " +
                 "\nP, P_meas[0,0], ..., P_meas[numStates,numStates] " +
                 "\nI, gamma[0], ..., gamma[constellationSize] " +
                 "\nS, S[0,0], ..., S[constellationSize,constellationSize] " +
-                "\nid, satID[0], ..., satID[constellationSize]";
+                "\nid, satID[0], ..., satID[constellationSize]" +
+                "\nPR, pseudoranges[0], ..., pseudoranges[constellationSize]" +
+                "\nFl, fineLocation.Latitude, fineLocation.Longitude, fineLocation.Altitude";
     }
 
     public void logError(double latError, double lonError){
@@ -81,6 +84,12 @@ public class KalmanFilterFileLogger extends FileLogger {
             for (int i = 0; i < constellationSize; i++) {
                 buildStream.append("," + constellation.getSatellites().get(i).getUniqueSatId());
             }
+            buildStream.append("\n");
+
+            buildStream.append("PR,");
+            for (int i = 0; i < constellationSize; i++) {
+                buildStream.append("," + constellation.getSatellites().get(i).getPseudorange());
+            }
 
             try {
                 mFileWriter.write(buildStream.toString());
@@ -94,5 +103,26 @@ public class KalmanFilterFileLogger extends FileLogger {
     @Override
     public String getName() {
         return NAME;
+    }
+
+    public void logFineLocation(Location fineLocation) {
+        synchronized (mFileLock) {
+            if (mFileWriter == null) {
+                return;
+            }
+
+            String locationStream =
+                    String.format(Locale.ENGLISH,
+                            "FL, %f, %f, %f",
+                            fineLocation.getLatitude(),
+                            fineLocation.getLongitude(),
+                            fineLocation.getAltitude());
+            try {
+                mFileWriter.write(locationStream);
+                mFileWriter.newLine();
+            } catch (IOException e) {
+                Log.e(TAG, ERROR_WRITING_FILE, e);
+            }
+        }
     }
 }

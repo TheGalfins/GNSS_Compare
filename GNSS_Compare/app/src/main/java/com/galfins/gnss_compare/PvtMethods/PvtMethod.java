@@ -1,5 +1,7 @@
 package com.galfins.gnss_compare.PvtMethods;
 
+import android.location.Location;
+
 import java.util.HashMap;
 import java.util.Set;
 
@@ -50,6 +52,8 @@ public abstract class PvtMethod {
     public void stopLog() { }
 
     public void logError(double latError, double lonError) { }
+
+    public void logFineLocation(Location location) {}
 
     public abstract double getClockBias();
 

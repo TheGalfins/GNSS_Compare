@@ -2,6 +2,7 @@
 
 package com.galfins.gnss_compare.PvtMethods;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.ejml.data.SingularMatrixException;
@@ -145,6 +146,13 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
     public void logError(double latError, double lonError) {
         if (kalmanParamLogger.isStarted()) {
             kalmanParamLogger.logError(latError, lonError);
+        }
+    }
+
+    @Override
+    public void logFineLocation(Location fineLocation){
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logFineLocation(fineLocation);
         }
     }
 

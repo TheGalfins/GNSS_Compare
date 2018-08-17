@@ -463,6 +463,7 @@ public class CalculationModule implements Runnable{
     public void updateLocationFromGoogleServices(Location location){
 
         locationFromGoogleServices = location;
+        pvtMethod.logFineLocation(location);
 
         if (!poseInitialized && locationFromGoogleServices != null) {
             pose = Coordinates.globalGeodInstance(

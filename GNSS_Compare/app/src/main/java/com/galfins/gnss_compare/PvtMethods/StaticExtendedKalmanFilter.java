@@ -8,6 +8,7 @@ import com.galfins.gnss_compare.Constellations.Constellation;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 
+import android.location.Location;
 import android.util.Log;
 
 
@@ -125,6 +126,13 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
     public void logError(double latError, double lonError) {
         if (kalmanParamLogger.isStarted()) {
             kalmanParamLogger.logError(latError, lonError);
+        }
+    }
+
+    @Override
+    public void logFineLocation(Location fineLocation){
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logFineLocation(fineLocation);
         }
     }
 
