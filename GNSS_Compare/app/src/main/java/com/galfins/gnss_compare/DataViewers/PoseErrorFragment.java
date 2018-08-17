@@ -305,6 +305,8 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                                 (calculatedPose.getGeodeticLatitude() - phoneInternalPose.getLatitude()) * Math.PI / 180.0,
                                 (calculatedPose.getGeodeticLongitude() - phoneInternalPose.getLongitude()) * Math.PI / 180.0);
 
+                        calculationModuleReference.getPvtMethod().logError(poseError[0], poseError[1]);
+
                         Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
 
                         registeredPoses.add(new Double[]{poseError[0], poseError[1]});

@@ -229,10 +229,13 @@ public class CalculationModule implements Runnable{
      */
     public void setLogToFile(boolean logToFile) {
         this.logToFile = logToFile;
-        if (logToFile)
+        if (logToFile){
             fileLogger.startNewLog();
-        else
+            pvtMethod.startLog(NAME);
+        } else {
             fileLogger.closeLog();
+            pvtMethod.stopLog();
+        }
     }
 
     /**

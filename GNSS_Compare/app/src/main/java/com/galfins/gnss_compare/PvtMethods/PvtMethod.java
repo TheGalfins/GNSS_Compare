@@ -45,6 +45,12 @@ public abstract class PvtMethod {
         return registeredObjects.get(name);
     }
 
+    public void startLog(String name) { }
+
+    public void stopLog() { }
+
+    public void logError(double latError, double lonError) { }
+
     public abstract double getClockBias();
 
     private static boolean initialized = false;
