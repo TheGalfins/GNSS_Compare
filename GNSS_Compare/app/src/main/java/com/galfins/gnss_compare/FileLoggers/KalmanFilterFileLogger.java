@@ -16,14 +16,14 @@ public class KalmanFilterFileLogger extends FileLogger {
     public KalmanFilterFileLogger() {
         TAG = "KalmanFilterFileLogger";
         filePrefix = "";
-        initialLine = "E, Latitude error, Longitude error" +
-                "\nx, x_meas[0], ..., x_meas[numStates] " +
-                "\nP, P_meas[0,0], ..., P_meas[numStates,numStates] " +
-                "\nI, gamma[0], ..., gamma[constellationSize] " +
-                "\nS, S[0,0], ..., S[constellationSize,constellationSize] " +
-                "\nid, satID[0], ..., satID[constellationSize]" +
-                "\nPR, pseudoranges[0], ..., pseudoranges[constellationSize]" +
-                "\nFl, fineLocation.Latitude, fineLocation.Longitude, fineLocation.Altitude";
+        initialLine = "% E, Latitude error, Longitude error" +
+                "\n% x, x_meas[0], ..., x_meas[numStates] " +
+                "\n% P, P_meas[0,0], ..., P_meas[numStates,numStates] " +
+                "\n% I, gamma[0], ..., gamma[constellationSize] " +
+                "\n% S, S[0,0], ..., S[constellationSize,constellationSize] " +
+                "\n% id, satID[0], ..., satID[constellationSize]" +
+                "\n% PR, pseudoranges[0], ..., pseudoranges[constellationSize]" +
+                "\n% Fl, fineLocation.Latitude, fineLocation.Longitude, fineLocation.Altitude\n\n";
     }
 
     public void logError(double latError, double lonError){
