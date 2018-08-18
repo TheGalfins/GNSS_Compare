@@ -32,9 +32,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name="com.galfins.gnss_compare.CreateModulePreference" />
-        <activity android:name="com.galfins.gnss_compare.ModifyModulePreference" />
+
+        <activity
+            android:name="com.galfins.gnss_compare.CreateModulePreference"
+            android:theme="@style/PreferenceScreen"/>
+
+        <activity
+            android:name="com.galfins.gnss_compare.ModifyModulePreference"
+            android:theme="@style/PreferenceScreen"/>
     </application>
 
 </manifest>

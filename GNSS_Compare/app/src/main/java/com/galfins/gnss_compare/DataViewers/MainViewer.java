@@ -349,6 +349,9 @@ public class MainViewer extends Fragment implements DataViewer {
         }
 
         private void updateViews(){
+
+            //todo: throws error here when executed from incorrect thread
+            //todo: can be causing viewers crash
             if(nameView != null &&
                     latView != null &&
                     lonView != null &&

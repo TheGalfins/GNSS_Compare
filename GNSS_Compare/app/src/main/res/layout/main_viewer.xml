@@ -15,38 +15,14 @@
 
         <ImageView
             android:id="@+id/logoView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher_foreground" />
-
-        <TextView
-            android:id="@+id/appNameView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/app_name"
-            android:textColor="@color/ap_charcoal"
-            android:textSize="24sp"
-            app:layout_constraintStart_toEndOf="@id/logoView"
-            app:layout_constraintTop_toTopOf="@id/logoView" />
-
-        <TextView
-            android:id="@+id/appMottoView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            android:layout_marginStart="12dp"
-            android:text="@string/app_motto"
-            android:textColor="@color/ap_charcoal"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/logoView"
-            app:layout_constraintStart_toEndOf="@id/logoView" />
+            app:srcCompat="@drawable/full_logo_vertical_transparent" />
 
         <View
             android:id="@+id/constellation_horizontal_line_top"

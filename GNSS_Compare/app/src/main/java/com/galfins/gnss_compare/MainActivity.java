@@ -420,6 +420,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimaryBright2));
+
         snackbar.show();
     }
 
