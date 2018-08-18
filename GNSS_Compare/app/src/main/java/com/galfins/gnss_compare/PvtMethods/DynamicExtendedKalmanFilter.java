@@ -10,6 +10,7 @@ import org.ejml.simple.SimpleMatrix;
 import com.galfins.gnss_compare.Constellations.Constellation;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
+import com.galfins.gogpsextracts.TopocentricCoordinates;
 
 /**
  * implements a dynamic extended Kalman filter. The state vector contains the position,
@@ -198,9 +199,6 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
         R = R.divide(1.0/100.0);
         SimpleMatrix sigma2C1 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
         double measVarC1phone;
-
-        // Perform time-prediction of the state vector and its VCM
-
 
         // Form the observation matrix H
         for(int k = 0; k < CONSTELLATION_SIZE; k++){

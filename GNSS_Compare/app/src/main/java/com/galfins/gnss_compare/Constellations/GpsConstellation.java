@@ -39,8 +39,8 @@ public class GpsConstellation extends Constellation {
     private long FullBiasNanos;
 
     private Coordinates rxPos;
-    private double tRxGPS;
-    private double weekNumberNanos;
+    protected double tRxGPS;
+    protected double weekNumberNanos;
 
     private static final int constellationId = GnssStatus.CONSTELLATION_GPS;
 
@@ -49,7 +49,7 @@ public class GpsConstellation extends Constellation {
      */
     private Time timeRefMsec;
 
-    private int visibleButNotUsed = 0;
+    protected int visibleButNotUsed = 0;
 
     // Condition for the pseudoranges that takes into account a maximum uncertainty for the TOW
     // (as done in gps-measurement-tools MATLAB code)
