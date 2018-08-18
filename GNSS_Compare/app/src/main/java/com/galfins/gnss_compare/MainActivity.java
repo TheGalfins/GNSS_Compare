@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Observable uiThreadObservable;
 
+    private Menu menu;
+
     /**
      * Callback used for receiving phone's location
      */
@@ -384,14 +386,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void update(Observable o, Object arg) {
 
-                final CalculationModule calculationModuleReference = (CalculationModule) arg;
+            final CalculationModule calculationModuleReference = (CalculationModule) arg;
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        uiThreadObservable.notifyObservers(calculationModuleReference);
-                    }
-                });
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    uiThreadObservable.notifyObservers(calculationModuleReference);
+                }
+            });
             }
         };
 
@@ -571,6 +573,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -588,6 +591,19 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_modify_module:
                 Intent preferencesIntent = new Intent(this, ModifyModulePreference.class);
                 startActivity(preferencesIntent);
+                return true;
+
+            case R.id.action_start_stop_log:
+                MenuItem logButton = menu.findItem(R.id.action_start_stop_log);
+                if (!rawMeasurementsLogger.isStarted()) {
+                    rawMeasurementsLogger.startNewLog();
+                    makeNotification("Starting raw GNSS measurements log...");
+                    logButton.setTitle(R.string.stop_log_button_description);
+                } else {
+                    rawMeasurementsLogger.closeLog();
+                    makeNotification("Stopping raw GNSS measurements log...");
+                    logButton.setTitle(R.string.start_log_button_description);
+                }
                 return true;
 
             default:

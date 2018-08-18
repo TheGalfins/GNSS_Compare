@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_create_module"
         android:title="@string/settings_button_title"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add_circle_outline_white_24dp"
-        android:iconTint="@color/ap_white"/>
+        app:showAsAction="never"
+        android:icon="@drawable/ic_add_circle_outline_white_24dp"/>
 
     <item android:id="@+id/action_modify_module"
         android:title="@string/preferences_name"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_settings_white_24dp"
-        android:iconTint="@color/ap_white"/>
+        app:showAsAction="never"
+        android:icon="@drawable/ic_settings_white_24dp"/>
+
+    <item android:id="@+id/action_start_stop_log"
+        android:title="@string/start_log_button_description"
+        app:showAsAction="never"/>
 </menu>
