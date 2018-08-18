@@ -387,7 +387,6 @@ public class MainViewer extends Fragment implements DataViewer {
     private GridLayout poseGridView;
     private GridLayout constellationGridView;
     private List<CalculationGridItem> poseItems = new ArrayList<>();
-    private Button logButton;
     private ConstellationGrid constellationGrid;
 
     private static List<CalculationModule> seriesAddedBeforeInitialization = new ArrayList<>();
@@ -403,19 +402,6 @@ public class MainViewer extends Fragment implements DataViewer {
 
         poseGridView = rootView.findViewById(R.id.pose_list);
         constellationGridView = rootView.findViewById(R.id.constellation_list);
-        logButton = rootView.findViewById(R.id.log_button);
-        logButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!MainActivity.rawMeasurementsLogger.isStarted()) {
-                    MainActivity.rawMeasurementsLogger.startNewLog();
-                    logButton.setText(R.string.stop_log_button_description);
-                } else {
-                    MainActivity.rawMeasurementsLogger.closeLog();
-                    logButton.setText(R.string.start_log_button_description);
-                }
-            }
-        });
 
         if(constellationGrid == null)
             constellationGrid = new ConstellationGrid(constellationGridView);
