@@ -194,7 +194,7 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
                 else
                     return toAppendTo.append("");
             }
-            
+
             @Override
             public Object parseObject(String source, @NonNull ParsePosition pos) {
                 return null;
