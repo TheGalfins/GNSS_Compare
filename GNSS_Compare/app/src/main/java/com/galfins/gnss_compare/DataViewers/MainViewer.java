@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,7 +117,7 @@ public class MainViewer extends Fragment implements DataViewer {
                     visibleView != null &&
                     usedView != null) {
 
-                nameView.setText(constellationReference.getName());
+                nameView.setText(Html.fromHtml(constellationReference.getName(), Html.FROM_HTML_MODE_LEGACY));
                 visibleView.setText(String.format("%d", constellationReference.getVisibleConstellationSize()));
                 usedView.setText(String.format("%d", constellationReference.getUsedConstellationSize()));
             }
@@ -355,7 +356,7 @@ public class MainViewer extends Fragment implements DataViewer {
                     altView != null &&
                     clockBiasView != null) {
 
-                nameView.setText(calculationModuleReference.getName());
+                nameView.setText(Html.fromHtml(calculationModuleReference.getName(), Html.FROM_HTML_MODE_LEGACY));
                 latView.setText(String.format("%.5f", calculationModuleReference.getPose().getGeodeticLatitude()));
                 lonView.setText(String.format("%.5f", calculationModuleReference.getPose().getGeodeticLongitude()));
                 altView.setText(String.format("%.1f", calculationModuleReference.getPose().getGeodeticHeight()));

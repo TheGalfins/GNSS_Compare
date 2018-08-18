@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.ArraySet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -189,10 +190,11 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
             public StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, @NonNull FieldPosition pos) {
                 int i = Math.round(((Number) obj).intValue());
                 if((i-1)<data.satellites.size() && i>0)
-                    return toAppendTo.append(data.satellites.get(i-1).getUniqueSatId());
+                    return toAppendTo.append(Html.fromHtml(data.satellites.get(i-1).getUniqueSatId(), Html.FROM_HTML_MODE_LEGACY));
                 else
                     return toAppendTo.append("");
             }
+            
             @Override
             public Object parseObject(String source, @NonNull ParsePosition pos) {
                 return null;
