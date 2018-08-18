@@ -35,21 +35,21 @@ public class GalileoConstellation extends Constellation {
 
     private Coordinates rxPos;
 
-    private double tRxGalileoTOW;
+    protected double tRxGalileoTOW;
     private double tRxGalileoE1_2nd;
-    private double weekNumberNanos;
+    protected double weekNumberNanos;
 
     /**
      * Time of the measurement
      */
     private Time timeRefMsec;
 
-    private int visibleButNotUsed = 0;
+    protected int visibleButNotUsed = 0;
 
     /**
      * List holding observed satellites
      */
-    private List<SatelliteParameters> observedSatellites = new ArrayList<>();
+    protected List<SatelliteParameters> observedSatellites = new ArrayList<>();
 
 
 //    private long timeRx;

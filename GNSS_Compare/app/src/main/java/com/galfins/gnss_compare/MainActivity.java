@@ -440,15 +440,26 @@ public class MainActivity extends AppCompatActivity {
 
                         List<CalculationModule> initialModules = new ArrayList<>();
 
-//                        initialModules.add(new CalculationModule(
-//                                "GPS IonoFree",
-//                                GpsIonoFreeConstellation.class,
-//                                new ArrayList<Class<? extends Correction>>() {{
-//                                    add(ShapiroCorrection.class);
-//                                    add(TropoCorrection.class);
-//                                }},
-//                                PedestrianStaticExtendedKalmanFilter.class,
-//                                NmeaFileLogger.class));
+                        initialModules.add(new CalculationModule(
+                                "Galileo E1",
+                                GalileoE1Constellation.class,
+                                new ArrayList<Class<? extends Correction>>() {{
+                                    add(ShapiroCorrection.class);
+                                    add(TropoCorrection.class);
+                                }},
+                                PedestrianStaticExtendedKalmanFilter.class,
+                                NmeaFileLogger.class));
+
+                        initialModules.add(new CalculationModule(
+                                "Galileo IonoFree",
+                                GalileoIonoFreeConstellation.class,
+                                new ArrayList<Class<? extends Correction>>() {{
+                                    add(ShapiroCorrection.class);
+                                    add(TropoCorrection.class);
+                                }},
+                                PedestrianStaticExtendedKalmanFilter.class,
+                                NmeaFileLogger.class));
+
 
                         initialModules.add(new CalculationModule(
                                 "Galileo E5a",
@@ -459,17 +470,6 @@ public class MainActivity extends AppCompatActivity {
                                 }},
                                 PedestrianStaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
-
-
-//                        initialModules.add(new CalculationModule(
-//                                "GPS L5",
-//                                GpsL5Constellation.class,
-//                                new ArrayList<Class<? extends Correction>>() {{
-//                                    add(ShapiroCorrection.class);
-//                                    add(TropoCorrection.class);
-//                                }},
-//                                PedestrianStaticExtendedKalmanFilter.class,
-//                                NmeaFileLogger.class));
 
 
 //                        initialModules.add(new CalculationModule(
