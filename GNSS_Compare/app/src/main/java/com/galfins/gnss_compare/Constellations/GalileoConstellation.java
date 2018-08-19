@@ -29,6 +29,8 @@ public class GalileoConstellation extends Constellation {
     private static final String NAME = "Galileo";
     private static final String TAG = "GalileoConstellation";
     private static int constellationId = GnssStatus.CONSTELLATION_GALILEO;
+    private static double MASK_ELEVATION = 20; // degrees
+    private static double MASK_CN0 = 10; // dB-Hz
 
     private boolean fullBiasNanosInitialized = false;
     private long FullBiasNanos;
@@ -298,8 +300,8 @@ public class GalileoConstellation extends Constellation {
     public void calculateSatPosition(Location initialLocation, Coordinates position) {
 
 
-//        rxPos = pose;
-//        rxPos = Coordinates.globalGeodInstance(52.1628855, 4.523316, 179.547);
+        // Make a list to hold the satellites that are to be excluded based on elevation/CN0 masking criteria
+        List<SatelliteParameters> excludedSatellites = new ArrayList<>();
 
         synchronized (this) {
             rxPos = Coordinates.globalXYZInstance(position.getX(), position.getY(), position.getZ());
@@ -356,6 +358,13 @@ public class GalileoConstellation extends Constellation {
                                 rxPos,
                                 observedSatellite.getSatellitePosition()));
 
+
+                // Add to the exclusion list the satellites that do not pass the masking criteria
+                if(observedSatellite.getRxTopo().getElevation() < MASK_ELEVATION){
+                    excludedSatellites.add(observedSatellite);
+                }
+
+
                 double accumulatedCorrection = 0;
 
                 /** Compute the accumulated corrections for the pseudorange measurements
@@ -384,6 +393,9 @@ public class GalileoConstellation extends Constellation {
 
                 observedSatellite.setAccumulatedCorrection(accumulatedCorrection);
             }
+
+            // Remove from the list all the satellites that did not pass the masking criteria
+            observedSatellites.removeAll(excludedSatellites);
         }
     }
 
