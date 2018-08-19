@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -111,6 +111,8 @@ public class ModifyModulePreference extends AppCompatActivity {
      */
     final private ArrayList<PreferenceListItem> itemsList = new ArrayList<>();
 
+    private View mainView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +131,8 @@ public class ModifyModulePreference extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, itemsList);
 
         listView.setAdapter(adapter);
+
+        mainView = findViewById(R.id.main_view);
     }
 
     @Override
@@ -153,8 +157,11 @@ public class ModifyModulePreference extends AppCompatActivity {
 
             } catch (CalculationModule.NameAlreadyRegisteredException
                     | CalculationModule.NumberOfSeriesExceededLimitException e) {
-                Toast toast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
-                toast.show();
+
+                Snackbar snackbar = Snackbar
+                        .make(mainView, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                snackbar.show();
             }
 
             recreate();
@@ -209,13 +216,16 @@ public class ModifyModulePreference extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     getItem(pos).getCalculationModuleReference().setActive(isChecked);
 
-                    String toastText;
+                    String notificationText;
                     if (isChecked)
-                        toastText = "Calculations activated";
+                        notificationText = "Calculations activated";
                     else
-                        toastText = "Calculations deactivated";
+                        notificationText = "Calculations deactivated";
 
-                    Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar
+                            .make(mainView, notificationText, Snackbar.LENGTH_SHORT);
+
+                    snackbar.show();
                 }
             });
         }
@@ -232,13 +242,17 @@ public class ModifyModulePreference extends AppCompatActivity {
             switchReference.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     getItem(pos).getCalculationModuleReference().setLogToFile(isChecked);
-                    String toastText;
-                    if (isChecked)
-                        toastText = "Logging results to file";
-                    else
-                        toastText = "Logging results to file terminated";
 
-                    Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+                    String notificationText;
+                    if (isChecked)
+                        notificationText = "Logging results to file";
+                    else
+                        notificationText = "Logging results to file terminated";
+
+                    Snackbar snackbar = Snackbar
+                            .make(mainView, notificationText, Snackbar.LENGTH_SHORT);
+
+                    snackbar.show();
                 }
             });
         }
