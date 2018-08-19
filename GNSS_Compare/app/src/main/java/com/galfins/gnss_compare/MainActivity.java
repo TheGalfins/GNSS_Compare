@@ -35,6 +35,7 @@ import com.galfins.gnss_compare.Constellations.GpsIonoFreeConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
 import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
+import com.galfins.gnss_compare.PvtMethods.StaticExtendedKalmanFilter;
 import com.galfins.gnss_compare.PvtMethods.WeightedLeastSquares;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -447,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
-                                PedestrianStaticExtendedKalmanFilter.class,
+                                StaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
@@ -457,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
-                                PedestrianStaticExtendedKalmanFilter.class,
+                                StaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
 
 
@@ -468,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
-                                PedestrianStaticExtendedKalmanFilter.class,
+                                StaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
 
 

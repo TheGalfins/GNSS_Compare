@@ -233,7 +233,6 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
 
             // Form the VCM of the measurements (R)
             elev = constellation.getSatellite(k).getRxTopo().getElevation() * (Math.PI / 180.0);
-
             R.set(k,k,sigma2Meas * Math.pow(a + b * Math.exp(-elev/10.0),2));
 
             usedInCalculations ++;

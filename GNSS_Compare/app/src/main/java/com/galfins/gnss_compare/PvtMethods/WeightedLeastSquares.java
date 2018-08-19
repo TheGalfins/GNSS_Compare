@@ -25,6 +25,10 @@ public class WeightedLeastSquares extends PvtMethod {
     private double clockBias; // =0.0;
     //private final static Coordinates ZERO_POSE = Coordinates.globalGeodInstance(47.642795, 23.622892, 350.0);   // Romania
 
+    // Define the parameters for the elevation dependent weighting method [Jaume Subirana et al. GNSS Data Processing: Fundamentals and Algorithms]
+    private double a = 0.13;
+    private double b = 0.53;
+    private double sigma2Meas = Math.pow(5,2);
 
 
     public WeightedLeastSquares(){
@@ -44,12 +48,12 @@ public class WeightedLeastSquares extends PvtMethod {
         SimpleMatrix svClkBias = new SimpleMatrix(CONSTELLATION_SIZE, 1);
         SimpleMatrix ionoCorr = new SimpleMatrix(CONSTELLATION_SIZE, 1);
         SimpleMatrix shapiroCorr = new SimpleMatrix(CONSTELLATION_SIZE, 1);
-        SimpleMatrix sigma2C1 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
-        SimpleMatrix prC1Vect = new SimpleMatrix(CONSTELLATION_SIZE, 1);
+        SimpleMatrix sigma2 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
+        SimpleMatrix prVect = new SimpleMatrix(CONSTELLATION_SIZE, 1);
         SimpleMatrix vcvMeasurement;
         SimpleMatrix PDOP = new SimpleMatrix(1,1);
 
-        double elevation, measVarC1phone,  measVarC1;
+        double elevation, measVar,  measVarC1;
         int CN0;
 
         TopocentricCoordinates topo = new TopocentricCoordinates();
@@ -63,7 +67,7 @@ public class WeightedLeastSquares extends PvtMethod {
             for (int ii = 0; ii < CONSTELLATION_SIZE; ii++) {
 
                 // Set the measurements into a vector
-                prC1Vect.set(ii, constellation.getSatellite(ii).getPseudorange());
+                prVect.set(ii, constellation.getSatellite(ii).getPseudorange());
 
                 // Compute the satellite coordinates
                 svClkBias.set(ii, constellation.getSatellite(ii).getClockBias());
@@ -83,19 +87,11 @@ public class WeightedLeastSquares extends PvtMethod {
 //                origin.setXYZ(rxPosSimpleVector.get(0), rxPosSimpleVector.get(1),rxPosSimpleVector.get(2));
 //                target.setXYZ(satPosMat.get(ii, 0),satPosMat.get(ii, 1),satPosMat.get(ii, 2) );
                 topo.computeTopocentric(origin, target);
-                elevation = topo.getElevation();
+                elevation = topo.getElevation() * (Math.PI / 180.0);
 
                 // Set the variance of the measurement for each satellite
-//                measVarC1phone = constellation.getSatellite(ii).getPseudorangeObject().getMeasurementVariance();
-                measVarC1phone = 100.0;
-                CN0 = (int)constellation.getSatelliteSignalStrength(ii);
-
-                // Use the measurement variance as given by the phone
-                //sigma2C1.set(ii, measVarC1phone);
-
-                // Apply the CN0 + Tangential weighting method (takes into account the satellite signal strength and its elevation)
-                //measVarC1 =  (Math.pow(10.0, -1.0 * CN0) / Math.pow(Math.tan(elevation * Math.PI / 180.0 - 0.1),2)) / Math.pow(measVarC1phone,2);
-                sigma2C1.set(ii, measVarC1phone);
+                measVar = sigma2Meas * Math.pow(a + b * Math.exp(-elevation/10.0),2);
+                sigma2.set(ii, measVar);
 
                 ///////////////////////////// Printing results  ////////////////////////////////////////////////////
 
@@ -136,7 +132,7 @@ public class WeightedLeastSquares extends PvtMethod {
 
         try{
             // VCV matrix of the pseudorange measurements
-            vcvMeasurement = sigma2C1.diag();
+            vcvMeasurement = sigma2.diag();
 
             SimpleMatrix W = vcvMeasurement.invert();
 
@@ -175,7 +171,7 @@ public class WeightedLeastSquares extends PvtMethod {
                 }
 
                 // Compute the prefit vector (z)
-                z.set(prC1Vect.minus(measPred));
+                z.set(prVect.minus(measPred));
 
                 // Estimate the unknowns (dxHat)
                 SimpleMatrix Cov = H.transpose().mult(W).mult(H);
