@@ -441,8 +441,8 @@ public class MainActivity extends AppCompatActivity {
                         List<CalculationModule> initialModules = new ArrayList<>();
 
                         initialModules.add(new CalculationModule(
-                                "Galileo E1",
-                                GalileoE1Constellation.class,
+                                "GPS L1",
+                                GpsL1Constellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -451,8 +451,8 @@ public class MainActivity extends AppCompatActivity {
                                 NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
-                                "Galileo E5a",
-                                GalileoE5aConstellation.class,
+                                "GPS L5",
+                                GpsL5Constellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -462,8 +462,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                         initialModules.add(new CalculationModule(
-                                "Galileo IonoFree",
-                                GalileoIonoFreeConstellation.class,
+                                "GPS IonoFree",
+                                GpsIonoFreeConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);

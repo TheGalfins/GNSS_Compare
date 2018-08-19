@@ -43,6 +43,8 @@ public class GpsConstellation extends Constellation {
     protected double weekNumberNanos;
 
     private static final int constellationId = GnssStatus.CONSTELLATION_GPS;
+    private static double MASK_ELEVATION = 20; // degrees
+    private static double MASK_CN0 = 10; // dB-Hz
 
     /**
      * Time of the measurement
@@ -212,6 +214,9 @@ public class GpsConstellation extends Constellation {
     @Override
     public void calculateSatPosition(Location initialLocation, Coordinates position) {
 
+        // Make a list to hold the satellites that are to be excluded based on elevation/CN0 masking criteria
+        List<SatelliteParameters> excludedSatellites = new ArrayList<>();
+
         synchronized (this) {
 
             rxPos = Coordinates.globalXYZInstance(position.getX(), position.getY(), position.getZ());
@@ -247,6 +252,11 @@ public class GpsConstellation extends Constellation {
                                 rxPos,
                                 observedSatellite.getSatellitePosition()));
 
+                // Add to the exclusion list the satellites that do not pass the masking criteria
+                if(observedSatellite.getRxTopo().getElevation() < MASK_ELEVATION){
+                    excludedSatellites.add(observedSatellite);
+                }
+
                 double accumulatedCorrection = 0;
 
                 for (Correction correction : corrections) {
@@ -263,6 +273,9 @@ public class GpsConstellation extends Constellation {
 
                 observedSatellite.setAccumulatedCorrection(accumulatedCorrection);
             }
+
+            // Remove from the list all the satellites that did not pass the masking criteria
+            observedSatellites.removeAll(excludedSatellites);
         }
     }
 
