@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.galfins.gnss_compare.Corrections.Correction;
+import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -338,8 +339,11 @@ public class GalileoConstellation extends Constellation {
                         initialLocation);
 
                 if (rnp == null) {
+                    MainActivity.makeRnpFailedNotification();
                     break;
                 }
+
+                MainActivity.dismissRnpFailedNotification();
 
                 observedSatellite.setSatellitePosition(rnp);
 

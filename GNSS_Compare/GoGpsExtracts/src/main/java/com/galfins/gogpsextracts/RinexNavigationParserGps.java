@@ -37,6 +37,8 @@ public class RinexNavigationParserGps extends EphemerisSystem implements Navigat
 
     public static String newline = System.getProperty("line.separator");
 
+    private final String TAG = this.getClass().getSimpleName();
+
     private ArrayList<EphGps> eph = new ArrayList<EphGps>(); /* GPS broadcast ephemerides */
     //private double[] iono = new double[8]; /* Ionosphere model parameters */
     private IonoGps iono = null; /* Ionosphere model parameters */
@@ -1276,19 +1278,22 @@ public class RinexNavigationParserGps extends EphemerisSystem implements Navigat
             return null;
 
         EphGps eph = findEph(unixTime, satID, satType);
+
+        if (eph == null) {
+            Log.e(TAG, "getSatPositionAndVelocities: Ephemeris failed to load..." );
+            return null;
+        }
+
         if (eph.equals(EphGps.UnhealthyEph))
             return SatellitePosition.UnhealthySat;
 
-        if (eph != null) {
+        //			char satType = eph.getSatType();
 
-            //			char satType = eph.getSatType();
+        SatellitePosition sp = computeSatPositionAndVelocities(unixTime, range, satID, satType, eph, receiverClockError);
+        //			SatellitePosition sp = computePositionGps(unixTime, satType, satID, eph, range, receiverClockError);
+        //if(receiverPosition!=null) earthRotationCorrection(receiverPosition, sp);
+        return sp;// new SatellitePosition(eph, unixTime, satID, range);
 
-            SatellitePosition sp = computeSatPositionAndVelocities(unixTime, range, satID, satType, eph, receiverClockError);
-            //			SatellitePosition sp = computePositionGps(unixTime, satType, satID, eph, range, receiverClockError);
-            //if(receiverPosition!=null) earthRotationCorrection(receiverPosition, sp);
-            return sp;// new SatellitePosition(eph, unixTime, satID, range);
-        }
-        return null;
     }
 
     public String getFileName() {

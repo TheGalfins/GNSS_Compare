@@ -28,8 +28,10 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.androidplot.util.PixelUtils;
+import com.galfins.gnss_compare.Constellations.GalileoConstellation;
 import com.galfins.gnss_compare.Constellations.GalileoE1Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
+import com.galfins.gnss_compare.Constellations.GpsConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
 import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
@@ -123,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
      * Locally saved state of created calculation modules
      */
     private static Bundle savedState;
+
+    private static Snackbar rnpFailedSnackbar = null;
 
     /**
      * Callback used for receiving phone's location
@@ -448,8 +452,8 @@ public class MainActivity extends AppCompatActivity {
 //                                NmeaFileLogger.class));
 
                         initialModules.add(new CalculationModule(
-                                "Galileo E5a",
-                                GalileoE5aConstellation.class,
+                                "Galileo",
+                                GalileoConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -459,8 +463,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                         initialModules.add(new CalculationModule(
-                                "GPS L5",
-                                GpsL5Constellation.class,
+                                "GPS",
+                                GpsConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -719,6 +723,25 @@ public class MainActivity extends AppCompatActivity {
                 .make(mainView, note, Snackbar.LENGTH_LONG);
 
         snackbar.show();
+    }
+
+    public static void makeRnpFailedNotification(){
+
+        if(rnpFailedSnackbar==null) {
+            rnpFailedSnackbar = Snackbar.make(
+                    mainView,
+                    "Failed to get ephemeris data. Retrying...",
+                    Snackbar.LENGTH_INDEFINITE
+            );
+            rnpFailedSnackbar.show();
+        } else if (!rnpFailedSnackbar.isShown())
+            rnpFailedSnackbar.show();
+
+    }
+
+    public static void dismissRnpFailedNotification(){
+        if(rnpFailedSnackbar!=null)
+            rnpFailedSnackbar.dismiss();
     }
 
 }
