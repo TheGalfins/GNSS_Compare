@@ -181,10 +181,10 @@ public class GalileoConstellation extends Constellation {
                 int svID = measurement.getSvid();
 
 
-                if (true || (towKnown || towDecoded)) { //todo don't leave it like this!!!
+                if ((towKnown || towDecoded)) { //todo don't leave it like this!!!
 
-                    boolean satelliteAlreadySeen = false;
-
+//                    boolean satelliteAlreadySeen = false;
+//
 //                    for(SatelliteParameters satelliteParameters : observedSatellites)
 //                        if(satelliteParameters.getSatId() == measurement.getSvid())
 //                            satelliteAlreadySeen = true;
@@ -212,7 +212,7 @@ public class GalileoConstellation extends Constellation {
                     Log.d(TAG, "updateConstellations: Passed with measurement state: " + measState);
 
 
-                } /*else if (codeLock) {
+                } else if (codeLock) {
 
                     SatelliteParameters satelliteParameters = new SatelliteParameters(
                             measurement.getSvid(),
@@ -231,7 +231,7 @@ public class GalileoConstellation extends Constellation {
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGalileoTOW + ", " + pseudorangeE1_2nd);
                     Log.d(TAG, "updateConstellations: Passed with measurement state: " + measState);
 
-                } */else {
+                } else {
                     visibleButNotUsed++;
                 }
             }

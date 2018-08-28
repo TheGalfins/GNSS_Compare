@@ -453,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
 
                         initialModules.add(new CalculationModule(
                                 "Galileo",
-                                GalileoE1Constellation.class,
+                                GalileoConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
 
                         initialModules.add(new CalculationModule(
                                 "GPS",
-                                GpsL1Constellation.class,
+                                GpsConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
