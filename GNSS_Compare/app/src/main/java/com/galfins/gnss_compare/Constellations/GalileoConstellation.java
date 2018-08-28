@@ -118,7 +118,7 @@ public class GalileoConstellation extends Constellation {
                 if (measurement.getConstellationType() != constellationId)
                     continue;
 
-                if(measurement.getSvid() == 27) //todo: hardcoded exlusion of a faulty satellite (SUPL not working)
+                if(measurement.getSvid() == 27 || measurement.getSvid() == 25) //todo: hardcoded exlusion of a faulty satellite (SUPL not working)
                     continue;
 
                 long ReceivedSvTimeNanos = measurement.getReceivedSvTimeNanos();
