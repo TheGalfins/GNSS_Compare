@@ -28,15 +28,13 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.androidplot.util.PixelUtils;
+import com.galfins.gnss_compare.Constellations.GalileoConstellation;
 import com.galfins.gnss_compare.Constellations.GalileoE1Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
-import com.galfins.gnss_compare.Constellations.GalileoIonoFreeConstellation;
-import com.galfins.gnss_compare.Constellations.GpsIonoFreeConstellation;
+import com.galfins.gnss_compare.Constellations.GpsConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
 import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
-import com.galfins.gnss_compare.PvtMethods.StaticExtendedKalmanFilter;
-import com.galfins.gnss_compare.PvtMethods.WeightedLeastSquares;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -127,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
      * Locally saved state of created calculation modules
      */
     private static Bundle savedState;
+
+    private static Snackbar rnpFailedSnackbar = null;
 
     /**
      * Callback used for receiving phone's location
@@ -441,6 +441,16 @@ public class MainActivity extends AppCompatActivity {
 
                         List<CalculationModule> initialModules = new ArrayList<>();
 
+//                        initialModules.add(new CalculationModule(
+//                                "Galileo+GPS",
+//                                GalileoGpsConstellation.class,
+//                                new ArrayList<Class<? extends Correction>>() {{
+//                                    add(ShapiroCorrection.class);
+//                                    add(TropoCorrection.class);
+//                                }},
+//                                DynamicExtendedKalmanFilter.class,
+//                                NmeaFileLogger.class));
+
                         initialModules.add(new CalculationModule(
                                 "Galileo E1",
                                 GalileoE1Constellation.class,
@@ -448,8 +458,9 @@ public class MainActivity extends AppCompatActivity {
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
-                                StaticExtendedKalmanFilter.class,
+                                PedestrianStaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
+
 
                         initialModules.add(new CalculationModule(
                                 "GPS L1",
@@ -458,29 +469,18 @@ public class MainActivity extends AppCompatActivity {
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
                                 }},
-                                StaticExtendedKalmanFilter.class,
+                                PedestrianStaticExtendedKalmanFilter.class,
                                 NmeaFileLogger.class));
 
-//
+
 //                        initialModules.add(new CalculationModule(
-//                                "Galileo IF",
-//                                GalileoIonoFreeConstellation.class,
+//                                "GPS L1",
+//                                GpsL1Constellation.class,
 //                                new ArrayList<Class<? extends Correction>>() {{
 //                                    add(ShapiroCorrection.class);
 //                                    add(TropoCorrection.class);
 //                                }},
-//                                StaticExtendedKalmanFilter.class,
-//                                NmeaFileLogger.class));
-
-
-//                        initialModules.add(new CalculationModule(
-//                                "GPS L5",
-//                                GpsL5Constellation.class,
-//                                new ArrayList<Class<? extends Correction>>() {{
-//                                    add(ShapiroCorrection.class);
-//                                    add(TropoCorrection.class);
-//                                }},
-//                                PedestrianStaticExtendedKalmanFilter.class,
+//                                DynamicExtendedKalmanFilter.class,
 //                                NmeaFileLogger.class));
 
 //                        initialModules.add(new CalculationModule(
@@ -723,6 +723,25 @@ public class MainActivity extends AppCompatActivity {
                 .make(mainView, note, Snackbar.LENGTH_LONG);
 
         snackbar.show();
+    }
+
+    public static void makeRnpFailedNotification(){
+
+        if(rnpFailedSnackbar==null) {
+            rnpFailedSnackbar = Snackbar.make(
+                    mainView,
+                    "Failed to get ephemeris data. Retrying...",
+                    Snackbar.LENGTH_INDEFINITE
+            );
+            rnpFailedSnackbar.show();
+        } else if (!rnpFailedSnackbar.isShown())
+            rnpFailedSnackbar.show();
+
+    }
+
+    public static void dismissRnpFailedNotification(){
+        if(rnpFailedSnackbar!=null)
+            rnpFailedSnackbar.dismiss();
     }
 
 }

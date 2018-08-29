@@ -2,6 +2,7 @@ package com.galfins.gogpsextracts;
 
 import android.location.Location;
 import android.location.cts.nano.GalileoEphemeris;
+import android.util.Log;
 
 import com.galfins.gogpsextracts.EphemerisSystemGalileo;
 
@@ -40,6 +41,8 @@ public class RinexNavigationParserGalileo extends EphemerisSystemGalileo impleme
 	private OutputStreamWriter cacheStreamWriter;
 
 	public static String newline = System.getProperty("line.separator");
+
+	private final String TAG = this.getClass().getSimpleName();
 
 	public BroadcastGGTO ggto;
 
@@ -1064,18 +1067,20 @@ public class RinexNavigationParserGalileo extends EphemerisSystemGalileo impleme
 		EphGalileo eph = findEph(unixTime, satID, satType);
 		//if( eph.equals( EphGalileo.UnhealthyEph ))
 			//return SatellitePosition.UnhealthySat;
-		
-		if (eph != null) {
 
-			//			char satType = eph.getSatType();
+		if (eph == null){
+            Log.e(TAG, "getGalileoSatPosition: Ephemeris failed to load..." );
+            return null;
+        }
 
-			SatellitePosition sp = computePositionGalileo(unixTime, range, satID, satType, eph, receiverClockError);
-			//			SatellitePosition sp = computePositionGps(unixTime, satType, satID, eph, range, receiverClockError);
-			//if(receiverPosition!=null) earthRotationCorrection(receiverPosition, sp);			
-			
-			return sp;// new SatellitePosition(eph, unixTime, satID, range);
-		}
-		return null;
+        //			char satType = eph.getSatType();
+
+        SatellitePosition sp = computePositionGalileo(unixTime, range, satID, satType, eph, receiverClockError);
+        //			SatellitePosition sp = computePositionGps(unixTime, satType, satID, eph, range, receiverClockError);
+        //if(receiverPosition!=null) earthRotationCorrection(receiverPosition, sp);
+
+        return sp;// new SatellitePosition(eph, unixTime, satID, range);
+
 	}
 	
 	public SatellitePosition getGalileoSatVelocities(long unixTime,double range, int satID, char satType, double receiverClockError) {

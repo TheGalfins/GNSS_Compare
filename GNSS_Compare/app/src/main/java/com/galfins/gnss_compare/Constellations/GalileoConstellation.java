@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.galfins.gnss_compare.Corrections.Correction;
+import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -119,7 +120,7 @@ public class GalileoConstellation extends Constellation {
                 if (measurement.getConstellationType() != constellationId)
                     continue;
 
-                if(measurement.getSvid() == 27) //todo: hardcoded exlusion of a faulty satellite (SUPL not working)
+                if(measurement.getSvid() == 27 || measurement.getSvid() == 25) //todo: hardcoded exlusion of a faulty satellite (SUPL not working)
                     continue;
 
                 long ReceivedSvTimeNanos = measurement.getReceivedSvTimeNanos();
@@ -182,10 +183,10 @@ public class GalileoConstellation extends Constellation {
                 int svID = measurement.getSvid();
 
 
-                if (true || (towKnown || towDecoded)) { //todo don't leave it like this!!!
+                if ((towKnown || towDecoded)) { //todo don't leave it like this!!!
 
-                    boolean satelliteAlreadySeen = false;
-
+//                    boolean satelliteAlreadySeen = false;
+//
 //                    for(SatelliteParameters satelliteParameters : observedSatellites)
 //                        if(satelliteParameters.getSatId() == measurement.getSvid())
 //                            satelliteAlreadySeen = true;
@@ -213,7 +214,7 @@ public class GalileoConstellation extends Constellation {
                     Log.d(TAG, "updateConstellations: Passed with measurement state: " + measState);
 
 
-                } /*else if (codeLock) {
+                } else if (codeLock) {
 
                     SatelliteParameters satelliteParameters = new SatelliteParameters(
                             measurement.getSvid(),
@@ -232,7 +233,7 @@ public class GalileoConstellation extends Constellation {
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGalileoTOW + ", " + pseudorangeE1_2nd);
                     Log.d(TAG, "updateConstellations: Passed with measurement state: " + measState);
 
-                } */else {
+                } else {
                     visibleButNotUsed++;
                 }
             }
@@ -340,8 +341,11 @@ public class GalileoConstellation extends Constellation {
                         initialLocation);
 
                 if (rnp == null) {
+                    MainActivity.makeRnpFailedNotification();
                     break;
                 }
+
+                MainActivity.dismissRnpFailedNotification();
 
                 observedSatellite.setSatellitePosition(rnp);
 
