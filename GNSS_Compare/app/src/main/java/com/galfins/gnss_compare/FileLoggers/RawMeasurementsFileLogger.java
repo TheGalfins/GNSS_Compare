@@ -3,6 +3,7 @@ package com.galfins.gnss_compare.FileLoggers;
 import android.location.GnssClock;
 import android.location.GnssMeasurement;
 import android.location.GnssMeasurementsEvent;
+import android.location.Location;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
@@ -65,9 +66,14 @@ public class RawMeasurementsFileLogger extends FileLogger{
                         + "ReceivedSvTimeUncertaintyNanos,Cn0DbHz,PseudorangeRateMetersPerSecond,"
                         + "PseudorangeRateUncertaintyMetersPerSecond,"
                         + "AccumulatedDeltaRangeState,AccumulatedDeltaRangeMeters,"
-                        + "AccumulatedDeltaRangeUncertaintyMeters,CarrierFrequencyHz,CarrierCycles,"
+                        + "AccumulatedDeltaRangeUncertaintyMeters,CarrierCycles,"
                         + "CarrierPhase,CarrierPhaseUncertainty,MultipathIndicator,SnrInDb,"
                         + "ConstellationType,AgcDb,CarrierFrequencyHz");
+        initialLine.append('\n');
+        initialLine.append(COMMENT_START);
+        initialLine.append('\n');
+        initialLine.append(COMMENT_START);
+        initialLine.append("Fix,Fused,Latitude,Longitude,Altitude,Speed,Accuracy,(UTC)TimeInMs");
         initialLine.append('\n');
         initialLine.append(COMMENT_START);
         initialLine.append('\n');
@@ -76,9 +82,14 @@ public class RawMeasurementsFileLogger extends FileLogger{
     }
 
     /**
-     * Add new pose to the file
+     * Add new pose to the file dummy function
      */
-    public void addNewPose(Coordinates pose, Constellation constellation) {
+    public void addNewPose(Coordinates pose, Constellation constellation) { }
+
+    /**
+     * Add fine location to the file
+     */
+    public void addFineLocation(Location fineLocation) {
         synchronized (mFileLock) {
             if (mFileWriter == null) {
                 return;
@@ -87,13 +98,13 @@ public class RawMeasurementsFileLogger extends FileLogger{
             String locationStream =
                     String.format(Locale.ENGLISH,
                             "Fix,%s,%f,%f,%f,%f,%f,%d",
-                            constellation.getConstellationId(),
-                            pose.getGeodeticLatitude(),
-                            pose.getGeodeticLongitude(),
-                            pose.getGeodeticHeight(),
-                            0.0, //speed
-                            0.0, //accuracy
-                            pose.getRefTime());
+                            fineLocation.getProvider(),
+                            fineLocation.getLatitude(),
+                            fineLocation.getLongitude(),
+                            fineLocation.getAltitude(),
+                            fineLocation.getSpeed(),
+                            fineLocation.getAccuracy(),
+                            fineLocation.getTime());
             try {
                 mFileWriter.write(locationStream);
                 mFileWriter.newLine();
@@ -142,11 +153,10 @@ public class RawMeasurementsFileLogger extends FileLogger{
                                 ? clock.getDriftUncertaintyNanosPerSecond()
                                 : "",
                         clock.getHardwareClockDiscontinuityCount() + ",");
-        mFileWriter.write(clockStream);
 
         String measurementStream =
                 String.format(
-                        "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                        "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         measurement.getSvid(),
                         measurement.getTimeOffsetNanos(),
                         measurement.getState(),
@@ -158,7 +168,6 @@ public class RawMeasurementsFileLogger extends FileLogger{
                         measurement.getAccumulatedDeltaRangeState(),
                         measurement.getAccumulatedDeltaRangeMeters(),
                         measurement.getAccumulatedDeltaRangeUncertaintyMeters(),
-                        measurement.hasCarrierFrequencyHz() ? measurement.getCarrierFrequencyHz() : "",
                         measurement.hasCarrierCycles() ? measurement.getCarrierCycles() : "",
                         measurement.hasCarrierPhase() ? measurement.getCarrierPhase() : "",
                         measurement.hasCarrierPhaseUncertainty()
@@ -172,8 +181,13 @@ public class RawMeasurementsFileLogger extends FileLogger{
                                 ? measurement.getAutomaticGainControlLevelDb()
                                 : "",
                         measurement.hasCarrierFrequencyHz() ? measurement.getCarrierFrequencyHz() : "");
-        mFileWriter.write(measurementStream);
-        mFileWriter.newLine();
+        try {
+            mFileWriter.write(clockStream);
+            mFileWriter.write(measurementStream);
+            mFileWriter.newLine();
+        } catch (IOException e) {
+            Log.e(TAG, ERROR_WRITING_FILE, e);
+        }
     }
 
 
