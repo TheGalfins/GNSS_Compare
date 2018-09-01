@@ -3,6 +3,8 @@
 Example of analysis
 *******************
 
+**(To be updated with an example of analysis for the GNSS Dual-Frequency Android phones)**
+
 This section provides information about the scenarios in which *GNSS Compare* was tested and the PVT performance
 obtained from its estimation algorithms (e.g., Extended Kalman Filter). Furthermore, the analysis
 presented here serves also as an example of how GNSS Compare can be used for algorithmic performance assessment.
