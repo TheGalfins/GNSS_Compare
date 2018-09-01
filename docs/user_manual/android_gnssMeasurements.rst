@@ -3,6 +3,8 @@
 Android GNSS raw measurements
 =============================
 
+*(To be updated to support GNSS Dual-Frequency Android phones)*
+
 In the following sections we describe the algorithms used to compute the pseudoranges
 taken into account the used satellite navigation system. The following algorithms are based on
 the European GNSS Agency's (GSA) `White Paper on using GNSS Raw Measurements on Android devices`_.
