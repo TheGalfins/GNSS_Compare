@@ -31,6 +31,7 @@ import com.androidplot.util.PixelUtils;
 import com.galfins.gnss_compare.Constellations.GalileoConstellation;
 import com.galfins.gnss_compare.Constellations.GalileoE1Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoE5aConstellation;
+import com.galfins.gnss_compare.Constellations.GalileoIonoFreeConstellation;
 import com.galfins.gnss_compare.Constellations.GpsConstellation;
 import com.galfins.gnss_compare.Constellations.GpsL1Constellation;
 import com.galfins.gnss_compare.Constellations.GpsL5Constellation;
@@ -463,8 +464,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                         initialModules.add(new CalculationModule(
-                                "GPS L1",
-                                GpsL1Constellation.class,
+                                "Galileo E5a",
+                                GalileoE5aConstellation.class,
                                 new ArrayList<Class<? extends Correction>>() {{
                                     add(ShapiroCorrection.class);
                                     add(TropoCorrection.class);
@@ -473,15 +474,15 @@ public class MainActivity extends AppCompatActivity {
                                 NmeaFileLogger.class));
 
 
-//                        initialModules.add(new CalculationModule(
-//                                "GPS L1",
-//                                GpsL1Constellation.class,
-//                                new ArrayList<Class<? extends Correction>>() {{
-//                                    add(ShapiroCorrection.class);
-//                                    add(TropoCorrection.class);
-//                                }},
-//                                DynamicExtendedKalmanFilter.class,
-//                                NmeaFileLogger.class));
+                        initialModules.add(new CalculationModule(
+                                "Galileo IF",
+                                GalileoIonoFreeConstellation.class,
+                                new ArrayList<Class<? extends Correction>>() {{
+                                    add(ShapiroCorrection.class);
+                                    add(TropoCorrection.class);
+                                }},
+                                PedestrianStaticExtendedKalmanFilter.class,
+                                NmeaFileLogger.class));
 
 //                        initialModules.add(new CalculationModule(
 //                                "Galileo",
