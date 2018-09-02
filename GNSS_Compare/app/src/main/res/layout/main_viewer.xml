@@ -15,38 +15,14 @@
 
         <ImageView
             android:id="@+id/logoView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="25dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher_foreground" />
-
-        <TextView
-            android:id="@+id/appNameView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/app_name"
-            android:textColor="@color/ap_charcoal"
-            android:textSize="24sp"
-            app:layout_constraintStart_toEndOf="@id/logoView"
-            app:layout_constraintTop_toTopOf="@id/logoView" />
-
-        <TextView
-            android:id="@+id/appMottoView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            android:layout_marginStart="12dp"
-            android:text="@string/app_motto"
-            android:textColor="@color/ap_charcoal"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/logoView"
-            app:layout_constraintStart_toEndOf="@id/logoView" />
+            app:srcCompat="@drawable/full_logo_vertical_transparent" />
 
         <View
             android:id="@+id/constellation_horizontal_line_top"
@@ -226,24 +202,11 @@
 
         </GridLayout>
 
-
-        <Button
-            android:id="@+id/log_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/start_log_button_description"
-            android:textAlignment="center"
-            android:textColor="@color/ap_charcoal"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/pose_list" />
-
         <TextView
             android:id="@+id/contribution_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/log_button"
+            app:layout_constraintTop_toBottomOf="@id/pose_list"
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/support_text"
             android:textColor="@color/ap_light_gray"
@@ -251,16 +214,17 @@
             android:textAlignment="center"
             android:layout_marginTop="48dp"/>
 
-        <!--<ImageView-->
-            <!--android:id="@+id/esa_logo"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginEnd="16dp"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--<TextView-->
+            <!--android:id="@+id/developer_version_text"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
             <!--app:layout_constraintTop_toBottomOf="@id/contribution_text"-->
-            <!--app:srcCompat="@drawable/esa_logo_dark_blue" />-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--android:text="@string/developer_version"-->
+            <!--android:textColor="@color/ap_light_gray"-->
+            <!--android:textSize="10sp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:layout_marginTop="24dp"/>-->
 
 
     </android.support.constraint.ConstraintLayout>
