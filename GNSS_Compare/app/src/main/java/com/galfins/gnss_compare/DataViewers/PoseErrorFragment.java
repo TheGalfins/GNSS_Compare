@@ -307,6 +307,8 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
                         Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
 
+                        calculationModuleReference.getPvtMethod().logError(poseError[0], poseError[1]);
+
                         registeredPoses.add(new Double[]{poseError[0], poseError[1]});
                         if (registeredPoses.size() > MAX_PLOTTED_POINTS)
                             registeredPoses.remove(0);

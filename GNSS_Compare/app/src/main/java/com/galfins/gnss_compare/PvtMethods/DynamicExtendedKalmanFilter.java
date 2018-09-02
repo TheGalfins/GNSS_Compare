@@ -2,12 +2,14 @@
 
 package com.galfins.gnss_compare.PvtMethods;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.ejml.data.SingularMatrixException;
 import org.ejml.simple.SimpleMatrix;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
+import com.galfins.gnss_compare.FileLoggers.KalmanFilterFileLogger;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.TopocentricCoordinates;
@@ -43,6 +45,9 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
     /** name of the pvt method as it appears in the selection menu for pvt methods
      */
     private static final String NAME = "Dynamic EKF";
+    /** Kalman filter parameters file logger
+     */
+    private KalmanFilterFileLogger kalmanParamLogger = new KalmanFilterFileLogger();
 
     // dimensions and indices for matrices.
     // these numbers should change if a dynamic Kalman filter is implemented.
@@ -133,6 +138,28 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
     }
 
     @Override
+    public void startLog(String name){
+        kalmanParamLogger.setName(name);
+        kalmanParamLogger.startNewLog();
+    }
+    @Override
+    public void stopLog() {
+        kalmanParamLogger.closeLog();
+    }
+    @Override
+    public void logError(double latError, double lonError) {
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logError(latError, lonError);
+        }
+    }
+    @Override
+    public void logFineLocation(Location fineLocation){
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logFineLocation(fineLocation);
+        }
+    }
+
+    @Override
     public Coordinates calculatePose(Constellation constellation) {
 
         /** number of satellites in constellation
@@ -187,6 +214,9 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
         /** Kalman gain matrix K
          */
         SimpleMatrix K;
+        /** Innovation covariance
+         */
+        SimpleMatrix S;
 
         // Initialize the variables related to the measurement model
         /** Observation Matrix H
@@ -251,6 +281,7 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
             // Compute the Kalman Gain
             try {
                 K = P_pred.mult(H.transpose().mult((H.mult(P_pred.mult(H.transpose())).plus(R)).invert()));
+                S = H.mult(P_pred.mult(H.transpose())).plus(R);
             } catch (SingularMatrixException e) {
                 Log.e(NAME, " Matrix inversion failed", e);
                 return Coordinates.globalXYZInstance(
@@ -267,6 +298,8 @@ public class DynamicExtendedKalmanFilter extends PvtMethod {
             x_meas = x_pred.plus(K.mult(gamma));
             P_meas = (SimpleMatrix.identity(numStates).minus((K.mult(H)))).mult(P_pred);
 
+            if (kalmanParamLogger.isStarted())
+                kalmanParamLogger.logKalmanParam(x_meas, P_meas, numStates, gamma, S, CONSTELLATION_SIZE, constellation);
 
             firstExecution = false;
 

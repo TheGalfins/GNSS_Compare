@@ -4,6 +4,8 @@ import android.location.GnssStatus;
 import android.util.Log;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
@@ -77,12 +79,12 @@ public class NmeaFileLogger extends FileLogger {
             int Checksum = 0; // use format %02x
             String locationStream =
                     String.format(Locale.ENGLISH,
-                            "$%sGGA,%s,%04.5f,%c,%04.5f,%c,,%02d,,%s,%c,,%c,,*%s",
+                            "$%sGGA,%s,%s,%c,%s,%c,,%02d,,%s,%c,,%c,,*%s",
                             TalkerID,
                             (constellation.getTime() == null) ? "" : constellation.getTime().toLogString(),
-                            pose.getGeodeticLatitude() * 100,
+                            convertToNmeaFormat(pose.getGeodeticLatitude()),
                             NS,
-                            pose.getGeodeticLongitude() * 100,
+                            convertToNmeaFormat(pose.getGeodeticLongitude()),
                             EW,
                             constellation.getUsedConstellationSize(),
                             ((int) pose.getGeodeticHeight() < 100000) ? String.format ("%05d", (int) pose.getGeodeticHeight()) : "100000",
@@ -95,6 +97,24 @@ public class NmeaFileLogger extends FileLogger {
                 Log.e(TAG, ERROR_WRITING_FILE, e);
             }
         }
+    }
+
+    private String convertToNmeaFormat(double geodeticCoordinate) {
+
+        double geodeticCoordinateDegrees = Math.floor(geodeticCoordinate);
+        double geodeticCoordinateMinutes = Math.floor(60 * (geodeticCoordinate-geodeticCoordinateDegrees));
+        double geodeticCoordinateSeconds = 60 * (60 * (geodeticCoordinate-geodeticCoordinateDegrees)-geodeticCoordinateMinutes);
+
+        StringBuilder mneaFormatCoordinate = new StringBuilder();
+        DecimalFormat decimalFormat = new DecimalFormat("00");
+        decimalFormat.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
+        mneaFormatCoordinate.append(decimalFormat.format(geodeticCoordinateDegrees));
+        mneaFormatCoordinate.append(decimalFormat.format(geodeticCoordinateMinutes));
+        DecimalFormat decimalFormatSec = new DecimalFormat(".######");
+        decimalFormatSec.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
+        mneaFormatCoordinate.append(decimalFormatSec.format(geodeticCoordinateSeconds/100));
+
+        return mneaFormatCoordinate.toString();
     }
 
     @Override

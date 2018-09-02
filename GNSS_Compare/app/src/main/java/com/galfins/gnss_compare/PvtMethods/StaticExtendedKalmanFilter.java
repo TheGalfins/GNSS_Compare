@@ -4,9 +4,11 @@ import org.ejml.data.SingularMatrixException;
 import org.ejml.simple.SimpleMatrix;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
+import com.galfins.gnss_compare.FileLoggers.KalmanFilterFileLogger;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 
+import android.location.Location;
 import android.util.Log;
 
 
@@ -54,6 +56,9 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
     /** index of clock drift of the state vector
      */
     private int idxClockDrift = 4;
+    /** Kalman filter parameters file logger
+     */
+    private KalmanFilterFileLogger kalmanParamLogger = new KalmanFilterFileLogger();
 
     /** vector for the predicted state
      */
@@ -112,6 +117,28 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
     }
 
     @Override
+    public void startLog(String name){
+        kalmanParamLogger.setName(name);
+        kalmanParamLogger.startNewLog();
+    }
+    @Override
+    public void stopLog() {
+        kalmanParamLogger.closeLog();
+    }
+    @Override
+    public void logError(double latError, double lonError) {
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logError(latError, lonError);
+        }
+    }
+    @Override
+    public void logFineLocation(Location fineLocation){
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logFineLocation(fineLocation);
+        }
+    }
+
+    @Override
     public Coordinates calculatePose(Constellation constellation) {
 
         /** number of satellites in constellation
@@ -163,6 +190,9 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
         /** Kalman gain matrix K
          */
         SimpleMatrix K;
+        /** Innovation covariance
+         */
+        SimpleMatrix S;
 
         // Initialize the variables related to the measurement model
         /** Observation Matrix H
@@ -226,6 +256,7 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
 
             try {
                 K = P_pred.mult(H.transpose().mult((H.mult(P_pred.mult(H.transpose())).plus(R)).invert()));
+                S = H.mult(P_pred.mult(H.transpose())).plus(R);
             } catch (SingularMatrixException e) {
                 Log.e(NAME, new String (" Matrix inversion failed"), e);
                 return Coordinates.globalXYZInstance(
@@ -243,6 +274,8 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
             P_meas = (SimpleMatrix.identity(numStates).minus((K.mult(H)))).mult(P_pred);
 
             // x_meas and P_meas are being used for the next set of measurements
+            if (kalmanParamLogger.isStarted())
+                kalmanParamLogger.logKalmanParam(x_meas, P_meas, numStates, gamma, S, CONSTELLATION_SIZE, constellation);
 
             firstExecution = false;
 
