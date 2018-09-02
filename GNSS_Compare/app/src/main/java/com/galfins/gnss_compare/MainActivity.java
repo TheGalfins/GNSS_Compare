@@ -550,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
                                         add(ShapiroCorrection.class);
                                         add(TropoCorrection.class);
                                     }},
-                                    DynamicExtendedKalmanFilter.class,
+                                    PedestrianStaticExtendedKalmanFilter.class,
                                     NmeaFileLogger.class));
 
                             initialModules.add(new CalculationModule(
@@ -570,7 +570,7 @@ public class MainActivity extends AppCompatActivity {
                                         add(ShapiroCorrection.class);
                                         add(TropoCorrection.class);
                                     }},
-                                    DynamicExtendedKalmanFilter.class,
+                                    PedestrianStaticExtendedKalmanFilter.class,
                                     NmeaFileLogger.class));
                         }
 
