@@ -25,29 +25,6 @@ import com.galfins.gogpsextracts.Time;
 
 public abstract class Constellation {
 
-    private static final class DeviceModel {
-        private String manufacturer;
-        private String model;
-
-        public DeviceModel(String manufacturer, String model){
-            this.manufacturer = manufacturer;
-            this.model = model;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (getClass() != obj.getClass())
-                return false;
-
-            DeviceModel compared = (DeviceModel) obj;
-            return compared.model.equals(model) && compared.manufacturer.equals(manufacturer);
-        }
-    }
-
-    private static final List<DeviceModel> SUPPORTED_DUAL_FREQUENCY_DEVICES = new ArrayList<DeviceModel>(){{
-        add(new DeviceModel("Xiaomi", "MI 8"));
-    }};
-
     /**
      * Indicates if initialization has already been performed
      */
@@ -58,15 +35,8 @@ public abstract class Constellation {
     /**
      * Registers all constellation classes which extend this
      */
-    public static void initialize() {
+    public static void initialize(boolean dualFrequencySupported) {
         if(!initialized) {
-
-            DeviceModel thisDevice = new DeviceModel(Build.MANUFACTURER, Build.MODEL);
-            boolean dualFrequencySupported = false;
-
-            for(DeviceModel device : SUPPORTED_DUAL_FREQUENCY_DEVICES)
-                if(thisDevice.equals(device))
-                    dualFrequencySupported = true;
 
             GpsConstellation.registerClass();
             GalileoConstellation.registerClass();
