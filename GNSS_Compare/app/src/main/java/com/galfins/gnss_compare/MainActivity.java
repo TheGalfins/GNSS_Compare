@@ -484,15 +484,15 @@ public class MainActivity extends AppCompatActivity {
 //                                PedestrianStaticExtendedKalmanFilter.class,
 //                                NmeaFileLogger.class));
 
-//                        initialModules.add(new CalculationModule(
-//                                "Galileo",
-//                                GalileoConstellation.class,
-//                                new ArrayList<Class<? extends Correction>>() {{
-//                                    add(ShapiroCorrection.class);
-//                                    add(TropoCorrection.class);
-//                                }},
-//                                DynamicExtendedKalmanFilter.class,
-//                                NmeaFileLogger.class));
+                        initialModules.add(new CalculationModule(
+                                "Galileo",
+                                GalileoConstellation.class,
+                                new ArrayList<Class<? extends Correction>>() {{
+                                    add(ShapiroCorrection.class);
+                                    add(TropoCorrection.class);
+                                }},
+                                DynamicExtendedKalmanFilter.class,
+                                NmeaFileLogger.class));
 
                         try {
                             for(CalculationModule module : initialModules)
