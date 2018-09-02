@@ -226,17 +226,6 @@
             android:textAlignment="center"
             android:layout_marginTop="24dp"/>
 
-        <!--<ImageView-->
-            <!--android:id="@+id/esa_logo"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginEnd="16dp"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@id/contribution_text"-->
-            <!--app:srcCompat="@drawable/esa_logo_dark_blue" />-->
-
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
