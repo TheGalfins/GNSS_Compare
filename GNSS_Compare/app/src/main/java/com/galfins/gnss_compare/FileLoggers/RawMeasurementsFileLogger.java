@@ -22,7 +22,7 @@ public class RawMeasurementsFileLogger extends FileLogger{
 
     private static final String ERROR_WRITING_FILE = "Problem writing to file.";
     private static final String COMMENT_START = "# ";
-    private static final String VERSION_TAG = "Version: ";
+    private static final String VERSION_TAG = "Version: v2.0.0.1"; //TODO change this hardcoded version
     private static final String NAME = "RawMeasurements";
 
     public RawMeasurementsFileLogger(String calculationName) {
@@ -66,7 +66,7 @@ public class RawMeasurementsFileLogger extends FileLogger{
                         + "ReceivedSvTimeUncertaintyNanos,Cn0DbHz,PseudorangeRateMetersPerSecond,"
                         + "PseudorangeRateUncertaintyMetersPerSecond,"
                         + "AccumulatedDeltaRangeState,AccumulatedDeltaRangeMeters,"
-                        + "AccumulatedDeltaRangeUncertaintyMeters,CarrierCycles,"
+                        + "AccumulatedDeltaRangeUncertaintyMeters,CarrierFrequencyHz,CarrierCycles,"
                         + "CarrierPhase,CarrierPhaseUncertainty,MultipathIndicator,SnrInDb,"
                         + "ConstellationType,AgcDb,CarrierFrequencyHz");
         initialLine.append('\n');
@@ -76,7 +76,7 @@ public class RawMeasurementsFileLogger extends FileLogger{
         initialLine.append("Fix,Fused,Latitude,Longitude,Altitude,Speed,Accuracy,(UTC)TimeInMs");
         initialLine.append('\n');
         initialLine.append(COMMENT_START);
-        initialLine.append('\n');
+        // initialLine.append('\n');
 
         return initialLine.toString();
     }
@@ -156,7 +156,7 @@ public class RawMeasurementsFileLogger extends FileLogger{
 
         String measurementStream =
                 String.format(
-                        "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                        "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                         measurement.getSvid(),
                         measurement.getTimeOffsetNanos(),
                         measurement.getState(),
@@ -168,6 +168,7 @@ public class RawMeasurementsFileLogger extends FileLogger{
                         measurement.getAccumulatedDeltaRangeState(),
                         measurement.getAccumulatedDeltaRangeMeters(),
                         measurement.getAccumulatedDeltaRangeUncertaintyMeters(),
+                        measurement.hasCarrierFrequencyHz() ? measurement.getCarrierFrequencyHz() : "",
                         measurement.hasCarrierCycles() ? measurement.getCarrierCycles() : "",
                         measurement.hasCarrierPhase() ? measurement.getCarrierPhase() : "",
                         measurement.hasCarrierPhaseUncertainty()
