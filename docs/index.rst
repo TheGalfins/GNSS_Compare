@@ -13,7 +13,7 @@
 Introduction
 ************
 
-**GNSS Compare now supports the Dual-Frequency Xiaomi Mi8 smartphone!**
+**GNSS Compare now supports the Dual-Frequency Xiaomi Mi 8 smartphone!**
 
 Welcome to GNSS Compare's documentation!
 
