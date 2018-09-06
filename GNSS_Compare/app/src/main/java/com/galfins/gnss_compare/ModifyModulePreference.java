@@ -1,9 +1,12 @@
 package com.galfins.gnss_compare;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -113,6 +116,25 @@ public class ModifyModulePreference extends AppCompatActivity {
 
     private View mainView;
 
+    private GnssCoreService.GnssCoreBinder gnssCoreBinder;
+    private boolean mGnssCoreBound;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            gnssCoreBinder = (GnssCoreService.GnssCoreBinder) service;
+            mGnssCoreBound = true;
+
+            for(CalculationModule calculationModule: gnssCoreBinder.getCalculationModules())
+                itemsList.add(new PreferenceListItem(calculationModule));
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,10 +144,10 @@ public class ModifyModulePreference extends AppCompatActivity {
 
         listView = findViewById(R.id.listview);
 
-        for (int i = 0; i < MainActivity.createdCalculationModules.size(); i++) {
-            itemsList.add(new PreferenceListItem(
-                    MainActivity.createdCalculationModules.get(i)));
-        }
+        bindService(
+                new Intent(this, GnssCoreService.class),
+                mConnection,
+                Context.BIND_AUTO_CREATE);
 
         StableArrayAdapter adapter = new StableArrayAdapter(this,
                 android.R.layout.simple_list_item_1, itemsList);
