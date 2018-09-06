@@ -25,6 +25,14 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
     private GnssMeasurementsEvent.Callback gnssCallback;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
+    private FusedLocationProviderClient fusedLocationProviderClientReference;
+    private LocationManager locationManagerReference;
+
+    public class CallbacksNotAssignedException extends IllegalStateException{
+        public CallbacksNotAssignedException(String message) {
+            super(message);
+        }
+    }
 
     public CalculationModulesArrayList(){
         gnssCallback = new GnssMeasurementsEvent.Callback() {
@@ -92,6 +100,9 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
     public void registerForGnssUpdates(FusedLocationProviderClient fusedLocationClient, LocationManager locationManager){
         try {
 
+            fusedLocationProviderClientReference = fusedLocationClient;
+            locationManagerReference = locationManager;
+
             fusedLocationClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
@@ -108,5 +119,14 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
     public void unregisterFromGnssUpdates(FusedLocationProviderClient fusedLocationClient, LocationManager locationManager){
         fusedLocationClient.removeLocationUpdates(locationCallback);
         locationManager.unregisterGnssMeasurementsCallback(gnssCallback);
+    }
+
+    public void unregisterFromGnssUpdates(){
+        if (fusedLocationProviderClientReference!=null && locationManagerReference!=null) {
+            fusedLocationProviderClientReference.removeLocationUpdates(locationCallback);
+            locationManagerReference.unregisterGnssMeasurementsCallback(gnssCallback);
+        } else {
+            Log.e(TAG, "unregisterFromGnssUpdates: Unregistering non-registered object!");
+        }
     }
 }
