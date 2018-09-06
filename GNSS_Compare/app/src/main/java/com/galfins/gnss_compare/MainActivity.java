@@ -2,7 +2,10 @@ package com.galfins.gnss_compare;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -11,6 +14,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -177,6 +181,42 @@ public class MainActivity extends AppCompatActivity {
 
     private Menu menu;
 
+    private GnssCoreService.GnssCoreBinder gnssCoreBinder;
+
+    private boolean mGnssCoreBound = false;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            gnssCoreBinder = (GnssCoreService.GnssCoreBinder) service;
+            mGnssCoreBound = true;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (DataViewer viewer : mPagerAdapter.getViewers()) {
+                        for(CalculationModule calculationModule : gnssCoreBinder.getCalculationModules()) {
+                            viewer.addSeries(calculationModule);
+                            calculationModule.addObserver(calculationModuleObserver);
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for(DataViewer viewer : mPagerAdapter.getViewers())
+                        for(CalculationModule calculationModule : gnssCoreBinder.getCalculationModules())
+                            viewer.removeSeries(calculationModule);
+                }
+            });
+        }
+    };
+
     /**
      * Callback used for receiving phone's location
      */
@@ -285,9 +325,9 @@ public class MainActivity extends AppCompatActivity {
             mLocationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
 
-            createdCalculationModules.registerForGnssUpdates(
-                    mFusedLocationClient,
-                    mLocationManager);
+//            createdCalculationModules.registerForGnssUpdates(
+//                    mFusedLocationClient,
+//                    mLocationManager);
 
         }
     }
@@ -351,9 +391,9 @@ public class MainActivity extends AppCompatActivity {
 
         initializeGnssCompareMainActivity();
 
-        initializeGnssCompareModules();
-
-        initializeCalculationModules();
+//        initializeGnssCompareModules();
+        createdCalculationModules = new DataViewerCalculationModulesArrayList();
+//        initializeCalculationModules();
 
         if (hasGnssAndLogPermissions()) {
             registerLocationManager();
@@ -364,6 +404,11 @@ public class MainActivity extends AppCompatActivity {
         mainView = findViewById(R.id.main_view);
 
         showInitializationDisclamer();
+
+        bindService(
+                new Intent(this, GnssCoreService.class),
+                mConnection,
+                Context.BIND_AUTO_CREATE);
     }
 
     private void initializeGnssCompareMainActivity() {
@@ -674,9 +719,13 @@ public class MainActivity extends AppCompatActivity {
                         sharedPreferences.getString(CreateModulePreference.KEY_PVT_METHOD, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_FILE_LOGGER, null));
 
-                    createdCalculationModules.add(newModule);
+                if(mGnssCoreBound) {
+                    gnssCoreBinder.addModule(newModule);
                     CreateModulePreference.notifyModuleCreated();
                     makeNotification("Module " + newModule.getName() + " created...");
+                } else {
+                    makeNotification("Error, GNSS Core service not running...");
+                }
 
             } catch (CalculationModule.NameAlreadyRegisteredException
                     | CalculationModule.NumberOfSeriesExceededLimitException

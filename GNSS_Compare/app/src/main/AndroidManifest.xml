@@ -42,6 +42,9 @@
         <activity
             android:name="com.galfins.gnss_compare.ModifyModulePreference"
             android:theme="@style/PreferenceScreen"/>
+
+        <service
+            android:name=".GnssCoreService"/>
     </application>
 
 </manifest>

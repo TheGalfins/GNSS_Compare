@@ -8,19 +8,23 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.galfins.gnss_compare.Constellations.Constellation;
 import com.galfins.gnss_compare.Constellations.GalileoConstellation;
 import com.galfins.gnss_compare.Constellations.GalileoGpsConstellation;
 import com.galfins.gnss_compare.Constellations.GpsConstellation;
 import com.galfins.gnss_compare.Corrections.Correction;
 import com.galfins.gnss_compare.Corrections.ShapiroCorrection;
 import com.galfins.gnss_compare.Corrections.TropoCorrection;
+import com.galfins.gnss_compare.FileLoggers.FileLogger;
 import com.galfins.gnss_compare.FileLoggers.NmeaFileLogger;
 import com.galfins.gnss_compare.PvtMethods.DynamicExtendedKalmanFilter;
+import com.galfins.gnss_compare.PvtMethods.PvtMethod;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observer;
 
 /**
  * Created by Mateusz on 9/6/2018.
@@ -28,15 +32,30 @@ import java.util.List;
  */
 public class GnssCoreService extends Service {
 
-    Binder binder = new Binder();
 
     CalculationModulesArrayList calculationModules = new CalculationModulesArrayList();
 
     private final String TAG = this.getClass().getSimpleName();
+    public class GnssCoreBinder extends Binder{
 
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationManager mLocationManager;
+        public void addObserver(Observer observer){
+            calculationModules.addObserver(observer);
+        }
 
+        public void removeObserver(Observer observer){
+            calculationModules.removeObserver(observer);
+        }
+
+        public CalculationModulesArrayList getCalculationModules(){
+            return calculationModules;
+        }
+
+        public void addModule(CalculationModule newModule){
+            calculationModules.add(newModule);
+        }
+    }
+
+    private IBinder binder = new GnssCoreBinder();
 
     @Nullable
     @Override
@@ -49,11 +68,25 @@ public class GnssCoreService extends Service {
         super.onCreate();
 
         createInitialCalculationModules();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
 
         calculationModules.registerForGnssUpdates(mFusedLocationClient, mLocationManager);
-        
+
+
+        Constellation.initialize();
+        Correction.initialize();
+        PvtMethod.initialize();
+        FileLogger.initialize();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        calculationModules.unregisterFromGnssUpdates();
+        calculationModules.clear();
     }
 
     private void createInitialCalculationModules(){

@@ -32,6 +32,7 @@ import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -72,6 +73,8 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     private boolean initalized = false;
 
+    private List<CalculationModule> registeredCalculationModules = new ArrayList<>();
+
     XYPlot plot;
 
     ArrayList<PoseErrorPlotDataSeries> data = new ArrayList<>();
@@ -87,31 +90,31 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
         preformatPlot(plot);
 
-        for(int i = 0; i< MainActivity.createdCalculationModules.size(); i++){
-            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                try {
-                    Iterator<PoseErrorPlotDataSeries> itr = data.iterator();
-                    PoseErrorPlotDataSeries reference;
+        for(int i = 0; i< registeredCalculationModules.size(); i++){
+//            synchronized (MainActivity.createdCalculationModules.get(i)) {
+            try {
+                Iterator<PoseErrorPlotDataSeries> itr = data.iterator();
+                PoseErrorPlotDataSeries reference;
 
-                    while(itr.hasNext()) {
-                        reference = itr.next();
-                        if (reference.getCalculationModuleReference() == MainActivity.createdCalculationModules.get(i)) {
-                            MainActivity.createdCalculationModules.get(i).removeObserver(reference.getDataObserver());
-                        }
+                while(itr.hasNext()) {
+                    reference = itr.next();
+                    if (reference.getCalculationModuleReference() == registeredCalculationModules.get(i)) {
+                        registeredCalculationModules.get(i).removeObserver(reference.getDataObserver());
                     }
-
-                } catch (Exception e){
-                    e.printStackTrace();
                 }
+
+            } catch (Exception e){
+                e.printStackTrace();
             }
+//            }
         }
 
         initalized = true;
 
-        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
-            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                addSeries(MainActivity.createdCalculationModules.get(i));
-            }
+        for(int i=0; i<registeredCalculationModules.size(); i++){
+//            synchronized (MainActivity.createdCalculationModules.get(i)) {
+                addSeries(registeredCalculationModules.get(i));
+//            }
         }
 
         return rootView;
@@ -145,6 +148,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
     private void registerSeries(CalculationModule calculationModule){
         if(!seriesRegistered(calculationModule)){
             data.add(new PoseErrorPlotDataSeries(calculationModule, MAX_PLOTTED_POINTS));
+            registeredCalculationModules.add(calculationModule);
         }
     }
 
@@ -185,6 +189,8 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                 }
             }
         }
+
+        registeredCalculationModules.remove(calculationModule);
     }
 
     @Override
