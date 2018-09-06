@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -56,6 +57,11 @@ public class MainViewer extends Fragment implements DataViewer {
          * is removed from the grid layout
          */
         void decremntRowId();
+
+        /**
+         * @return row id of item
+         */
+        int getRowId();
 
         /**
          * Detaches the observer associated with updating data
@@ -389,6 +395,11 @@ public class MainViewer extends Fragment implements DataViewer {
         }
 
         @Override
+        public int getRowId() {
+            return rowId;
+        }
+
+        @Override
         public void detachObserver(){
             calculationModuleReference.removeObserver(updater);
         }
@@ -496,20 +507,18 @@ public class MainViewer extends Fragment implements DataViewer {
             GridLayout grid,
             Map<CalculationModule, CalculationGridItem> items) {
 
-        boolean itemFound = false;
-        for(int i=0; i<items.size(); i++){
-            if(items.get(i).getCalculationModuleReference() == calculationModule){
-                items.get(i).detachObserver();
-                items.get(i).removeFromGrid(grid);
-                items.remove(i);
+        int removedRowId = items.get(calculationModule).getRowId();
 
-                itemFound = true;
-            }
-            if(itemFound && i<items.size()) {
-                items.get(i).decremntRowId();
-                items.get(i).removeFromGrid(grid);
+        for(Map.Entry<CalculationModule, CalculationGridItem> entry : items.entrySet()){
+            if(entry.getValue().getRowId()>removedRowId) {
+                entry.getValue().decremntRowId();
+                entry.getValue().removeFromGrid(grid);
             }
         }
+
+        items.get(calculationModule).detachObserver();
+        items.get(calculationModule).removeFromGrid(grid);
+        items.remove(calculationModule);
 
         // opposite order than in redrawGrid
         for(Map.Entry<CalculationModule, CalculationGridItem> entry: items.entrySet()) {
@@ -539,6 +548,9 @@ public class MainViewer extends Fragment implements DataViewer {
 
     }
 
+    private List<CalculationModule> modulesToBeAdded = new ArrayList<>();
+    private List<CalculationModule> modulesToBeRemoved = new ArrayList<>();
+
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
@@ -550,8 +562,16 @@ public class MainViewer extends Fragment implements DataViewer {
         for(CalculationModule calculationModule : calculationModules) {
             if (poseItems.containsKey(calculationModule)) {
                 poseItems.get(calculationModule).update(calculationModule);
+            } else {
+                modulesToBeAdded.add(calculationModule);
             }
         }
+
+        modulesToBeRemoved.addAll(
+                Sets.difference(
+                        poseItems.keySet(),
+                        new HashSet<>(calculationModules)));
+
     }
 
     @Override
@@ -560,19 +580,21 @@ public class MainViewer extends Fragment implements DataViewer {
         if(constellationGrid==null || poseItems == null)
             return;
 
-        //todo: so far this doesn't support removing of items
+        for(CalculationModule calculationModule : modulesToBeAdded) {
+            poseGridView.setRowCount(poseGridView.getRowCount() + 1);
+            poseItems.put(calculationModule, new PoseItem(
+                    calculationModule,
+                    poseGridView,
+                    poseGridView.getRowCount() - 1
+            ));
 
-        for(CalculationModule calculationModule : calculationModules) {
-            if(!poseItems.containsKey(calculationModule)){
-                poseGridView.setRowCount(poseGridView.getRowCount() + 1);
-                poseItems.put(calculationModule, new PoseItem(
-                        calculationModule,
-                        poseGridView,
-                        poseGridView.getRowCount() - 1
-                ));
-
-                poseItems.get(calculationModule).update(calculationModule);
-            }
+            poseItems.get(calculationModule).update(calculationModule);
         }
+        modulesToBeAdded.clear();
+
+        for(CalculationModule calculationModule : modulesToBeRemoved){
+            removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
+        }
+        modulesToBeRemoved.clear();
     }
 }
