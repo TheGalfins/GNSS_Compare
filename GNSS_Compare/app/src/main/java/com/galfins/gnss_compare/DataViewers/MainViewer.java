@@ -4,11 +4,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.ArraySet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -18,11 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
+import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gnss_compare.Constellations.Constellation;
-import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
+import com.google.common.collect.Sets;
 
 /**
  * Created by Mateusz Krainski on 04/05/2018.
@@ -65,6 +67,8 @@ public class MainViewer extends Fragment implements DataViewer {
          * @param grid layout to which the item was assigned
          */
         void removeFromGrid(GridLayout grid);
+
+        void update(CalculationModule calculationModule);
     }
 
     /**
@@ -232,6 +236,19 @@ public class MainViewer extends Fragment implements DataViewer {
                 items.put(constellation.getName(), new ConstellationItem(referenceToLayout, items.size()+1));
         }
 
+        public void update(CalculationModulesArrayList calculationModules){
+
+            Set<String> availableConstellations = new ArraySet<>();
+
+            for(CalculationModule calculationModule : calculationModules){
+                items.get(calculationModule.getConstellation().getName())
+                        .updateViews(calculationModule.getConstellation());
+
+                availableConstellations.add(calculationModule.getConstellation().getName());
+            }
+
+        }
+
         private Observer calculationUpdatedObserver = new Observer() {
             @Override
             public void update(Observable o, Object arg) {
@@ -245,12 +262,12 @@ public class MainViewer extends Fragment implements DataViewer {
         }
 
         public void addSeries(CalculationModule calculationModule){
-            calculationModule.addObserver(calculationUpdatedObserver);
+//            calculationModule.addObserver(calculationUpdatedObserver);
         }
 
         public void removeSeries(CalculationModule calculationModule){
-            items.get(calculationModule.getConstellation().getName()).initializeViewsAsEmpty();
-            calculationModule.removeObserver(calculationUpdatedObserver);
+//            items.get(calculationModule.getConstellation().getName()).initializeViewsAsEmpty();
+//            calculationModule.removeObserver(calculationUpdatedObserver);
         }
 
     }
@@ -297,7 +314,7 @@ public class MainViewer extends Fragment implements DataViewer {
 
             reinitializeViews(gridLayout);
 
-            calculationModuleReference.addObserver(updater);
+//            calculationModuleReference.addObserver(updater);
         }
 
         @Override
@@ -323,7 +340,7 @@ public class MainViewer extends Fragment implements DataViewer {
                 initializeTextView(altView, gridLayout, POSE_ALT_COLUMN);
                 initializeTextView(clockBiasView, gridLayout, POSE_CLOCK_BIAS_COLUMN);
 
-                updateViews();
+//                updateViews();
             }
         }
 
@@ -348,7 +365,7 @@ public class MainViewer extends Fragment implements DataViewer {
             view.setLayoutParams (param);
         }
 
-        private void updateViews(){
+        public void updateViews(){
 
             //todo: throws error here when executed from incorrect thread
             //todo: can be causing viewers crash
@@ -384,12 +401,32 @@ public class MainViewer extends Fragment implements DataViewer {
             grid.removeView(altView);
             grid.removeView(clockBiasView);
         }
+
+        @Override
+        public void update(CalculationModule calculationModule) {
+
+            //todo: throws error here when executed from incorrect thread?
+            //todo: can be causing viewers crash?
+            if (nameView != null &&
+                    latView != null &&
+                    lonView != null &&
+                    altView != null &&
+                    clockBiasView != null) {
+
+                nameView.setText(calculationModule.getName());
+                latView.setText(String.format("%.5f", calculationModule.getPose().getGeodeticLatitude()));
+                lonView.setText(String.format("%.5f", calculationModule.getPose().getGeodeticLongitude()));
+                altView.setText(String.format("%.1f", calculationModule.getPose().getGeodeticHeight()));
+                clockBiasView.setText(String.format("%.0f", calculationModule.getClockBias()));
+
+            }
+        }
     }
 
 
     private GridLayout poseGridView;
     private GridLayout constellationGridView;
-    private List<CalculationGridItem> poseItems = new ArrayList<>();
+    private HashMap<CalculationModule, CalculationGridItem> poseItems = new HashMap<>();
     private ConstellationGrid constellationGrid;
 
     private static List<CalculationModule> seriesAddedBeforeInitialization = new ArrayList<>();
@@ -426,12 +463,12 @@ public class MainViewer extends Fragment implements DataViewer {
         redrawGrid(poseGridView, poseItems);
     }
 
-    private void redrawGrid(GridLayout grid, List<CalculationGridItem> items){
+    private void redrawGrid(GridLayout grid, HashMap<CalculationModule, CalculationGridItem> items){
 
         grid.setRowCount(items.size() + 1);
 
-        for(CalculationGridItem item: items) {
-            item.reinitializeViews(grid);
+        for(Map.Entry<CalculationModule, CalculationGridItem> entry: items.entrySet()) {
+            entry.getValue().reinitializeViews(grid);
         }
     }
 
@@ -444,7 +481,7 @@ public class MainViewer extends Fragment implements DataViewer {
 
             poseGridView.setRowCount(poseGridView.getRowCount() + 1);
 
-            poseItems.add(new PoseItem(
+            poseItems.put(calculationModule, new PoseItem(
                     calculationModule,
                     poseGridView,
                     poseGridView.getRowCount() - 1
@@ -457,7 +494,7 @@ public class MainViewer extends Fragment implements DataViewer {
     private void removeSeriesFromGrid(
             CalculationModule calculationModule,
             GridLayout grid,
-            List<CalculationGridItem> items) {
+            Map<CalculationModule, CalculationGridItem> items) {
 
         boolean itemFound = false;
         for(int i=0; i<items.size(); i++){
@@ -475,8 +512,8 @@ public class MainViewer extends Fragment implements DataViewer {
         }
 
         // opposite order than in redrawGrid
-        for(CalculationGridItem item: items) {
-            item.reinitializeViews(grid);
+        for(Map.Entry<CalculationModule, CalculationGridItem> entry: items.entrySet()) {
+            entry.getValue().reinitializeViews(grid);
         }
 
         grid.setRowCount(items.size() + 1);
@@ -500,5 +537,42 @@ public class MainViewer extends Fragment implements DataViewer {
     @Override
     public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
 
+    }
+
+    @Override
+    public void update(CalculationModulesArrayList calculationModules) {
+
+        if(constellationGrid==null || poseItems == null)
+            return;
+
+        constellationGrid.update(calculationModules);
+
+        for(CalculationModule calculationModule : calculationModules) {
+            if (poseItems.containsKey(calculationModule)) {
+                poseItems.get(calculationModule).update(calculationModule);
+            }
+        }
+    }
+
+    @Override
+    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
+
+        if(constellationGrid==null || poseItems == null)
+            return;
+
+        //todo: so far this doesn't support removing of items
+
+        for(CalculationModule calculationModule : calculationModules) {
+            if(!poseItems.containsKey(calculationModule)){
+                poseGridView.setRowCount(poseGridView.getRowCount() + 1);
+                poseItems.put(calculationModule, new PoseItem(
+                        calculationModule,
+                        poseGridView,
+                        poseGridView.getRowCount() - 1
+                ));
+
+                poseItems.get(calculationModule).update(calculationModule);
+            }
+        }
     }
 }

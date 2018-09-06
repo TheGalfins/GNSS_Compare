@@ -26,6 +26,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import com.galfins.gnss_compare.CalculationModule;
+import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
@@ -79,32 +80,32 @@ public class PosePlotFragment extends Fragment implements DataViewer {
 
         preformatPlot(plot);
 
-        for(int i = 0; i< MainActivity.createdCalculationModules.size(); i++){
-            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                try {
-                    Iterator<PosePlotDataSeries> itr = data.iterator();
-                    PosePlotDataSeries reference;
-
-                    while(itr.hasNext()) {
-                        reference = itr.next();
-                        if (reference.getCalculationModuleReference() == MainActivity.createdCalculationModules.get(i)) {
-                            MainActivity.createdCalculationModules.get(i).removeObserver(reference.getDataObserver());
-                        }
-                    }
-
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
+//        for(int i = 0; i< MainActivity.createdCalculationModules.size(); i++){
+//            synchronized (MainActivity.createdCalculationModules.get(i)) {
+//                try {
+//                    Iterator<PosePlotDataSeries> itr = data.iterator();
+//                    PosePlotDataSeries reference;
+//
+//                    while(itr.hasNext()) {
+//                        reference = itr.next();
+//                        if (reference.getCalculationModuleReference() == MainActivity.createdCalculationModules.get(i)) {
+//                            MainActivity.createdCalculationModules.get(i).removeObserver(reference.getDataObserver());
+//                        }
+//                    }
+//
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
         initalized = true;
 
-        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
-            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                addSeries(MainActivity.createdCalculationModules.get(i));
-            }
-        }
+//        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
+//            synchronized (MainActivity.createdCalculationModules.get(i)) {
+//                addSeries(MainActivity.createdCalculationModules.get(i));
+//            }
+//        }
 
         return rootView;
     }
@@ -185,6 +186,16 @@ public class PosePlotFragment extends Fragment implements DataViewer {
 
     @Override
     public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
+
+    @Override
+    public void update(CalculationModulesArrayList calculationModules) {
+
+    }
+
+    @Override
+    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
 
     }
 

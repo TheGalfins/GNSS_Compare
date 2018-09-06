@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.galfins.gnss_compare.CalculationModule;
+import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gnss_compare.R;
@@ -320,6 +321,16 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
             uiTheadObservable.addObserver(series.getDataObserver());
 
         uiThreadObservableReference = uiTheadObservable;
+    }
+
+    @Override
+    public void update(CalculationModulesArrayList calculationModules) {
+
+    }
+
+    @Override
+    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
+
     }
 
     private void addLocationSource(){

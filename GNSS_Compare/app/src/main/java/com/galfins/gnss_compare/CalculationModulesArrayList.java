@@ -5,8 +5,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-import com.galfins.gnss_compare.DataViewers.DataViewer;
-import com.galfins.gnss_compare.DataViewers.DataViewerAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -25,8 +23,18 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
     private GnssMeasurementsEvent.Callback gnssCallback;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-    private FusedLocationProviderClient fusedLocationProviderClientReference;
-    private LocationManager locationManagerReference;
+    private FusedLocationProviderClient fusedLocationProviderClientReference = null;
+    private LocationManager locationManagerReference = null;
+
+    public static abstract class PoseUpdatedListener {
+        public abstract void onPoseUpdated();
+    }
+
+    private PoseUpdatedListener mPoseUpdatedListener = null;
+
+    public void assignPoseUpdatedListener(PoseUpdatedListener newCallback){
+        mPoseUpdatedListener = newCallback;
+    }
 
     public class CallbacksNotAssignedException extends IllegalStateException{
         public CallbacksNotAssignedException(String message) {
@@ -45,7 +53,9 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
             for (CalculationModule calculationModule : CalculationModulesArrayList.this)
                 calculationModule.updateMeasurements(eventArgs);
 
-            notifyObservers();
+            if(mPoseUpdatedListener !=null)
+                mPoseUpdatedListener.onPoseUpdated();
+//            notifyObservers();
             }
         };
 

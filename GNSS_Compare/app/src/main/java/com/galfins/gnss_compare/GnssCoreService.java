@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 
 /**
@@ -35,15 +36,31 @@ public class GnssCoreService extends Service {
 
     CalculationModulesArrayList calculationModules = new CalculationModulesArrayList();
 
+    Observable gnssCoreObservable = new Observable(){
+        @Override
+        public void notifyObservers() {
+            setChanged();
+            super.notifyObservers(calculationModules); // by default passing the calculation modules
+        }
+    };
+
+    CalculationModulesArrayList.PoseUpdatedListener poseListener = new CalculationModulesArrayList.PoseUpdatedListener(){
+        @Override
+        public void onPoseUpdated() {
+            gnssCoreObservable.notifyObservers();
+        }
+    };
+
     private final String TAG = this.getClass().getSimpleName();
+
     public class GnssCoreBinder extends Binder{
 
         public void addObserver(Observer observer){
-            calculationModules.addObserver(observer);
+            gnssCoreObservable.addObserver(observer);
         }
 
         public void removeObserver(Observer observer){
-            calculationModules.removeObserver(observer);
+            gnssCoreObservable.deleteObserver(observer);
         }
 
         public CalculationModulesArrayList getCalculationModules(){
@@ -52,6 +69,10 @@ public class GnssCoreService extends Service {
 
         public void addModule(CalculationModule newModule){
             calculationModules.add(newModule);
+        }
+
+        public void removeModule(CalculationModule removedModule){
+            calculationModules.remove(removedModule);
         }
     }
 
@@ -68,11 +89,13 @@ public class GnssCoreService extends Service {
         super.onCreate();
 
         createInitialCalculationModules();
+
         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
 
         calculationModules.registerForGnssUpdates(mFusedLocationClient, mLocationManager);
 
+        calculationModules.assignPoseUpdatedListener(poseListener);
 
         Constellation.initialize();
         Correction.initialize();

@@ -35,6 +35,7 @@ import java.util.Observer;
 import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
+import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gnss_compare.Constellations.SatelliteParameters;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
@@ -111,15 +112,15 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
 
         preformatPlot(plot);
 
-        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
-            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                try {
-                    MainActivity.createdCalculationModules.get(i).removeObserver(plotUpdater);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
+//        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
+//            synchronized (MainActivity.createdCalculationModules.get(i)) {
+//                try {
+//                    MainActivity.createdCalculationModules.get(i).removeObserver(plotUpdater);
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
         initialized = true;
 
@@ -127,11 +128,11 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
         plot.addSeries(data, formatter);
         formatSeries(plot, formatter);
 
-        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
-            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                addSeries(MainActivity.createdCalculationModules.get(i));
-            }
-        }
+//        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
+//            synchronized (MainActivity.createdCalculationModules.get(i)) {
+//                addSeries(MainActivity.createdCalculationModules.get(i));
+//            }
+//        }
 
         return rootView;
     }
@@ -159,6 +160,16 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
 
     @Override
     public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
+
+    @Override
+    public void update(CalculationModulesArrayList calculationModules) {
+
+    }
+
+    @Override
+    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
 
     }
 

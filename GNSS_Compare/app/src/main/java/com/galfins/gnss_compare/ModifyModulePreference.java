@@ -116,8 +116,8 @@ public class ModifyModulePreference extends AppCompatActivity {
 
     private View mainView;
 
-    private GnssCoreService.GnssCoreBinder gnssCoreBinder;
-    private boolean mGnssCoreBound;
+    private static GnssCoreService.GnssCoreBinder gnssCoreBinder;
+    private static boolean mGnssCoreBound;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -127,6 +127,12 @@ public class ModifyModulePreference extends AppCompatActivity {
 
             for(CalculationModule calculationModule: gnssCoreBinder.getCalculationModules())
                 itemsList.add(new PreferenceListItem(calculationModule));
+
+            StableArrayAdapter adapter = new StableArrayAdapter(ModifyModulePreference.this,
+                    android.R.layout.simple_list_item_1, itemsList);
+
+            listView.setAdapter(adapter);
+
         }
 
         @Override
@@ -144,17 +150,26 @@ public class ModifyModulePreference extends AppCompatActivity {
 
         listView = findViewById(R.id.listview);
 
-        bindService(
-                new Intent(this, GnssCoreService.class),
-                mConnection,
-                Context.BIND_AUTO_CREATE);
-
-        StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, itemsList);
-
-        listView.setAdapter(adapter);
-
         mainView = findViewById(R.id.main_view);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!mGnssCoreBound)
+            bindService(
+                    new Intent(this, GnssCoreService.class),
+                    mConnection,
+                    Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unbindService(mConnection);
+        mGnssCoreBound = false;
     }
 
     @Override
@@ -290,8 +305,9 @@ public class ModifyModulePreference extends AppCompatActivity {
             buttonReference.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MainActivity.createdCalculationModules.remove(
-                            getItem(pos).getCalculationModuleReference());
+
+                    if(mGnssCoreBound)
+                        gnssCoreBinder.removeModule(getItem(pos).getCalculationModuleReference());
 
                     StableArrayAdapter.this.remove(getItem(pos));
                     StableArrayAdapter.this.notifyDataSetChanged();

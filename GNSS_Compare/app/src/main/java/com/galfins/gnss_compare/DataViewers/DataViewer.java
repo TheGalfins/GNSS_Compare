@@ -3,6 +3,7 @@ package com.galfins.gnss_compare.DataViewers;
 import android.location.Location;
 
 import com.galfins.gnss_compare.CalculationModule;
+import com.galfins.gnss_compare.CalculationModulesArrayList;
 
 import java.util.Observable;
 
@@ -36,4 +37,8 @@ public interface DataViewer {
     }
 
     void registerToUiThreadedUpdates(Observable UiTheadObservable);
+
+    void update(CalculationModulesArrayList calculationModules);
+
+    void updateOnUiThread(CalculationModulesArrayList calculationModules);
 }

@@ -37,6 +37,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import com.galfins.gnss_compare.CalculationModule;
+import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
@@ -200,6 +201,16 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     @Override
     public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
+
+    }
+
+    @Override
+    public void update(CalculationModulesArrayList calculationModules) {
+
+    }
+
+    @Override
+    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
 
     }
 

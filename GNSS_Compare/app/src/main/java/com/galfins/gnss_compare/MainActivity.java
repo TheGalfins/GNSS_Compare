@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Object storing created calculation modules
      */
-    public static DataViewerCalculationModulesArrayList createdCalculationModules;
+    private DataViewerCalculationModulesArrayList createdCalculationModules;
 
     /**
      * ViewPager object, which allows for scrolling over Fragments
@@ -191,17 +191,20 @@ public class MainActivity extends AppCompatActivity {
             gnssCoreBinder = (GnssCoreService.GnssCoreBinder) service;
             mGnssCoreBound = true;
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (DataViewer viewer : mPagerAdapter.getViewers()) {
-                        for(CalculationModule calculationModule : gnssCoreBinder.getCalculationModules()) {
-                            viewer.addSeries(calculationModule);
-                            calculationModule.addObserver(calculationModuleObserver);
-                        }
-                    }
-                }
-            });
+            gnssCoreBinder.addObserver(calculationModuleObserver);
+
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    for (DataViewer viewer : mPagerAdapter.getViewers()) {
+//                        for(CalculationModule calculationModule : gnssCoreBinder.getCalculationModules()) {
+//                            viewer.removeSeries(calculationModule);
+//                            viewer.addSeries(calculationModule);
+//                            calculationModule.addObserver(calculationModuleObserver);
+//                        }
+//                    }
+//                }
+//            });
         }
 
         @Override
@@ -405,6 +408,17 @@ public class MainActivity extends AppCompatActivity {
 
         showInitializationDisclamer();
 
+        startService(new Intent(this, GnssCoreService.class));
+
+
+        try {
+            synchronized (this) {
+                wait(1000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         bindService(
                 new Intent(this, GnssCoreService.class),
                 mConnection,
@@ -428,17 +442,38 @@ public class MainActivity extends AppCompatActivity {
 
         calculationModuleObserver = new Observer() {
 
-            @Override
-            public void update(Observable o, Object arg) {
+            class UiThreadRunnable implements Runnable {
 
-            final CalculationModule calculationModuleReference = (CalculationModule) arg;
+                CalculationModulesArrayList calculationModules;
 
-            runOnUiThread(new Runnable() {
+                public void setCalculationModules(CalculationModulesArrayList newCalculationModules){
+                    synchronized (this) {
+                        calculationModules = newCalculationModules;
+                    }
+                }
+
                 @Override
                 public void run() {
-                    uiThreadObservable.notifyObservers(calculationModuleReference);
+                    synchronized (this) {
+                        for (DataViewer viewer : mPagerAdapter.getViewers())
+                            viewer.updateOnUiThread(calculationModules);
+                    }
                 }
-            });
+            }
+
+            UiThreadRunnable uiThreadRunnable = new UiThreadRunnable();
+
+            @Override
+            public void update(Observable o, Object calculationModules) {
+
+                for(DataViewer viewer : mPagerAdapter.getViewers()){
+                    viewer.update((CalculationModulesArrayList) calculationModules);
+                }
+
+                uiThreadRunnable.setCalculationModules((CalculationModulesArrayList) calculationModules);
+
+                runOnUiThread(uiThreadRunnable);
+
             }
         };
 
@@ -669,6 +704,11 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        bindService(
+                new Intent(this, GnssCoreService.class),
+                mConnection,
+                Context.BIND_AUTO_CREATE);
+
         Log.d(TAG, "onResume: invoked");
     }
 
@@ -679,6 +719,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+
+        unbindService(mConnection);
 
         Log.d(TAG, "onPause: invoked");
     }
@@ -721,6 +763,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if(mGnssCoreBound) {
                     gnssCoreBinder.addModule(newModule);
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            for(DataViewer viewer: mPagerAdapter.getViewers())
+//                                viewer.addSeries(newModule);
+//                        }
+//                    });
                     CreateModulePreference.notifyModuleCreated();
                     makeNotification("Module " + newModule.getName() + " created...");
                 } else {
