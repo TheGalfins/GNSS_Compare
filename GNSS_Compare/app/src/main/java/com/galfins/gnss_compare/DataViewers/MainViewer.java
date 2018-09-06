@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
@@ -47,12 +46,6 @@ public class MainViewer extends Fragment implements DataViewer {
         void reinitializeViews(GridLayout gridLayout);
 
         /**
-         *
-         * @return assigned calculation module
-         */
-        CalculationModule getCalculationModuleReference();
-
-        /**
          * decrements row number on which this item is stored. Used when another item (above current one)
          * is removed from the grid layout
          */
@@ -62,11 +55,6 @@ public class MainViewer extends Fragment implements DataViewer {
          * @return row id of item
          */
         int getRowId();
-
-        /**
-         * Detaches the observer associated with updating data
-         */
-        void detachObserver();
 
         /**
          * Removes item from grid
@@ -255,27 +243,6 @@ public class MainViewer extends Fragment implements DataViewer {
 
         }
 
-        private Observer calculationUpdatedObserver = new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-                items.get(((CalculationModule) arg).getConstellation().getName())
-                    .updateViews(((CalculationModule) arg).getConstellation());
-            }
-        };
-
-        public Observer getCalculationUpdatedObserver() {
-            return calculationUpdatedObserver;
-        }
-
-        public void addSeries(CalculationModule calculationModule){
-//            calculationModule.addObserver(calculationUpdatedObserver);
-        }
-
-        public void removeSeries(CalculationModule calculationModule){
-//            items.get(calculationModule.getConstellation().getName()).initializeViewsAsEmpty();
-//            calculationModule.removeObserver(calculationUpdatedObserver);
-        }
-
     }
 
     /**
@@ -296,7 +263,6 @@ public class MainViewer extends Fragment implements DataViewer {
                 (int) itemColumnWidth,
                 (int) itemColumnWidth
         };
-        private CalculationModule calculationModuleReference;
 
         private TextView nameView;
         private TextView latView;
@@ -306,26 +272,12 @@ public class MainViewer extends Fragment implements DataViewer {
 
         private int rowId;
 
-        private Observer updater = new Observer() {
-            @Override
-            public void update(Observable observable, Object o) {
-                updateViews();
-            }
-        };
-
-        public PoseItem(CalculationModule calculationModule, GridLayout gridLayout, int rowId){
-            calculationModuleReference = calculationModule;
+        public PoseItem(GridLayout gridLayout, int rowId){
 
             this.rowId = rowId;
 
             reinitializeViews(gridLayout);
 
-//            calculationModuleReference.addObserver(updater);
-        }
-
-        @Override
-        public CalculationModule getCalculationModuleReference() {
-            return calculationModuleReference;
         }
 
         @Override
@@ -345,8 +297,6 @@ public class MainViewer extends Fragment implements DataViewer {
                 initializeTextView(lonView, gridLayout, POSE_LON_COLUMN);
                 initializeTextView(altView, gridLayout, POSE_ALT_COLUMN);
                 initializeTextView(clockBiasView, gridLayout, POSE_CLOCK_BIAS_COLUMN);
-
-//                updateViews();
             }
         }
 
@@ -371,24 +321,6 @@ public class MainViewer extends Fragment implements DataViewer {
             view.setLayoutParams (param);
         }
 
-        public void updateViews(){
-
-            //todo: throws error here when executed from incorrect thread
-            //todo: can be causing viewers crash
-            if(nameView != null &&
-                    latView != null &&
-                    lonView != null &&
-                    altView != null &&
-                    clockBiasView != null) {
-
-                nameView.setText(calculationModuleReference.getName());
-                latView.setText(String.format("%.5f", calculationModuleReference.getPose().getGeodeticLatitude()));
-                lonView.setText(String.format("%.5f", calculationModuleReference.getPose().getGeodeticLongitude()));
-                altView.setText(String.format("%.1f", calculationModuleReference.getPose().getGeodeticHeight()));
-                clockBiasView.setText(String.format("%.0f", calculationModuleReference.getClockBias()));
-            }
-        }
-
         @Override
         public void decremntRowId(){
             rowId--;
@@ -397,11 +329,6 @@ public class MainViewer extends Fragment implements DataViewer {
         @Override
         public int getRowId() {
             return rowId;
-        }
-
-        @Override
-        public void detachObserver(){
-            calculationModuleReference.removeObserver(updater);
         }
 
         @Override
@@ -483,25 +410,6 @@ public class MainViewer extends Fragment implements DataViewer {
         }
     }
 
-    @Override
-    public void addSeries(CalculationModule calculationModule) {
-
-        if(poseGridView==null || constellationGrid==null){
-            seriesAddedBeforeInitialization.add(calculationModule);
-        } else {
-
-            poseGridView.setRowCount(poseGridView.getRowCount() + 1);
-
-            poseItems.put(calculationModule, new PoseItem(
-                    calculationModule,
-                    poseGridView,
-                    poseGridView.getRowCount() - 1
-            ));
-
-            constellationGrid.addSeries(calculationModule);
-        }
-    }
-
     private void removeSeriesFromGrid(
             CalculationModule calculationModule,
             GridLayout grid,
@@ -516,7 +424,6 @@ public class MainViewer extends Fragment implements DataViewer {
             }
         }
 
-        items.get(calculationModule).detachObserver();
         items.get(calculationModule).removeFromGrid(grid);
         items.remove(calculationModule);
 
@@ -529,13 +436,32 @@ public class MainViewer extends Fragment implements DataViewer {
     }
 
     @Override
-    public void removeSeries(CalculationModule calculationModule) {
-        if(poseGridView == null)
-            seriesAddedBeforeInitialization.remove(calculationModule);
-        else
-            removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
+    public void addSeries(CalculationModule calculationModule) {
 
-        constellationGrid.removeSeries(calculationModule);
+//        if(poseGridView==null || constellationGrid==null){
+//            seriesAddedBeforeInitialization.add(calculationModule);
+//        } else {
+//
+//            poseGridView.setRowCount(poseGridView.getRowCount() + 1);
+//
+//            poseItems.put(calculationModule, new PoseItem(
+//                    calculationModule,
+//                    poseGridView,
+//                    poseGridView.getRowCount() - 1
+//            ));
+//
+//            constellationGrid.addSeries(calculationModule);
+//        }
+    }
+
+    @Override
+    public void removeSeries(CalculationModule calculationModule) {
+//        if(poseGridView == null)
+//            seriesAddedBeforeInitialization.remove(calculationModule);
+//        else
+//            removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
+//
+//        constellationGrid.removeSeries(calculationModule);
     }
 
     @Override
@@ -583,7 +509,6 @@ public class MainViewer extends Fragment implements DataViewer {
         for(CalculationModule calculationModule : modulesToBeAdded) {
             poseGridView.setRowCount(poseGridView.getRowCount() + 1);
             poseItems.put(calculationModule, new PoseItem(
-                    calculationModule,
                     poseGridView,
                     poseGridView.getRowCount() - 1
             ));
