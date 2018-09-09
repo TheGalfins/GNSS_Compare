@@ -28,13 +28,13 @@ public interface DataViewer {
 
     void onLocationFromGoogleServicesResult(Location location);
 
-    /**
-     * Simple interface assuring that data series of classes extending GnssPlot will have a method
-     * to return their calculation module reference.
-     */
-    interface CalculationModuleDataSeries{
-        CalculationModule getCalculationModuleReference();
-    }
+//    /**
+//     * Simple interface assuring that data series of classes extending GnssPlot will have a method
+//     * to return their calculation module reference.
+//     */
+//    interface CalculationModuleDataSeries{
+//        CalculationModule getCalculationModuleReference();
+//    }
 
     void registerToUiThreadedUpdates(Observable UiTheadObservable);
 

@@ -151,7 +151,7 @@ public class PosePlotFragment extends Fragment implements DataViewer {
 
     private boolean seriesRegistered(CalculationModule calculationModule) {
 
-        for(CalculationModuleDataSeries series : data){
+        for(PosePlotDataSeries series : data){
             if(series.getCalculationModuleReference() == calculationModule)
                 return true;
         }
@@ -238,7 +238,7 @@ public class PosePlotFragment extends Fragment implements DataViewer {
      * A data series implementation, which extracts signal strengths for satellites observed in a
      * CalculationModule, to which the reference is passed in constructor.
      */
-    private class PosePlotDataSeries implements DataViewer.CalculationModuleDataSeries, XYSeries {
+    private class PosePlotDataSeries implements XYSeries {
 
         /**
          * The number of max point to be plotted for a single data series
@@ -279,7 +279,6 @@ public class PosePlotFragment extends Fragment implements DataViewer {
             };
         }
 
-        @Override
         public CalculationModule getCalculationModuleReference() {
             return calculationModuleReference;
         }

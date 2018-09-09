@@ -38,11 +38,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.common.collect.Sets;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 /**
  * Created by Mateusz Krainski on 31/03/2018.
@@ -61,14 +66,13 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
     CameraUpdate mapCameraUpdateAnimation;
 
-    ArrayList<MapDataSeries> dataSeries = new ArrayList<>();
+    Map<CalculationModule, MapDataSeries> dataSeries = new HashMap<>();
 
     private boolean mapInActivity = false;
 
-    private class MapDataSeries implements DataViewer.CalculationModuleDataSeries, LocationSource {
+    private class MapDataSeries implements LocationSource {
 
         private static final String TAG = "MapDataSeries";
-        private CalculationModule calculationModuleReference;
         private final int MAX_PLOTTED_POINTS;
         ArrayList<SafeMarkerDescription> registeredMarkerOptions;
         ArrayList<Marker> registeredMarkers;
@@ -108,52 +112,86 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
             }
         }
 
-        MapDataSeries(final CalculationModule calculationModule, int plottedPoints) {
+        MapDataSeries(int plottedPoints) {
             MAX_PLOTTED_POINTS = plottedPoints;
-            calculationModuleReference = calculationModule;
+//            calculationModuleReference = calculationModule;
             registeredMarkerOptions = new ArrayList<>();
             registeredMarkers = new ArrayList<>();
 
-            observer = new Observer() {
-                @Override
-                public void update(Observable observable, Object o) {
-                    if (o != calculationModuleReference)
-                        return;
+//            observer = new Observer() {
+//                @Override
+//                public void update(Observable observable, Object o) {
+//                    if (o != calculationModuleReference)
+//                        return;
+//
+//                    Coordinates currentPose = calculationModuleReference.getPose();
+//
+//                    if (map != null) {
+//                        registeredMarkerOptions.add(
+//                                new SafeMarkerDescription(
+//                                        currentPose,
+//                                        R.drawable.map_dot_black_24dp,
+//                                        calculationModuleReference.getDataColor()));
+//
+//                        SafeMarkerDescription lastMarker =
+//                                registeredMarkerOptions.get(registeredMarkerOptions.size() - 1);
+//
+//                        if (mapInActivity) {
+//                            registeredMarkers.add(
+//                                    map.addMarker(lastMarker.getMarkerOptions()));
+//                        }
+//
+//                        if (registeredMarkerOptions.size() > MAX_PLOTTED_POINTS) {
+//                            registeredMarkerOptions.remove(0);
+//                            if (registeredMarkers.size() > 0) {
+//                                registeredMarkers.get(0).remove();
+//                                registeredMarkers.remove(0);
+//                            }
+//                        }
+//
+//                        if (mListener != null && mapInActivity) {
+//                            mListener.onLocationChanged(calculationModuleReference.getLocationFromGoogleServices());
+//                        }
+//                    } else {
+//                        Log.w(TAG, "update: Map not yet initialized...");
+//                    }
+//
+//                }
+//            };
+        }
 
-                    Coordinates currentPose = calculationModuleReference.getPose();
+        public void update(CalculationModule calculationModule){
+            Coordinates currentPose = calculationModule.getPose();
 
-                    if (map != null) {
-                        registeredMarkerOptions.add(
-                                new SafeMarkerDescription(
-                                        currentPose,
-                                        R.drawable.map_dot_black_24dp,
-                                        calculationModuleReference.getDataColor()));
+            if (map != null) {
+                registeredMarkerOptions.add(
+                        new SafeMarkerDescription(
+                                currentPose,
+                                R.drawable.map_dot_black_24dp,
+                                calculationModule.getDataColor()));
 
-                        SafeMarkerDescription lastMarker =
-                                registeredMarkerOptions.get(registeredMarkerOptions.size() - 1);
+                SafeMarkerDescription lastMarker =
+                        registeredMarkerOptions.get(registeredMarkerOptions.size() - 1);
 
-                        if (mapInActivity) {
-                            registeredMarkers.add(
-                                    map.addMarker(lastMarker.getMarkerOptions()));
-                        }
-
-                        if (registeredMarkerOptions.size() > MAX_PLOTTED_POINTS) {
-                            registeredMarkerOptions.remove(0);
-                            if (registeredMarkers.size() > 0) {
-                                registeredMarkers.get(0).remove();
-                                registeredMarkers.remove(0);
-                            }
-                        }
-
-                        if (mListener != null && mapInActivity) {
-                            mListener.onLocationChanged(calculationModuleReference.getLocationFromGoogleServices());
-                        }
-                    } else {
-                        Log.w(TAG, "update: Map not yet initialized...");
-                    }
-
+                if (mapInActivity) {
+                    registeredMarkers.add(
+                            map.addMarker(lastMarker.getMarkerOptions()));
                 }
-            };
+
+                if (registeredMarkerOptions.size() > MAX_PLOTTED_POINTS) {
+                    registeredMarkerOptions.remove(0);
+                    if (registeredMarkers.size() > 0) {
+                        registeredMarkers.get(0).remove();
+                        registeredMarkers.remove(0);
+                    }
+                }
+
+                if (mListener != null && mapInActivity) {
+                    mListener.onLocationChanged(calculationModule.getLocationFromGoogleServices());
+                }
+            } else {
+                Log.w(TAG, "update: Map not yet initialized...");
+            }
         }
 
         public Observer getDataObserver() {
@@ -171,10 +209,6 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
             return registeredMarkers;
         }
 
-        @Override
-        public CalculationModule getCalculationModuleReference() {
-            return calculationModuleReference;
-        }
     }
 
     @Nullable
@@ -224,9 +258,9 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
     @Override
     public void addSeries(CalculationModule calculationModule) {
-        registerSeries(calculationModule);
-        addLocationSource();
-        uiThreadObservableReference.addObserver(getSeries(calculationModule).getDataObserver());
+        dataSeries.put(calculationModule, new MapDataSeries(10));
+        addLocationSource(dataSeries.get(calculationModule));
+//        uiThreadObservableReference.addObserver(getSeries(calculationModule).getDataObserver());
 //        calculationModule.addObserver(getSeries(calculationModule).getDataObserver());
     }
 
@@ -245,35 +279,6 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    private void registerSeries(CalculationModule calculationModule){
-        if(!seriesRegistered(calculationModule)){
-            dataSeries.add(new MapDataSeries(calculationModule, 10));
-        }
-    }
-
-    private boolean seriesRegistered(CalculationModule calculationModule) {
-
-        for(CalculationModuleDataSeries series : dataSeries){
-            if(series.getCalculationModuleReference() == calculationModule)
-                return true;
-        }
-
-        return false;
-    }
-
-    private int getSeriesId(CalculationModule calculationModule){
-        for(int i = 0; i< dataSeries.size(); i++){
-            if(dataSeries.get(i).getCalculationModuleReference() == calculationModule)
-                return i;
-        }
-        return -1;
-    }
-
-
-    private MapDataSeries getSeries(CalculationModule calculationModule){
-        return dataSeries.get(getSeriesId(calculationModule));
-    }
-
     /**
      * Removes the series associated with {@code calculationModule} from the plot
      * @param calculationModule reference to the calculation module
@@ -281,20 +286,13 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
     @Override
     public void removeSeries(CalculationModule calculationModule){
         if (map != null) {
-            Iterator<MapDataSeries> itr = dataSeries.iterator();
-            MapDataSeries reference;
 
-            while (itr.hasNext()) {
-                reference = itr.next();
-                if (reference.getCalculationModuleReference() == calculationModule) {
-                    for (Marker marker : reference.getMarkers())
-                        marker.remove();
+            MapDataSeries reference = dataSeries.get(calculationModule);
+            for (Marker marker : reference.getMarkers())
+                marker.remove();
 
-                    itr.remove();
-                    uiThreadObservableReference.deleteObserver(reference.getDataObserver());
-//                    calculationModule.removeObserver(reference.getDataObserver());
-                }
-            }
+            dataSeries.remove(calculationModule);
+
         }
     }
 
@@ -317,10 +315,10 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
     @Override
     public void registerToUiThreadedUpdates(Observable uiTheadObservable) {
-        for(MapDataSeries series : dataSeries)
-            uiTheadObservable.addObserver(series.getDataObserver());
-
-        uiThreadObservableReference = uiTheadObservable;
+//        for(MapDataSeries series : dataSeries)
+//            uiTheadObservable.addObserver(series.getDataObserver());
+//
+//        uiThreadObservableReference = uiTheadObservable;
     }
 
     @Override
@@ -328,16 +326,39 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
     }
 
+    Set<CalculationModule> seenModules = new HashSet<>();
+    Set<CalculationModule> calculationModulesSet;
+
     @Override
     public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
 
-    }
+        calculationModulesSet = new HashSet<>(calculationModules);
 
-    private void addLocationSource(){
-        if (dataSeries.size() == 1 && map!=null) {
-            map.setLocationSource(dataSeries.get(0));
+        // modules to be added
+        for (CalculationModule calculationModule : Sets.difference(
+                calculationModulesSet,
+                seenModules)) {
+            addSeries(calculationModule);
+            seenModules.add(calculationModule);
         }
 
+        // modules to be removed
+        for (CalculationModule calculationModule : Sets.difference(
+                seenModules,
+                calculationModulesSet)) {
+            removeSeries(calculationModule);
+            seenModules.remove(calculationModule);
+        }
+
+        for(CalculationModule calculationModule: calculationModules)
+            dataSeries.get(calculationModule).update(calculationModule);
+
+    }
+
+    private void addLocationSource(MapDataSeries locationSourceToBeAdded){
+        if (locationSourceToBeAdded != null && map!=null) {
+            map.setLocationSource(locationSourceToBeAdded);
+        }
     }
 
     @Override
@@ -350,10 +371,9 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
         map.moveCamera(mapCameraUpdateAnimation);
 
-        addLocationSource();
-
-        for(MapDataSeries series: dataSeries){
-            series.resetMarkers();
+        for(Map.Entry<CalculationModule, MapDataSeries> entry: dataSeries.entrySet()){
+            entry.getValue().resetMarkers();
+            addLocationSource(entry.getValue());
         }
 
     }

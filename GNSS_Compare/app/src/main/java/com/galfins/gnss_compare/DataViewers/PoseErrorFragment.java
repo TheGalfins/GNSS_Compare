@@ -94,25 +94,6 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
         preformatPlot(plot);
 
-        for(int i = 0; i< registeredCalculationModules.size(); i++){
-//            synchronized (MainActivity.createdCalculationModules.get(i)) {
-            try {
-                Iterator<PoseErrorPlotDataSeries> itr = data.iterator();
-                PoseErrorPlotDataSeries reference;
-
-                while(itr.hasNext()) {
-                    reference = itr.next();
-                    if (reference.getCalculationModuleReference() == registeredCalculationModules.get(i)) {
-                        registeredCalculationModules.get(i).removeObserver(reference.getDataObserver());
-                    }
-                }
-
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-//            }
-        }
-
         initalized = true;
 
         for(int i=0; i<registeredCalculationModules.size(); i++){
@@ -166,7 +147,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     private boolean seriesRegistered(CalculationModule calculationModule) {
 
-        for(CalculationModuleDataSeries series : data){
+        for(PoseErrorPlotDataSeries series : data){
             if(series.getCalculationModuleReference() == calculationModule)
                 return true;
         }
@@ -230,6 +211,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                 seenModules,
                 calculationModulesSet)) {
             removeSeries(calculationModule);
+            seenModules.remove(calculationModule);
         }
 
         for(PoseErrorPlotDataSeries dataSeries : data){
@@ -316,7 +298,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
      * A data series implementation, which extracts signal strengths for satellites observed in a
      * CalculationModule, to which the reference is passed in constructor.
      */
-    private class PoseErrorPlotDataSeries implements DataViewer.CalculationModuleDataSeries, XYSeries {
+    private class PoseErrorPlotDataSeries implements XYSeries {
 
         /**
          * The number of max point to be plotted for a single data series
@@ -395,7 +377,6 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
             }
         }
 
-        @Override
         public CalculationModule getCalculationModuleReference() {
             return calculationModuleReference;
         }

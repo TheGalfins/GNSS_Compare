@@ -65,7 +65,7 @@ public class DataViewerAdapter extends FragmentStatePagerAdapter {
         this.registerFragment(new MainViewer());
         this.registerFragment(new PowerPlotFragment());
         this.registerFragment(new PoseErrorFragment());
-//        this.registerFragment(new MapFragment());
+        this.registerFragment(new MapFragment());
     }
 
     public void registerUiThreadObservable(Observable observable){
