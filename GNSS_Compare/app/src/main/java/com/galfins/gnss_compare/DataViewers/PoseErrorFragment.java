@@ -31,17 +31,15 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
 import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gogpsextracts.Coordinates;
-import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
 import com.google.common.collect.Sets;
 
@@ -66,8 +64,6 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
      */
     private static final String TAG = "Positioning error plot";
 
-    private Observer plotUpdater;
-
     /**
      * Displayed plot title
      */
@@ -75,13 +71,11 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
     private static final String PLOT_LABEL_X = "East [m]";
     private static final String PLOT_LABEL_Y = "North [m]";
 
-    private boolean initalized = false;
-
-    private List<CalculationModule> registeredCalculationModules = new ArrayList<>();
+    private boolean initialized = false;
 
     XYPlot plot;
 
-    ArrayList<PoseErrorPlotDataSeries> data = new ArrayList<>();
+    Map<CalculationModule, PoseErrorPlotDataSeries> data = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,13 +88,23 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
         preformatPlot(plot);
 
-        initalized = true;
+        for(Map.Entry<CalculationModule, PoseErrorPlotDataSeries> entry : data.entrySet() ) {
 
-        for(int i=0; i<registeredCalculationModules.size(); i++){
-//            synchronized (MainActivity.createdCalculationModules.get(i)) {
-                addSeries(registeredCalculationModules.get(i));
-//            }
+            XYSeriesFormatter formatter = new LineAndPointFormatter(
+                    null,
+                    Color.argb(50,
+                            Color.red(entry.getKey().getDataColor()),
+                            Color.green(entry.getKey().getDataColor()),
+                            Color.blue(entry.getKey().getDataColor())),
+                    Color.WHITE, //TODO: remove the black background from the legend
+                    null);
+
+            plot.addSeries(entry.getValue(), formatter);
+
+            formatSeries(formatter);
         }
+
+        initialized = true;
 
         return rootView;
     }
@@ -108,10 +112,10 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
     @Override
     public void addSeries(CalculationModule calculationModule) {
 
-        registerSeries(calculationModule);
-//        calculationModule.addObserver(getSeries(calculationModule).getDataObserver());
+        if(initialized) {
 
-        if(initalized) {
+            data.put(calculationModule, new PoseErrorPlotDataSeries(MAX_PLOTTED_POINTS));
+
             XYSeriesFormatter formatter = new LineAndPointFormatter(
                     null,
                     Color.argb(50,
@@ -121,38 +125,10 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                     Color.WHITE, //TODO: remove the black background from the legend
                     null);
 
-            plot.addSeries(getSeries(calculationModule), formatter);
-            formatSeries(plot, formatter);
+            plot.addSeries(data.get(calculationModule), formatter);
+
+            formatSeries(formatter);
         }
-    }
-
-    private PoseErrorPlotDataSeries getSeries(CalculationModule calculationModule){
-        return data.get(getSeriesId(calculationModule));
-    }
-
-    private void registerSeries(CalculationModule calculationModule){
-        if(!seriesRegistered(calculationModule)){
-            data.add(new PoseErrorPlotDataSeries(calculationModule, MAX_PLOTTED_POINTS));
-            registeredCalculationModules.add(calculationModule);
-        }
-    }
-
-    private int getSeriesId(CalculationModule calculationModule){
-        for(int i=0; i< data.size(); i++){
-            if(data.get(i).getCalculationModuleReference() == calculationModule)
-                return i;
-        }
-        return -1;
-    }
-
-    private boolean seriesRegistered(CalculationModule calculationModule) {
-
-        for(PoseErrorPlotDataSeries series : data){
-            if(series.getCalculationModuleReference() == calculationModule)
-                return true;
-        }
-
-        return false;
     }
 
     /**
@@ -161,21 +137,11 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
      */
     public void removeSeries(CalculationModule calculationModule){
 
-        if(initalized) {
-            Iterator<PoseErrorPlotDataSeries> itr = data.iterator();
-            PoseErrorPlotDataSeries reference;
-
-            while (itr.hasNext()) {
-                reference = itr.next();
-                if (reference.getCalculationModuleReference() == calculationModule) {
-                    plot.removeSeries(reference);
-                    itr.remove();
-                    calculationModule.removeObserver(reference.getDataObserver());
-                }
-            }
+        if(initialized) {
+            plot.removeSeries(data.get(calculationModule));
+            data.remove(calculationModule);
         }
 
-        registeredCalculationModules.remove(calculationModule);
     }
 
     @Override
@@ -188,35 +154,29 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     }
 
-
-    Set<CalculationModule> seenModules = new HashSet<>();
-    Set<CalculationModule> calculationModulesSet;
-
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
+        if(initialized) {
+            // modules to be added
+            for (CalculationModule calculationModule : Sets.difference(
+                    new HashSet<>(calculationModules),
+                    data.keySet())) {
+                addSeries(calculationModule);
+            }
 
-        calculationModulesSet = new HashSet<>(calculationModules);
-
-        // modules to be added
-        for (CalculationModule calculationModule : Sets.difference(
-                calculationModulesSet,
-                seenModules)) {
-            addSeries(calculationModule);
-            seenModules.add(calculationModule);
+            // modules to be removed
+            for (CalculationModule calculationModule : Sets.difference(
+                    data.keySet(),
+                    new HashSet<>(calculationModules))) {
+                removeSeries(calculationModule);
+            }
         }
 
-        // modules to be removed
-        for (CalculationModule calculationModule : Sets.difference(
-                seenModules,
-                calculationModulesSet)) {
-            removeSeries(calculationModule);
-            seenModules.remove(calculationModule);
+        for(Map.Entry<CalculationModule, PoseErrorPlotDataSeries> entry: data.entrySet()){
+            entry.getValue().update(entry.getKey());
         }
 
-        for(PoseErrorPlotDataSeries dataSeries : data){
-            dataSeries.update();
-        }
         if(plot!=null)
             plot.redraw();
     }
@@ -290,7 +250,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
         });
     }
 
-    protected void formatSeries(XYPlot plot, XYSeriesFormatter formatter) {
+    protected void formatSeries(XYSeriesFormatter formatter) {
         ((LineAndPointFormatter)formatter).getVertexPaint().setStrokeWidth(PixelUtils.dpToPix(10));
     }
 
@@ -310,52 +270,49 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
          */
         private ArrayList<Double[]> registeredPoses;
 
-        /**
-         * Reference to the calculation module linked with this data series object.
-         */
-        private CalculationModule calculationModuleReference;
+        private String seriesName;
 
-        PoseErrorPlotDataSeries(CalculationModule calculationModule, int maxPlottedPoints) {
-            calculationModuleReference = calculationModule;
+        PoseErrorPlotDataSeries(int maxPlottedPoints) {
             registeredPoses = new ArrayList<>();
             MAX_PLOTTED_POINTS = maxPlottedPoints;
         }
 
-        /**
-         * @return created data observer, which is to be added to the calculation module
-         */
-        Observer getDataObserver() {
-            return new Observer() {
-                @Override
-                public void update(Observable o, Object arg) {
-                    Coordinates calculatedPose = calculationModuleReference.getPose();
-                    Location phoneInternalPose = calculationModuleReference.getLocationFromGoogleServices();
+//        /**
+//         * @return created data observer, which is to be added to the calculation module
+//         */
+//        Observer getDataObserver() {
+//            return new Observer() {
+//                @Override
+//                public void update(Observable o, Object arg) {
+//                    Coordinates calculatedPose = calculationModuleReference.getPose();
+//                    Location phoneInternalPose = calculationModuleReference.getLocationFromGoogleServices();
+//
+//                    if(phoneInternalPose!=null && calculatedPose!=null) {
+//
+//                        double[] poseError = Coordinates.deltaGeodeticToDeltaMeters(
+//                                phoneInternalPose.getLatitude(),
+//                                phoneInternalPose.getAltitude(),
+//                                (calculatedPose.getGeodeticLatitude() - phoneInternalPose.getLatitude()) * Math.PI / 180.0,
+//                                (calculatedPose.getGeodeticLongitude() - phoneInternalPose.getLongitude()) * Math.PI / 180.0);
+//
+//                        Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
+//
+//                        registeredPoses.add(new Double[]{poseError[0], poseError[1]});
+//                        if (registeredPoses.size() > MAX_PLOTTED_POINTS)
+//                            registeredPoses.remove(0);
+//
+//                        if (initialized) {
+//                            plot.redraw();
+//                        }
+//                    }
+//                }
+//            };
+//        }
 
-                    if(phoneInternalPose!=null && calculatedPose!=null) {
-
-                        double[] poseError = Coordinates.deltaGeodeticToDeltaMeters(
-                                phoneInternalPose.getLatitude(),
-                                phoneInternalPose.getAltitude(),
-                                (calculatedPose.getGeodeticLatitude() - phoneInternalPose.getLatitude()) * Math.PI / 180.0,
-                                (calculatedPose.getGeodeticLongitude() - phoneInternalPose.getLongitude()) * Math.PI / 180.0);
-
-                        Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
-
-                        registeredPoses.add(new Double[]{poseError[0], poseError[1]});
-                        if (registeredPoses.size() > MAX_PLOTTED_POINTS)
-                            registeredPoses.remove(0);
-
-                        if (initalized) {
-                            plot.redraw();
-                        }
-                    }
-                }
-            };
-        }
-
-        public void update(){
-            Coordinates calculatedPose = calculationModuleReference.getPose();
-            Location phoneInternalPose = calculationModuleReference.getLocationFromGoogleServices();
+        public void update(CalculationModule calculationModule){
+            Coordinates calculatedPose = calculationModule.getPose();
+            Location phoneInternalPose = calculationModule.getLocationFromGoogleServices();
+            seriesName = calculationModule.getName();
 
             if(phoneInternalPose!=null && calculatedPose!=null) {
 
@@ -371,15 +328,15 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                 if (registeredPoses.size() > MAX_PLOTTED_POINTS)
                     registeredPoses.remove(0);
 
-                if (initalized) {
+                if (initialized) {
                     plot.redraw();
                 }
             }
         }
 
-        public CalculationModule getCalculationModuleReference() {
-            return calculationModuleReference;
-        }
+//        public CalculationModule getCalculationModuleReference() {
+//            return calculationModuleReference;
+//        }
 
         @Override
         public int size() {
@@ -412,7 +369,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
         @Override
         public String getTitle() {
-            return calculationModuleReference.getName();
+            return seriesName;
         }
     }
 }
