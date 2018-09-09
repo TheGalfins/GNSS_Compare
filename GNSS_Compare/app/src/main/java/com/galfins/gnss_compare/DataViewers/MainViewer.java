@@ -483,6 +483,37 @@ public class MainViewer extends Fragment implements DataViewer {
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
+//        if(constellationGrid==null || poseItems == null)
+//            return;
+//
+//        constellationGrid.update(calculationModules);
+//        modulesToBeAdded.clear();
+//        modulesToBeRemoved.clear();
+//
+//        for(CalculationModule calculationModule : calculationModules) {
+//            if (poseItems.containsKey(calculationModule)) {
+//                try {
+//                    // update sometimes throws CalledFromWrongThreadException
+//                    poseItems.get(calculationModule).update(calculationModule);
+//                } catch (Exception e){
+//                    Log.e(TAG, "update: Exception thrown" );
+//
+//                }
+//            } else {
+//                modulesToBeAdded.add(calculationModule);
+//            }
+//        }
+//
+//        modulesToBeRemoved.addAll(
+//                Sets.difference(
+//                        poseItems.keySet(),
+//                        new HashSet<>(calculationModules)));
+
+    }
+
+    @Override
+    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
+
         if(constellationGrid==null || poseItems == null)
             return;
 
@@ -508,14 +539,6 @@ public class MainViewer extends Fragment implements DataViewer {
                 Sets.difference(
                         poseItems.keySet(),
                         new HashSet<>(calculationModules)));
-
-    }
-
-    @Override
-    public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
-
-        if(constellationGrid==null || poseItems == null)
-            return;
 
         for(CalculationModule calculationModule : modulesToBeAdded) {
             poseGridView.setRowCount(poseGridView.getRowCount() + 1);
