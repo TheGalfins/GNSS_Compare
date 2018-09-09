@@ -483,32 +483,17 @@ public class MainViewer extends Fragment implements DataViewer {
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
-//        if(constellationGrid==null || poseItems == null)
-//            return;
-//
-//        constellationGrid.update(calculationModules);
-//        modulesToBeAdded.clear();
-//        modulesToBeRemoved.clear();
-//
-//        for(CalculationModule calculationModule : calculationModules) {
-//            if (poseItems.containsKey(calculationModule)) {
-//                try {
-//                    // update sometimes throws CalledFromWrongThreadException
-//                    poseItems.get(calculationModule).update(calculationModule);
-//                } catch (Exception e){
-//                    Log.e(TAG, "update: Exception thrown" );
-//
-//                }
-//            } else {
-//                modulesToBeAdded.add(calculationModule);
-//            }
-//        }
-//
-//        modulesToBeRemoved.addAll(
-//                Sets.difference(
-//                        poseItems.keySet(),
-//                        new HashSet<>(calculationModules)));
+        modulesToBeAdded.clear();
+        modulesToBeRemoved.clear();
 
+        modulesToBeAdded.addAll(Sets.difference(
+                new HashSet<>(calculationModules),
+                poseItems.keySet()));
+
+        modulesToBeRemoved.addAll(
+                Sets.difference(
+                        poseItems.keySet(),
+                        new HashSet<>(calculationModules)));
     }
 
     @Override
@@ -518,8 +503,6 @@ public class MainViewer extends Fragment implements DataViewer {
             return;
 
         constellationGrid.update(calculationModules);
-        modulesToBeAdded.clear();
-        modulesToBeRemoved.clear();
 
         for(CalculationModule calculationModule : calculationModules) {
             if (poseItems.containsKey(calculationModule)) {
@@ -528,17 +511,10 @@ public class MainViewer extends Fragment implements DataViewer {
                     poseItems.get(calculationModule).update(calculationModule);
                 } catch (Exception e){
                     Log.e(TAG, "update: Exception thrown" );
-
+                    e.printStackTrace();
                 }
-            } else {
-                modulesToBeAdded.add(calculationModule);
             }
         }
-
-        modulesToBeRemoved.addAll(
-                Sets.difference(
-                        poseItems.keySet(),
-                        new HashSet<>(calculationModules)));
 
         for(CalculationModule calculationModule : modulesToBeAdded) {
             poseGridView.setRowCount(poseGridView.getRowCount() + 1);
@@ -546,7 +522,6 @@ public class MainViewer extends Fragment implements DataViewer {
                     poseGridView,
                     poseGridView.getRowCount() - 1
             ));
-
             poseItems.get(calculationModule).update(calculationModule);
         }
         modulesToBeAdded.clear();
