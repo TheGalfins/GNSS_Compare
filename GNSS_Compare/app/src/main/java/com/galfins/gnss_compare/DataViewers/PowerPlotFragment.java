@@ -28,6 +28,7 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -39,6 +40,7 @@ import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gnss_compare.Constellations.SatelliteParameters;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
+import com.google.common.collect.Sets;
 
 import static android.location.GnssStatus.CONSTELLATION_GALILEO;
 import static android.location.GnssStatus.CONSTELLATION_GPS;
@@ -139,8 +141,8 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
 
     @Override
     public void addSeries(CalculationModule calculationModule) {
-        data.addSeries(calculationModule);
-        calculationModule.addObserver(plotUpdater);
+//        data.addSeries(calculationModule);
+//        calculationModule.addObserver(plotUpdater);
     }
 
 
@@ -150,7 +152,7 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
      */
     @Override
     public void removeSeries(CalculationModule calculationModule){
-        data.removeSeries(calculationModule);
+//        data.removeSeries(calculationModule);
     }
 
     @Override
@@ -163,9 +165,33 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
 
     }
 
+    Set<CalculationModule> seenModules = new HashSet<>();
+    Set<CalculationModule> calculationModulesSet;
+
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
+        calculationModulesSet = new HashSet<>(calculationModules);
+
+        // modules to be added
+        for (CalculationModule calculationModule : Sets.difference(
+                calculationModulesSet,
+                seenModules)) {
+            data.addSeries(calculationModule);
+            seenModules.add(calculationModule);
+        }
+
+        // modules to be removed
+        for (CalculationModule calculationModule : Sets.difference(
+                seenModules,
+                calculationModulesSet)) {
+            data.removeSeries(calculationModule);
+        }
+
+        if(initialized) {
+            data.update();
+            plot.redraw();
+        }
     }
 
     @Override
