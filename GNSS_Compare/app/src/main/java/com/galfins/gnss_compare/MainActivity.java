@@ -60,55 +60,6 @@ import com.galfins.gnss_compare.PvtMethods.PvtMethod;
 
 public class MainActivity extends AppCompatActivity {
 
-    public class DataViewerCalculationModulesArrayList extends CalculationModulesArrayList{
-
-        public boolean add(final CalculationModule calculationModule) {
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (DataViewer viewer : mPagerAdapter.getViewers()) {
-                        viewer.addSeries(calculationModule);
-                    }
-                }
-            });
-
-            synchronized (this) {
-                return super.add(calculationModule);
-            }
-        }
-
-        @Override
-        public boolean remove(final Object o){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (DataViewer viewer : mPagerAdapter.getViewers())
-                        viewer.removeSeries((CalculationModule) o);
-                }
-            });
-
-            synchronized (this) {
-                return super.remove(o);
-            }
-        }
-
-        /**
-         * Adds all created modules to viewers. This should be called on reset of the application
-         * where created calculation modules stay in memory, but data viewers are recreated
-         */
-        void reinitialize() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (CalculationModule calculationModule : DataViewerCalculationModulesArrayList.this)
-                        for (DataViewer viewer : mPagerAdapter.getViewers())
-                            viewer.addSeries(calculationModule);
-                }
-            });
-        }
-    }
-
     /**
      * Tag used for logging to logcat
      */
@@ -151,11 +102,6 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager mLocationManager;
 
     /**
-     * Object storing created calculation modules
-     */
-    private DataViewerCalculationModulesArrayList createdCalculationModules;
-
-    /**
      * ViewPager object, which allows for scrolling over Fragments
      */
     private ViewPager mPager;
@@ -192,31 +138,11 @@ public class MainActivity extends AppCompatActivity {
             mGnssCoreBound = true;
 
             gnssCoreBinder.addObserver(calculationModuleObserver);
-
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (DataViewer viewer : mPagerAdapter.getViewers()) {
-//                        for(CalculationModule calculationModule : gnssCoreBinder.getCalculationModules()) {
-//                            viewer.removeSeries(calculationModule);
-//                            viewer.addSeries(calculationModule);
-//                            calculationModule.addObserver(calculationModuleObserver);
-//                        }
-//                    }
-//                }
-//            });
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for(DataViewer viewer : mPagerAdapter.getViewers())
-                        for(CalculationModule calculationModule : gnssCoreBinder.getCalculationModules())
-                            viewer.removeSeries(calculationModule);
-                }
-            });
+
         }
     };
 
@@ -230,18 +156,6 @@ public class MainActivity extends AppCompatActivity {
         synchronized (locationFromGoogleServicesMutex) {
             return locationFromGoogleServices;
         }
-    }
-
-    /**
-     * Method to synchronize execution of calculations.
-     */
-    public void notifyCalculationObservers() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                createdCalculationModules.notifyObservers();
-            }
-        });
     }
 
     /**
@@ -328,9 +242,6 @@ public class MainActivity extends AppCompatActivity {
             mLocationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
 
-//            createdCalculationModules.registerForGnssUpdates(
-//                    mFusedLocationClient,
-//                    mLocationManager);
 
         }
     }
@@ -356,33 +267,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
     }
 
-    /**
-     * Creates initial calculation modules
-     */
-    public void initializeCalculationModules(){
-        if(createdCalculationModules==null) {
-            createdCalculationModules = new DataViewerCalculationModulesArrayList();
-            if(savedState == null)
-                createInitialCalculationModules();
-            else
-                createCalculationModulesFromBundle(savedState);
-
-            createdCalculationModules.addObserver(calculationModuleObserver);
-        } else {
-            createdCalculationModules.reinitialize();
-            createdCalculationModules.addObserver(calculationModuleObserver);
-        }
-
-    }
-
-    public void initializeGnssCompareModules(){
-        Constellation.initialize();
-        Correction.initialize();
-        PvtMethod.initialize();
-        FileLogger.initialize();
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -393,10 +277,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initializeGnssCompareMainActivity();
-
-//        initializeGnssCompareModules();
-        createdCalculationModules = new DataViewerCalculationModulesArrayList();
-//        initializeCalculationModules();
 
         if (hasGnssAndLogPermissions()) {
             registerLocationManager();
@@ -542,27 +422,27 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onStop: invoked");
     }
 
-    /**
-     * Creates new calculation modules, based on data stored in the bundle
-     * TODO - Add flags for status of "Active" and "Log"
-     * @param savedInstanceState bundle describing created calculation modules
-     */
-    private void createCalculationModulesFromBundle(final Bundle savedInstanceState) {
-
-        ArrayList<String> modulesNames = savedInstanceState.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
-
-        if(modulesNames != null) {
-            for (String name : modulesNames) {
-                try {
-                    ArrayList<String> constructorArrayList = savedInstanceState.getStringArrayList(name);
-                    if(constructorArrayList!=null)
-                        createdCalculationModules.add(CalculationModule.fromConstructorArrayList(constructorArrayList));
-                } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    /**
+//     * Creates new calculation modules, based on data stored in the bundle
+//     * TODO - Add flags for status of "Active" and "Log"
+//     * @param savedInstanceState bundle describing created calculation modules
+//     */
+//    private void createCalculationModulesFromBundle(final Bundle savedInstanceState) {
+//
+//        ArrayList<String> modulesNames = savedInstanceState.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
+//
+//        if(modulesNames != null) {
+//            for (String name : modulesNames) {
+//                try {
+//                    ArrayList<String> constructorArrayList = savedInstanceState.getStringArrayList(name);
+//                    if(constructorArrayList!=null)
+//                        createdCalculationModules.add(CalculationModule.fromConstructorArrayList(constructorArrayList));
+//                } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
@@ -576,80 +456,17 @@ public class MainActivity extends AppCompatActivity {
      * @param bundle reference to a Bundle object to which the information is to be stored.
      */
     private void saveInstanceState(Bundle bundle){
-        ArrayList<String> modulesNames = new ArrayList<>();
+//        ArrayList<String> modulesNames = new ArrayList<>();
 
-        for (CalculationModule module: createdCalculationModules)
-            modulesNames.add(module.getName());
+//        for (CalculationModule module: createdCalculationModules)
+//            modulesNames.add(module.getName());
 
-        bundle.putStringArrayList(MODULE_NAMES_BUNDLE_TAG, modulesNames);
+//        bundle.putStringArrayList(MODULE_NAMES_BUNDLE_TAG, modulesNames);
 
-        for (CalculationModule module : createdCalculationModules){
-            ArrayList<String> moduleDescription = module.getConstructorArrayList();
-            bundle.putStringArrayList(module.getName(), moduleDescription);
-        }
-    }
-
-    /**
-     * Creates default, initial calculation modules
-     */
-    private void createInitialCalculationModules(){
-
-        final List<CalculationModule> initialModules = new ArrayList<>();
-
-        try {
-            initialModules.add(new CalculationModule(
-                    "Galileo+GPS",
-                    GalileoGpsConstellation.class,
-                    new ArrayList<Class<? extends Correction>>() {{
-                        add(ShapiroCorrection.class);
-                        add(TropoCorrection.class);
-                    }},
-                    DynamicExtendedKalmanFilter.class,
-                    NmeaFileLogger.class));
-
-            initialModules.add(new CalculationModule(
-                    "GPS",
-                    GpsConstellation.class,
-                    new ArrayList<Class<? extends Correction>>() {{
-                        add(ShapiroCorrection.class);
-                        add(TropoCorrection.class);
-                    }},
-                    DynamicExtendedKalmanFilter.class,
-                    NmeaFileLogger.class));
-
-            initialModules.add(new CalculationModule(
-                    "Galileo",
-                    GalileoConstellation.class,
-                    new ArrayList<Class<? extends Correction>>() {{
-                        add(ShapiroCorrection.class);
-                        add(TropoCorrection.class);
-                    }},
-                    DynamicExtendedKalmanFilter.class,
-                    NmeaFileLogger.class));
-        } catch (Exception e){
-            e.printStackTrace();
-            Log.e(TAG, "createInitialCalculationModules: Exception when creating modules");
-        }
-
-        try {
-            for(CalculationModule calculationModule : initialModules) {
-                createdCalculationModules.add(calculationModule); // when simplified to addAll, doesn't work properly
-            }
-        } catch (Exception e){
-
-            //todo: leaving this just as a contingency, shouldn't happen
-            e.printStackTrace();
-            Log.e(TAG, "createInitalCalculationModules: adding modules failed");
-            for(CalculationModule module : initialModules) {
-                try {
-                    createdCalculationModules.remove(module);
-                } catch (Exception e2){
-                    e2.printStackTrace();
-                    Log.e(TAG, "createInitalCalculationModules: Removal of initial module failed");
-                }
-            }
-            CalculationModule.clear();
-        }
+//        for (CalculationModule module : createdCalculationModules){
+//            ArrayList<String> moduleDescription = module.getConstructorArrayList();
+//            bundle.putStringArrayList(module.getName(), moduleDescription);
+//        }
     }
 
     @Override
@@ -734,15 +551,6 @@ public class MainActivity extends AppCompatActivity {
 
         mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
         mFusedLocationClient.removeLocationUpdates(locationCallback);
-
-        createdCalculationModules.unregisterFromGnssUpdates(mFusedLocationClient, mLocationManager);
-
-        while(createdCalculationModules.size() > 0) {
-            createdCalculationModules.remove(createdCalculationModules.get(0));
-        }
-
-        createdCalculationModules = null;
-        CalculationModule.clear();
     }
 
     @Override
@@ -763,13 +571,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if(mGnssCoreBound) {
                     gnssCoreBinder.addModule(newModule);
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            for(DataViewer viewer: mPagerAdapter.getViewers())
-//                                viewer.addSeries(newModule);
-//                        }
-//                    });
                     CreateModulePreference.notifyModuleCreated();
                     makeNotification("Module " + newModule.getName() + " created...");
                 } else {

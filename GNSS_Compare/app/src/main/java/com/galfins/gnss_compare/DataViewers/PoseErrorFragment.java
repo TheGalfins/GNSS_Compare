@@ -277,38 +277,6 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
             MAX_PLOTTED_POINTS = maxPlottedPoints;
         }
 
-//        /**
-//         * @return created data observer, which is to be added to the calculation module
-//         */
-//        Observer getDataObserver() {
-//            return new Observer() {
-//                @Override
-//                public void update(Observable o, Object arg) {
-//                    Coordinates calculatedPose = calculationModuleReference.getPose();
-//                    Location phoneInternalPose = calculationModuleReference.getLocationFromGoogleServices();
-//
-//                    if(phoneInternalPose!=null && calculatedPose!=null) {
-//
-//                        double[] poseError = Coordinates.deltaGeodeticToDeltaMeters(
-//                                phoneInternalPose.getLatitude(),
-//                                phoneInternalPose.getAltitude(),
-//                                (calculatedPose.getGeodeticLatitude() - phoneInternalPose.getLatitude()) * Math.PI / 180.0,
-//                                (calculatedPose.getGeodeticLongitude() - phoneInternalPose.getLongitude()) * Math.PI / 180.0);
-//
-//                        Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
-//
-//                        registeredPoses.add(new Double[]{poseError[0], poseError[1]});
-//                        if (registeredPoses.size() > MAX_PLOTTED_POINTS)
-//                            registeredPoses.remove(0);
-//
-//                        if (initialized) {
-//                            plot.redraw();
-//                        }
-//                    }
-//                }
-//            };
-//        }
-
         public void update(CalculationModule calculationModule){
             Coordinates calculatedPose = calculationModule.getPose();
             Location phoneInternalPose = calculationModule.getLocationFromGoogleServices();
@@ -333,10 +301,6 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                 }
             }
         }
-
-//        public CalculationModule getCalculationModuleReference() {
-//            return calculationModuleReference;
-//        }
 
         @Override
         public int size() {
