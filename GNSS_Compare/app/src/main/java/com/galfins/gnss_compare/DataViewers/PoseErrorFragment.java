@@ -31,16 +31,19 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
 import com.galfins.gnss_compare.CalculationModulesArrayList;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
+import com.google.common.collect.Sets;
 
 /**
  * Created by Mateusz Krainski on 31/03/2018.
@@ -125,7 +128,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
     public void addSeries(CalculationModule calculationModule) {
 
         registerSeries(calculationModule);
-        calculationModule.addObserver(getSeries(calculationModule).getDataObserver());
+//        calculationModule.addObserver(getSeries(calculationModule).getDataObserver());
 
         if(initalized) {
             XYSeriesFormatter formatter = new LineAndPointFormatter(
@@ -204,9 +207,36 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     }
 
+
+    Set<CalculationModule> seenModules = new HashSet<>();
+    Set<CalculationModule> calculationModulesSet;
+
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
+
+        calculationModulesSet = new HashSet<>(calculationModules);
+
+        // modules to be added
+        for (CalculationModule calculationModule : Sets.difference(
+                calculationModulesSet,
+                seenModules)) {
+            addSeries(calculationModule);
+            seenModules.add(calculationModule);
+        }
+
+        // modules to be removed
+        for (CalculationModule calculationModule : Sets.difference(
+                seenModules,
+                calculationModulesSet)) {
+            removeSeries(calculationModule);
+        }
+
+        for(PoseErrorPlotDataSeries dataSeries : data){
+            dataSeries.update();
+        }
+        if(plot!=null)
+            plot.redraw();
     }
 
     @Override
@@ -339,6 +369,30 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
                     }
                 }
             };
+        }
+
+        public void update(){
+            Coordinates calculatedPose = calculationModuleReference.getPose();
+            Location phoneInternalPose = calculationModuleReference.getLocationFromGoogleServices();
+
+            if(phoneInternalPose!=null && calculatedPose!=null) {
+
+                double[] poseError = Coordinates.deltaGeodeticToDeltaMeters(
+                        phoneInternalPose.getLatitude(),
+                        phoneInternalPose.getAltitude(),
+                        (calculatedPose.getGeodeticLatitude() - phoneInternalPose.getLatitude()) * Math.PI / 180.0,
+                        (calculatedPose.getGeodeticLongitude() - phoneInternalPose.getLongitude()) * Math.PI / 180.0);
+
+                Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
+
+                registeredPoses.add(new Double[]{poseError[0], poseError[1]});
+                if (registeredPoses.size() > MAX_PLOTTED_POINTS)
+                    registeredPoses.remove(0);
+
+                if (initalized) {
+                    plot.redraw();
+                }
+            }
         }
 
         @Override
