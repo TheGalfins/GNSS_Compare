@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.ArraySet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ public class MainViewer extends Fragment implements DataViewer {
 
     double nameColumnWidth = 0.0;
     double itemColumnWidth = 0.0;
+
+    private final String TAG = this.getClass().getSimpleName();
 
     /**
      * CalculationGridItem is used as an interface for dynamically updated items within a GridLayout
@@ -484,10 +487,18 @@ public class MainViewer extends Fragment implements DataViewer {
             return;
 
         constellationGrid.update(calculationModules);
+        modulesToBeAdded.clear();
+        modulesToBeRemoved.clear();
 
         for(CalculationModule calculationModule : calculationModules) {
             if (poseItems.containsKey(calculationModule)) {
-                poseItems.get(calculationModule).update(calculationModule);
+                try {
+                    // update sometimes throws CalledFromWrongThreadException
+                    poseItems.get(calculationModule).update(calculationModule);
+                } catch (Exception e){
+                    Log.e(TAG, "update: Exception thrown" );
+
+                }
             } else {
                 modulesToBeAdded.add(calculationModule);
             }
