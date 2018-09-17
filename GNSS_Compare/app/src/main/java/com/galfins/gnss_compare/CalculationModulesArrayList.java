@@ -82,31 +82,6 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
         };
     }
 
-    /**
-     * Start threads associated with added CalculationModules. This is a single execution
-     * of a calculation module's notifyObservers() method
-     */
-    public void notifyObservers() {
-        Log.d(TAG, "notifyObservers: invoked");
-        synchronized (this) {
-            for (CalculationModule calculationModule : this) {
-                calculationModule.notifyObservers();
-            }
-        }
-    }
-
-    public void addObserver(Observer observer){
-        for (CalculationModule calculationModule : this){
-            calculationModule.addObserver(observer);
-        }
-    }
-
-    public void removeObserver(Observer observer){
-        for (CalculationModule calculationModule : this){
-            calculationModule.removeObserver(observer);
-        }
-    }
-
     public void registerForGnssUpdates(FusedLocationProviderClient fusedLocationClient, LocationManager locationManager){
         try {
 

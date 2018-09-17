@@ -296,7 +296,6 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
                 if (reference == calculationModule) {
                     // Remove the current element from the iterator and the list.
                     iterator.remove();
-                    calculationModule.removeObserver(plotUpdater);
                 }
             }
         }

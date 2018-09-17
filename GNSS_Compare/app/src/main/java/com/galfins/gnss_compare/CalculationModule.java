@@ -8,8 +8,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
@@ -24,23 +22,6 @@ import com.galfins.gogpsextracts.Coordinates;
  * This class is for performing all of the calculations and retrieving GNSS data from the chip.
  */
 public class CalculationModule{
-
-    /**
-     * Proper implementation of the CalculationModule observable.
-     * notified when the calculations have been finished. Stores a reference to 'this'
-     */
-    public class CalculationModuleObservable extends Observable{
-
-        public CalculationModuleObservable(){
-
-        }
-
-        @Override
-        public void notifyObservers() {
-            setChanged();
-            super.notifyObservers(CalculationModule.this); // by default passing this reference as argument
-        }
-    }
 
     /**
      * Choose format for logging file
@@ -166,12 +147,6 @@ public class CalculationModule{
     private Constellation constellation;
 
     /**
-     * Notifier object, which will notify subsribed Observers about data updates.
-     */
-    private Observable poseUpdatedNotifier;
-
-    /**
-     *
      * @return location as calculated by the phone's location service
      */
     public Location getLocationFromGoogleServices() {
@@ -295,8 +270,6 @@ public class CalculationModule{
         registeredNames.add(name);
 
         pose = Coordinates.globalGeodInstance(0.000001, 0.000001, 0.000001); // can't be zeros - ECEF conversion crashes
-
-        poseUpdatedNotifier = new CalculationModuleObservable();
 
         constellationUpdated = false;
         corrections = new ArrayList<>();
@@ -425,19 +398,22 @@ public class CalculationModule{
      */
     public void updateMeasurements(GnssMeasurementsEvent event){
 
-        constellation.updateMeasurements(event);
+        if (active) {
 
-        if(poseInitialized) {
-            constellation.calculateSatPosition(locationFromGoogleServices, pose);
-            if (constellation.getUsedConstellationSize() != 0) {
-                pose = pvtMethod.calculatePose(constellation);
-                Log.i(TAG, "newPose: " + pose.getGeodeticLatitude() + ", " + pose.getGeodeticLongitude() + ", " + pose.getGeodeticHeight());
-                if (logToFile) {
-                    fileLogger.addNewPose(pose, constellation);
+            constellation.updateMeasurements(event);
+
+            if (poseInitialized) {
+                constellation.calculateSatPosition(locationFromGoogleServices, pose);
+                if (constellation.getUsedConstellationSize() != 0) {
+                    pose = pvtMethod.calculatePose(constellation);
+                    Log.i(TAG, "newPose: " + pose.getGeodeticLatitude() + ", " + pose.getGeodeticLongitude() + ", " + pose.getGeodeticHeight());
+                    if (logToFile) {
+                        fileLogger.addNewPose(pose, constellation);
+                    }
                 }
             }
+            measurementsUpdated = true;
         }
-        measurementsUpdated = true;
     }
 
     /**
@@ -456,35 +432,6 @@ public class CalculationModule{
                     locationFromGoogleServices.getAltitude());
 
             poseInitialized = true;
-        }
-    }
-
-    /**
-     * @param observer observer, which is to be notified about new data
-     */
-    public void addObserver(Observer observer) {
-        poseUpdatedNotifier.addObserver(observer);
-    }
-
-
-    /**
-     * Removes {@code observer} from the notifier
-     *
-     * @param observer removed entity
-     */
-    public void removeObserver(Observer observer) {
-        poseUpdatedNotifier.deleteObserver(observer);
-    }
-
-    /**
-     * notifies observers about the new data. This is separate, to give the opportunity to execute this
-     * on UI thread
-     */
-    public void notifyObservers() {
-        Log.d(TAG, "notifyObservers: invoked!");
-        if(measurementsUpdated) {
-            poseUpdatedNotifier.notifyObservers();
-            measurementsUpdated = false;
         }
     }
 
