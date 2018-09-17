@@ -521,9 +521,9 @@ public class CalculationModule{
             String fileLoggerClassName) throws NameAlreadyRegisteredException, NumberOfSeriesExceededLimitException, CalculationSettingsIncompleteException {
 
         if(checkSettingsValid(name) &&
-        checkSettingsValid(constellationClassName) &&
-        checkSettingsValid(pvtMethodClassName) &&
-        checkSettingsValid(fileLoggerClassName)) {
+                checkSettingsValid(constellationClassName) &&
+                checkSettingsValid(pvtMethodClassName) &&
+                checkSettingsValid(fileLoggerClassName)) {
 
             return new CalculationModule(
                     name,
