@@ -83,7 +83,7 @@ public class CalculationModule{
     /**
      * Color used for data plotting
      */
-    private int DATA_COLOR = Color.GRAY;
+    private int DATA_COLOR;
 
     /**
      * PVT method associated with this calculation module
@@ -93,7 +93,7 @@ public class CalculationModule{
     /**
      * Corrections which are to be applied to received pseudoranges
      */
-    private ArrayList<Correction> corrections = new ArrayList<>();
+    private ArrayList<Correction> corrections;
 
     /**
      * List of registered module ids
@@ -125,11 +125,6 @@ public class CalculationModule{
             Color.rgb(109,76,65),
             Color.rgb(84,110,122)
     };
-
-    /**
-     * This flag is set to true after the updated of the pseudoranges, allowing the PVT calculations
-     */
-    private boolean constellationUpdated;
 
     /**
      * Calculated pose of the receiver
@@ -271,7 +266,6 @@ public class CalculationModule{
 
         pose = Coordinates.globalGeodInstance(0.000001, 0.000001, 0.000001); // can't be zeros - ECEF conversion crashes
 
-        constellationUpdated = false;
         corrections = new ArrayList<>();
         try {
             updateSetup();
@@ -387,12 +381,6 @@ public class CalculationModule{
     }
 
     /**
-     * Set after measurements have been updated, cleared after the update notification has been
-     * sent out
-     */
-    private boolean measurementsUpdated = false;
-
-    /**
      * Performs the update on the GNSS event and all following calculations.
      * @param event GNSS event
      */
@@ -412,7 +400,6 @@ public class CalculationModule{
                     }
                 }
             }
-            measurementsUpdated = true;
         }
     }
 
@@ -507,14 +494,10 @@ public class CalculationModule{
 
     /**
      * Checks if the passed setting has been set. Throws exception if not
-     * todo - refactor so that it doesn't use exception
      * @param value vlue of the checked setting
-     * @throws CalculationSettingsIncompleteException when the value has not been set.
      */
-    private static void checkSettingsValid(String value) throws CalculationSettingsIncompleteException {
-        if(value == null){
-            throw new CalculationSettingsIncompleteException("Not all required settings selected!");
-        }
+    private static boolean checkSettingsValid(String value){
+        return value != null;
     }
 
     /**
@@ -537,17 +520,20 @@ public class CalculationModule{
             String pvtMethodClassName,
             String fileLoggerClassName) throws NameAlreadyRegisteredException, NumberOfSeriesExceededLimitException, CalculationSettingsIncompleteException {
 
-        checkSettingsValid(name);
-        checkSettingsValid(constellationClassName);
-        checkSettingsValid(pvtMethodClassName);
-        checkSettingsValid(fileLoggerClassName);
+        if(checkSettingsValid(name) &&
+        checkSettingsValid(constellationClassName) &&
+        checkSettingsValid(pvtMethodClassName) &&
+        checkSettingsValid(fileLoggerClassName)) {
 
-        return new CalculationModule(
-                name,
-                getConstellationClassFromName(constellationClassName),
-                getCorrectionClassesFromNames(correctionClassNames),
-                getPvtMethodClassFromName(pvtMethodClassName),
-                getFileLoggerClassFromName(fileLoggerClassName));
+            return new CalculationModule(
+                    name,
+                    getConstellationClassFromName(constellationClassName),
+                    getCorrectionClassesFromNames(correctionClassNames),
+                    getPvtMethodClassFromName(pvtMethodClassName),
+                    getFileLoggerClassFromName(fileLoggerClassName));
+        } else {
+            throw new CalculationSettingsIncompleteException("Settings not complete!");
+        }
 
     }
 
