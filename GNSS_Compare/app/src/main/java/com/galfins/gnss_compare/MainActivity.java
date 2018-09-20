@@ -57,7 +57,6 @@ import com.galfins.gnss_compare.DataViewers.DataViewerAdapter;
 import com.galfins.gnss_compare.FileLoggers.FileLogger;
 import com.galfins.gnss_compare.FileLoggers.NmeaFileLogger;
 import com.galfins.gnss_compare.FileLoggers.RawMeasurementsFileLogger;
-import com.galfins.gnss_compare.PvtMethods.DynamicExtendedKalmanFilter;
 import com.galfins.gnss_compare.PvtMethods.PvtMethod;
 
 
@@ -832,7 +831,7 @@ public class MainActivity extends AppCompatActivity {
             rnpFailedSnackbar = Snackbar.make(
                     mainView,
                     "Failed to get ephemeris data. Retrying...",
-                    Snackbar.LENGTH_INDEFINITE
+                    Snackbar.LENGTH_LONG
             );
             rnpFailedSnackbar.show();
         } else if (!rnpFailedSnackbar.isShown())
@@ -841,8 +840,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void dismissRnpFailedNotification(){
-        if(rnpFailedSnackbar!=null)
-            rnpFailedSnackbar.dismiss();
+//        if(rnpFailedSnackbar!=null)
+//            rnpFailedSnackbar.dismiss();
     }
 
 }
