@@ -341,8 +341,9 @@ public class GalileoConstellation extends Constellation {
                         initialLocation);
 
                 if (rnp == null) {
+                    excludedSatellites.add(observedSatellite);
                     MainActivity.makeRnpFailedNotification();
-                    break;
+                    continue;
                 }
 
                 MainActivity.dismissRnpFailedNotification();
