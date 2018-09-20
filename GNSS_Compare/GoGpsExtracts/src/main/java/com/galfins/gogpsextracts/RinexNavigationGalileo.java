@@ -220,7 +220,7 @@ public class RinexNavigationGalileo implements NavigationProducer {
             //System.out.println("request: "+unixTime+" "+(new Date(t.getMsec()))+" week:"+t.getGpsWeek()+" "+t.getGpsWeekDay());
 
             //String url = t.formatTemplate(urltemplate);
-            final String url = "supl-dev.google.com";
+            final String url = "supl.google.com";
 
         if (pool.containsKey(url)) {
             synchronized (this) {
@@ -301,8 +301,7 @@ public class RinexNavigationGalileo implements NavigationProducer {
         try {
             Log.w(TAG, "getFromSUPL: Getting data using SUPL client..." );
 
-            //SuplRrlpController mSuplController = new SuplRrlpController("supl.google.com",7276); // use this once the google server is operational
-            SuplRrlpController mSuplController = new SuplRrlpController(suplName,7280); // non-SSL
+            SuplRrlpController mSuplController = new SuplRrlpController(suplName,7276);
 
             Pair<Ephemeris.GpsNavMessageProto, GalileoEphemeris.GalNavMessageProto> navMsg;
             navMsg = mSuplController.generateNavMessage((long) (initialLocation.getLatitude()*1e7), (long) (initialLocation.getLongitude()*1e7));
