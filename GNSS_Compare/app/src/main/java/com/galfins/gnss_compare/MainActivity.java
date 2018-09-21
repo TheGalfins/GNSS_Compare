@@ -839,10 +839,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static void dismissRnpFailedNotification(){
-//        if(rnpFailedSnackbar!=null)
-//            rnpFailedSnackbar.dismiss();
-    }
-
 }
 

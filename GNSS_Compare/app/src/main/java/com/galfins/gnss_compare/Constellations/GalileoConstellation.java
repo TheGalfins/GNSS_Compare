@@ -346,8 +346,6 @@ public class GalileoConstellation extends Constellation {
                     continue;
                 }
 
-                MainActivity.dismissRnpFailedNotification();
-
                 observedSatellite.setSatellitePosition(rnp);
 
 

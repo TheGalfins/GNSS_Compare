@@ -248,7 +248,6 @@ public class GpsConstellation extends Constellation {
                     MainActivity.makeRnpFailedNotification();
                     continue;
                 }
-                MainActivity.dismissRnpFailedNotification();
 
                 observedSatellite.setSatellitePosition(rnp);
 
