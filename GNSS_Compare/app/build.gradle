@@ -6,8 +6,8 @@ android {
         applicationId "com.galfins.gnss_compare"
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 4
-        versionName "0.4"
+        versionCode 41
+        versionName "0.41"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
