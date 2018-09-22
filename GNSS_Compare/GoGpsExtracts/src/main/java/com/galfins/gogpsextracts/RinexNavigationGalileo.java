@@ -310,8 +310,8 @@ public class RinexNavigationGalileo implements NavigationProducer {
 
             Log.w(TAG, "getFromSUPL: Received data from SUPL server" );
 
-//        } catch (IOException | NullPointerException | UnsupportedOperationException e) {
-        } catch (Exception e) {
+        } catch (IOException | NullPointerException | UnsupportedOperationException | IllegalArgumentException e) {
+//        } catch (Exception e) {
             Log.e(TAG, "Exception thrown getting msg from SUPL server", e);
         }
         return rnp;

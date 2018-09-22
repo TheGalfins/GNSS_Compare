@@ -258,9 +258,10 @@ public class RinexNavigationGps implements NavigationProducer {
 
             Log.w(TAG, "getFromSUPL: Received data from SUPL server" );
 
-//        } catch (IOException | IndexOutOfBoundsException e) {
-        } catch (Exception e) {
+        } catch (IOException | IndexOutOfBoundsException | UnsupportedOperationException | IllegalArgumentException e) {
+//        } catch (Exception e) {
             Log.e(TAG, "Exception thrown getting msg from SUPL server", e);
+            e.printStackTrace();
         }
         return rnp;
     }
