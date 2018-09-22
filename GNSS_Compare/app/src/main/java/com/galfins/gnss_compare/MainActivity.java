@@ -305,11 +305,6 @@ public class MainActivity extends AppCompatActivity {
         showInitializationDisclamer();
 
         startService(new Intent(this, GnssCoreService.class));
-
-        bindService(
-                new Intent(this, GnssCoreService.class),
-                mConnection,
-                Context.BIND_AUTO_CREATE);
     }
 
     private void initializeGnssCompareMainActivity() {
@@ -481,6 +476,9 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        if(!GnssCoreService.isServiceStarted())
+            startService(new Intent(this, GnssCoreService.class));
+
         bindService(
                 new Intent(this, GnssCoreService.class),
                 mConnection,
@@ -501,6 +499,12 @@ public class MainActivity extends AppCompatActivity {
         ((GnssCoreServiceConnector) mConnection).resetConnection();
 
         Log.d(TAG, "onPause: invoked");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
     }
 
     @Override

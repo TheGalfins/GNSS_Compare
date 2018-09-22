@@ -40,7 +40,7 @@ public class GnssCoreService extends Service {
      */
     private final String MODULE_NAMES_BUNDLE_TAG = "__module_names";
 
-    private Bundle savedModulesBundle = null;
+    private static Bundle savedModulesBundle = null;
 
     CalculationModulesArrayList calculationModules = new CalculationModulesArrayList();
 
@@ -82,11 +82,19 @@ public class GnssCoreService extends Service {
         public void removeModule(CalculationModule removedModule){
             calculationModules.remove(removedModule);
         }
+
+        public boolean getServiceStarted(){
+            return serviceStarted;
+        }
     }
 
     private IBinder binder = new GnssCoreBinder();
 
-    private boolean serviceStarted = false;
+    private static boolean serviceStarted = false;
+
+    public static boolean isServiceStarted(){
+        return serviceStarted;
+    }
 
     @Nullable
     @Override
@@ -156,8 +164,8 @@ public class GnssCoreService extends Service {
         savedModulesBundle.putStringArrayList(MODULE_NAMES_BUNDLE_TAG, modulesNames);
 
         for (CalculationModule module : calculationModules){
-            ArrayList<String> moduleDescription = module.getConstructorArrayList();
-            savedModulesBundle.putStringArrayList(module.getName(), moduleDescription);
+            Bundle moduleDescription = module.getConstructorBundle();
+            savedModulesBundle.putBundle(module.getName(), moduleDescription);
         }
     }
 
@@ -174,9 +182,9 @@ public class GnssCoreService extends Service {
             if (modulesNames != null) {
                 for (String name : modulesNames) {
                     try {
-                        ArrayList<String> constructorArrayList = savedModulesBundle.getStringArrayList(name);
-                        if (constructorArrayList != null)
-                            calculationModules.add(CalculationModule.fromConstructorArrayList(constructorArrayList));
+                        Bundle constructorBundle = savedModulesBundle.getBundle(name);
+                        if (constructorBundle != null)
+                            calculationModules.add(CalculationModule.fromConstructorBundle(constructorBundle));
                     } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
                         e.printStackTrace();
                     }
