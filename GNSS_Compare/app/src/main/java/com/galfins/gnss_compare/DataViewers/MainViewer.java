@@ -526,6 +526,8 @@ public class MainViewer extends Fragment implements DataViewer {
         }
         modulesToBeAdded.clear();
 
+        //todo: got a ConcurrentModificationException on the loop below. after putting the app
+        // todo: to sleep and waking it back up (old calculation modules removed, new added
         for(CalculationModule calculationModule : modulesToBeRemoved){
             removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
         }
