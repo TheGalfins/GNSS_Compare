@@ -516,6 +516,9 @@ public class MainViewer extends Fragment implements DataViewer {
             }
         }
 
+        /* todo: got a ConcurrentModificationException on the loop below. after
+        /  todo: when the main activity was launched after a delay after the gnss core service
+        */
         for(CalculationModule calculationModule : modulesToBeAdded) {
             poseGridView.setRowCount(poseGridView.getRowCount() + 1);
             poseItems.put(calculationModule, new PoseItem(
@@ -526,7 +529,7 @@ public class MainViewer extends Fragment implements DataViewer {
         }
         modulesToBeAdded.clear();
 
-        //todo: got a ConcurrentModificationException on the loop below. after putting the app
+        // todo: got a ConcurrentModificationException on the loop below. after putting the app
         // todo: to sleep and waking it back up (old calculation modules removed, new added
         for(CalculationModule calculationModule : modulesToBeRemoved){
             removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
