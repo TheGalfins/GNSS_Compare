@@ -131,20 +131,36 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean mGnssCoreBound = false;
 
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private class GnssCoreServiceConnector implements ServiceConnection{
+
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            gnssCoreBinder = (GnssCoreService.GnssCoreBinder) service;
-            mGnssCoreBound = true;
 
-            gnssCoreBinder.addObserver(calculationModuleObserver);
+            if(!mGnssCoreBound) {
+                gnssCoreBinder = (GnssCoreService.GnssCoreBinder) service;
+                mGnssCoreBound = true;
+
+                gnssCoreBinder.addObserver(calculationModuleObserver);
+            }
+        }
+
+        public void resetConnection(){
+            if(gnssCoreBinder != null && mGnssCoreBound) {
+                gnssCoreBinder.removeObserver(calculationModuleObserver);
+                mGnssCoreBound = false;
+
+                gnssCoreBinder = null;
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            resetConnection();
         }
-    };
+
+    }
+
+    private ServiceConnection mConnection = new GnssCoreServiceConnector() ;
 
     /**
      * Callback used for receiving phone's location
@@ -290,15 +306,6 @@ public class MainActivity extends AppCompatActivity {
 
         startService(new Intent(this, GnssCoreService.class));
 
-
-        try {
-            synchronized (this) {
-                wait(1000);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         bindService(
                 new Intent(this, GnssCoreService.class),
                 mConnection,
@@ -422,53 +429,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onStop: invoked");
     }
 
-//    /**
-//     * Creates new calculation modules, based on data stored in the bundle
-//     * TODO - Add flags for status of "Active" and "Log"
-//     * @param savedInstanceState bundle describing created calculation modules
-//     */
-//    private void createCalculationModulesFromBundle(final Bundle savedInstanceState) {
-//
-//        ArrayList<String> modulesNames = savedInstanceState.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
-//
-//        if(modulesNames != null) {
-//            for (String name : modulesNames) {
-//                try {
-//                    ArrayList<String> constructorArrayList = savedInstanceState.getStringArrayList(name);
-//                    if(constructorArrayList!=null)
-//                        createdCalculationModules.add(CalculationModule.fromConstructorArrayList(constructorArrayList));
-//                } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-        saveInstanceState(bundle);
-    }
-
-    /**
-     * Parses created calculation module definitions to a bundle. This bundle can later be used with
-     * createCalculationModulesFromBundle to create a new set of calculationModules
-     * @param bundle reference to a Bundle object to which the information is to be stored.
-     */
-    private void saveInstanceState(Bundle bundle){
-//        ArrayList<String> modulesNames = new ArrayList<>();
-
-//        for (CalculationModule module: createdCalculationModules)
-//            modulesNames.add(module.getName());
-
-//        bundle.putStringArrayList(MODULE_NAMES_BUNDLE_TAG, modulesNames);
-
-//        for (CalculationModule module : createdCalculationModules){
-//            ArrayList<String> moduleDescription = module.getConstructorArrayList();
-//            bundle.putStringArrayList(module.getName(), moduleDescription);
-//        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -538,6 +498,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         unbindService(mConnection);
+        ((GnssCoreServiceConnector) mConnection).resetConnection();
 
         Log.d(TAG, "onPause: invoked");
     }
@@ -547,7 +508,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         savedState = new Bundle();
-        saveInstanceState(savedState);
 
         mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
         mFusedLocationClient.removeLocationUpdates(locationCallback);

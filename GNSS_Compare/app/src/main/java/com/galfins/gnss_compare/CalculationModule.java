@@ -579,6 +579,8 @@ public class CalculationModule{
         ArrayList<String> returnedValue = new ArrayList<>();
 
         returnedValue.add(getName());
+        returnedValue.add(String.valueOf(active));
+        returnedValue.add(String.valueOf(logToFile));
         returnedValue.add(constellation.getName());
         returnedValue.add(pvtMethod.getName());
         returnedValue.add(fileLogger.getName());
@@ -598,20 +600,27 @@ public class CalculationModule{
      */
     public static CalculationModule fromConstructorArrayList(ArrayList<String> arrayList) throws NameAlreadyRegisteredException, NumberOfSeriesExceededLimitException {
         String name = arrayList.get(0);
-        String constellationClassName = arrayList.get(1);
-        String pvtMethodClassName = arrayList.get(2);
-        String fileLoggerClassName = arrayList.get(3);
+        boolean valueOfActive = Boolean.parseBoolean(arrayList.get(1));
+        boolean valueOfLogToFile = Boolean.parseBoolean(arrayList.get(2));
+        String constellationClassName = arrayList.get(3);
+        String pvtMethodClassName = arrayList.get(4);
+        String fileLoggerClassName = arrayList.get(5);
         Set<String> correctionClassNames = new ArraySet<>();
 
         for(int i=4; i<arrayList.size(); i++)
             correctionClassNames.add(arrayList.get(i));
 
-        return new CalculationModule(
+        CalculationModule createdModule = new CalculationModule(
                 name,
                 getConstellationClassFromName(constellationClassName),
                 getCorrectionClassesFromNames(correctionClassNames),
                 getPvtMethodClassFromName(pvtMethodClassName),
                 getFileLoggerClassFromName(fileLoggerClassName));
+
+        createdModule.active = valueOfActive;
+        createdModule.logToFile = valueOfLogToFile;
+
+        return createdModule;
     }
 
     /**

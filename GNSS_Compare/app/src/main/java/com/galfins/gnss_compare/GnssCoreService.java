@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -33,6 +34,13 @@ import java.util.Observer;
  */
 public class GnssCoreService extends Service {
 
+
+    /**
+     * Tag used to mark module names for savedInstanceStates of the onCreate method.
+     */
+    private final String MODULE_NAMES_BUNDLE_TAG = "__module_names";
+
+    private Bundle savedModulesBundle = null;
 
     CalculationModulesArrayList calculationModules = new CalculationModulesArrayList();
 
@@ -78,6 +86,8 @@ public class GnssCoreService extends Service {
 
     private IBinder binder = new GnssCoreBinder();
 
+    private boolean serviceStarted = false;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -88,28 +98,93 @@ public class GnssCoreService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        createInitialCalculationModules();
-
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-
-        calculationModules.registerForGnssUpdates(mFusedLocationClient, mLocationManager);
-
-        calculationModules.assignPoseUpdatedListener(poseListener);
-
         Constellation.initialize();
         Correction.initialize();
         PvtMethod.initialize();
         FileLogger.initialize();
 
+        if(calculationModules.size() == 0){
+            if(savedModulesBundle==null)
+                createInitialCalculationModules();
+            else
+                createCalculationModulesFromBundle();
+
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+
+            calculationModules.registerForGnssUpdates(mFusedLocationClient, mLocationManager);
+            calculationModules.assignPoseUpdatedListener(poseListener);
+
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        serviceStarted = true;
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
+        saveModulesDescriptionToBundle();
+
         calculationModules.unregisterFromGnssUpdates();
         calculationModules.clear();
+        CalculationModule.clear();
+
+        serviceStarted = false;
+
+        stopSelf();
+    }
+
+    /**
+     * Saves the descriptions of calculation modules to a bundle object
+     * todo: move to calcualtionModulesArrayList?
+     */
+    private void saveModulesDescriptionToBundle() {
+
+        ArrayList<String> modulesNames = new ArrayList<>();
+        savedModulesBundle = new Bundle();
+
+        for (CalculationModule module: calculationModules)
+            modulesNames.add(module.getName());
+
+        savedModulesBundle.putStringArrayList(MODULE_NAMES_BUNDLE_TAG, modulesNames);
+
+        for (CalculationModule module : calculationModules){
+            ArrayList<String> moduleDescription = module.getConstructorArrayList();
+            savedModulesBundle.putStringArrayList(module.getName(), moduleDescription);
+        }
+    }
+
+    /**
+     * Creates new calculation modules, based on data stored in the bundle
+     * todo: move to calcualtionModulesArrayList?
+     */
+    private void createCalculationModulesFromBundle() {
+
+        if(savedModulesBundle!=null) {
+
+            ArrayList<String> modulesNames = savedModulesBundle.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
+
+            if (modulesNames != null) {
+                for (String name : modulesNames) {
+                    try {
+                        ArrayList<String> constructorArrayList = savedModulesBundle.getStringArrayList(name);
+                        if (constructorArrayList != null)
+                            calculationModules.add(CalculationModule.fromConstructorArrayList(constructorArrayList));
+                    } catch (CalculationModule.NameAlreadyRegisteredException | CalculationModule.NumberOfSeriesExceededLimitException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            savedModulesBundle = null;
+
+        }
     }
 
     private void createInitialCalculationModules(){
