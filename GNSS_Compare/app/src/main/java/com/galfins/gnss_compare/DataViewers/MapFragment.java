@@ -73,8 +73,6 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
     Set<CalculationModule> seenModules = new HashSet<>();
 
-    Set<CalculationModule> calculationModulesSet;
-
     private class SafeMarkerDescription {
         private Coordinates location;
         private int drawableReference;
@@ -285,7 +283,7 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
         Coordinates currentPose = calculationModule.getPose();
 
-        if (map != null) {
+        if (map != null && updatedSeries != null) {
             updatedSeries.registeredMarkerOptions.add(
                     new SafeMarkerDescription(
                             currentPose,
