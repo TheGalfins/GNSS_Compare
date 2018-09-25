@@ -476,28 +476,31 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(!GnssCoreService.isServiceStarted()) {
-                    startService(new Intent(MainActivity.this, GnssCoreService.class));
-
-                    if(!GnssCoreService.waitForServiceStarted()){
-                        makeDismissableNotification(
-                                "Issue starting GNSS Core service...",
-                                Snackbar.LENGTH_INDEFINITE );
-
-                        //todo: consider a return here?
-                    }
-
-                }
-
-                bindService(
-                        new Intent(MainActivity.this, GnssCoreService.class),
-                        mConnection,
-                        Context.BIND_AUTO_CREATE);
+                startAndBindGnssCoreService();
             }
         }).start();
 
-
         Log.d(TAG, "onResume: invoked");
+    }
+
+    public void startAndBindGnssCoreService(){
+        if(!GnssCoreService.isServiceStarted()) {
+            startService(new Intent(MainActivity.this, GnssCoreService.class));
+
+            if(!GnssCoreService.waitForServiceStarted()){
+                makeDismissableNotification(
+                        "Issue starting GNSS Core service...",
+                        Snackbar.LENGTH_INDEFINITE );
+
+                //todo: consider a return here?
+            }
+
+        }
+
+        bindService(
+                new Intent(MainActivity.this, GnssCoreService.class),
+                mConnection,
+                Context.BIND_AUTO_CREATE);
     }
 
     /**
