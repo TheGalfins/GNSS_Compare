@@ -32,10 +32,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.androidplot.util.PixelUtils;
-import com.galfins.gnss_compare.Constellations.GalileoConstellation;
-import com.galfins.gnss_compare.Constellations.GalileoGpsConstellation;
-import com.galfins.gnss_compare.Constellations.GpsConstellation;
-import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -43,25 +39,17 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.rd.PageIndicatorView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.galfins.gnss_compare.Constellations.Constellation;
-import com.galfins.gnss_compare.Corrections.Correction;
-import com.galfins.gnss_compare.Corrections.ShapiroCorrection;
-import com.galfins.gnss_compare.Corrections.TropoCorrection;
 import com.galfins.gnss_compare.DataViewers.DataViewer;
 import com.galfins.gnss_compare.DataViewers.DataViewerAdapter;
-import com.galfins.gnss_compare.FileLoggers.FileLogger;
-import com.galfins.gnss_compare.FileLoggers.NmeaFileLogger;
 import com.galfins.gnss_compare.FileLoggers.RawMeasurementsFileLogger;
-import com.galfins.gnss_compare.PvtMethods.PvtMethod;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private static int dismissableNotificationTextColor;
     /**
      * Tag used for logging to logcat
      */
@@ -384,24 +372,16 @@ public class MainActivity extends AppCompatActivity {
 
         initializePager();
         initializeToolbar();
+
+        dismissableNotificationTextColor = ContextCompat.getColor(this, R.color.colorPrimaryBright2);
     }
 
     private void showInitializationDisclamer() {
-        final Snackbar snackbar = Snackbar
-                .make(mainView,
-                        "All calculations are initialized with phone's FINE location",
-                        Snackbar.LENGTH_LONG);
 
-        snackbar.setAction("Acknowledge", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    snackbar.dismiss();
-                }
-            });
-
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorPrimaryBright2));
-
-        snackbar.show();
+        makeDismissableNotification(
+                "All calculations are initialized with phone's FINE location",
+                Snackbar.LENGTH_LONG
+        );
     }
 
     private void initializeMetaDataHandler() {
@@ -498,11 +478,15 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if(!GnssCoreService.isServiceStarted()) {
                     startService(new Intent(MainActivity.this, GnssCoreService.class));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+
+                    if(!GnssCoreService.waitForServiceStarted()){
+                        makeDismissableNotification(
+                                "Issue starting GNSS Core service...",
+                                Snackbar.LENGTH_INDEFINITE );
+
+                        //todo: consider a return here?
                     }
+
                 }
 
                 bindService(
@@ -618,6 +602,23 @@ public class MainActivity extends AppCompatActivity {
     public static void makeNotification(final String note){
         Snackbar snackbar = Snackbar
                 .make(mainView, note, Snackbar.LENGTH_LONG);
+
+        snackbar.show();
+    }
+
+    public static void makeDismissableNotification(String note, int length){
+
+        final Snackbar snackbar = Snackbar
+                .make(mainView, note, length);
+
+        snackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snackbar.dismiss();
+            }
+        });
+
+        snackbar.setActionTextColor(dismissableNotificationTextColor);
 
         snackbar.show();
     }

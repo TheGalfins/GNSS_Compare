@@ -157,16 +157,38 @@ public class GnssCoreService extends Service {
         }
     }
 
-    private static int invocationCounter = 0;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        invocationCounter++;
 
         serviceStarted = true;
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
+     * Waits for length*0.1s for the service to start
+     * @param length duration in length*0.1s
+     * @return true if service has started in defined time, false otherwise
+     */
+    public static boolean waitForServiceStarted(int length){
+        for(int i=0; i<length; i++) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(isServiceStarted())
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Waits for service to start for 15s.
+     * @return true if service has started within 15s, false otherwise
+     */
+    public static boolean waitForServiceStarted(){
+        return waitForServiceStarted(150);
     }
 
     @Override
