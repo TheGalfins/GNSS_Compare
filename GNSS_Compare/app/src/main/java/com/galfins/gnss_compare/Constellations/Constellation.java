@@ -42,14 +42,15 @@ public abstract class Constellation {
             GalileoConstellation.registerClass();
             GalileoGpsConstellation.registerClass();
 
-            if(dualFrequencySupported) {
-                GpsL1Constellation.registerClass();
-                GpsL5Constellation.registerClass();
-                GpsIonoFreeConstellation.registerClass();
-                GalileoE1Constellation.registerClass();
-                GalileoE5aConstellation.registerClass();
-                GalileoIonoFreeConstellation.registerClass();
-            }
+            // coming soon :)
+//            if(dualFrequencySupported) {
+//                GpsL1Constellation.registerClass();
+//                GpsL5Constellation.registerClass();
+//                GpsIonoFreeConstellation.registerClass();
+//                GalileoE1Constellation.registerClass();
+//                GalileoE5aConstellation.registerClass();
+//                GalileoIonoFreeConstellation.registerClass();
+//            }
             initialized = true;
         }
     }
