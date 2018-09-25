@@ -42,4 +42,16 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 
+    <TextView
+        android:id="@+id/versionCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/ap_light_gray"
+        android:textSize="10sp"
+        android:text="@string/version_default"/>
+
 </android.support.constraint.ConstraintLayout>
