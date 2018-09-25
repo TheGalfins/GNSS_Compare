@@ -157,8 +157,12 @@ public class GnssCoreService extends Service {
         }
     }
 
+    private static int invocationCounter = 0;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        invocationCounter++;
 
         serviceStarted = true;
 

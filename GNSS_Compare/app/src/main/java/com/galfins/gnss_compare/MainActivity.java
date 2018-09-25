@@ -493,13 +493,25 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        if(!GnssCoreService.isServiceStarted())
-            startService(new Intent(this, GnssCoreService.class));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(!GnssCoreService.isServiceStarted()) {
+                    startService(new Intent(MainActivity.this, GnssCoreService.class));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-        bindService(
-                new Intent(this, GnssCoreService.class),
-                mConnection,
-                Context.BIND_AUTO_CREATE);
+                bindService(
+                        new Intent(MainActivity.this, GnssCoreService.class),
+                        mConnection,
+                        Context.BIND_AUTO_CREATE);
+            }
+        }).start();
+
 
         Log.d(TAG, "onResume: invoked");
     }
