@@ -246,7 +246,7 @@ public class RinexNavigationGps implements NavigationProducer {
         try {
 
             Log.w(TAG, "getFromSUPL: Getting data using SUPL client..." );
-            SuplRrlpController mSuplController = new SuplRrlpController(suplName,7276); // non-SSL
+            SuplRrlpController mSuplController = new SuplRrlpController(suplName,7276);
             Pair<Ephemeris.GpsNavMessageProto, GalileoEphemeris.GalNavMessageProto> navMsg;
             navMsg = mSuplController.generateNavMessage((long) (initialLocation.getLatitude()*1e7), (long) (initialLocation.getLongitude()*1e7));
 
