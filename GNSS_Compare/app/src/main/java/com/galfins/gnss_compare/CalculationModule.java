@@ -201,10 +201,13 @@ public class CalculationModule{
      */
     public void setLogToFile(boolean logToFile) {
         this.logToFile = logToFile;
-        if (logToFile)
+        if (logToFile){
             fileLogger.startNewLog();
-        else
+            pvtMethod.startLog(NAME);
+        } else {
             fileLogger.closeLog();
+            pvtMethod.stopLog();
+        }
     }
 
     /**
@@ -426,6 +429,7 @@ public class CalculationModule{
     public void updateLocationFromGoogleServices(Location location){
 
         locationFromGoogleServices = location;
+        pvtMethod.logFineLocation(location);
 
         if (!poseInitialized && locationFromGoogleServices != null) {
             pose = Coordinates.globalGeodInstance(

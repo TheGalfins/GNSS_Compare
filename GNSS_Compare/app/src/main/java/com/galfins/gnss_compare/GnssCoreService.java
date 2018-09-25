@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -34,6 +35,30 @@ import java.util.Observer;
  */
 public class GnssCoreService extends Service {
 
+    private static final List<DeviceModel> SUPPORTED_DUAL_FREQUENCY_DEVICES = new ArrayList<DeviceModel>(){{
+        add(new DeviceModel("Xiaomi", "MI 8"));
+    }};
+
+    boolean dualFrequencySupported = false;
+
+    private static final class DeviceModel {
+        private String manufacturer;
+        private String model;
+
+        DeviceModel(String manufacturer, String model){
+            this.manufacturer = manufacturer;
+            this.model = model;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (getClass() != obj.getClass())
+                return false;
+
+            DeviceModel compared = (DeviceModel) obj;
+            return compared.model.equals(model) && compared.manufacturer.equals(manufacturer);
+        }
+    }
 
     /**
      * Tag used to mark module names for savedInstanceStates of the onCreate method.
@@ -106,7 +131,13 @@ public class GnssCoreService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Constellation.initialize();
+        DeviceModel thisDevice = new DeviceModel(Build.MANUFACTURER, Build.MODEL);
+
+        for(DeviceModel device : SUPPORTED_DUAL_FREQUENCY_DEVICES)
+            if(thisDevice.equals(device))
+                dualFrequencySupported = true;
+
+        Constellation.initialize(dualFrequencySupported);
         Correction.initialize();
         PvtMethod.initialize();
         FileLogger.initialize();

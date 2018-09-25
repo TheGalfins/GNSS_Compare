@@ -46,6 +46,9 @@ public class Constants {
 			(1 - WGS84_FLATTENING), 2));
 
 	// Time-related values
+	public static final double HUNDREDSMILLI = 1e-1; // 100 ms in seconds
+	public static final double ONEMILLI = 1e-3;      // 1 ms in seconds
+
 	public static final long DAYS_IN_WEEK = 7L;
 	public static final long SEC_IN_DAY = 86400L;
 	public static final long SEC_IN_HOUR = 3600L;
@@ -55,8 +58,10 @@ public class Constants {
 	public static final long UNIX_GPS_DAYS_DIFF = 3657L;
 	// MFB just add nanoseconds in a week
 	public static final long NUMBER_NANO_SECONDS_PER_WEEK = 604800000000000L;
+	public static final long WEEKSEC = 604800;
 
 	public static final double NumberNanoSeconds100Milli = 1e8;         // 100 ms expressed in nanoseconds
+	public static final double NumberNanoSeconds1Milli = 1e6;           // 100 ms expressed in nanoseconds
 
 	// Standard atmosphere - Berg, 1948 (Bernese)
 	public static final double STANDARD_PRESSURE = 1013.25;

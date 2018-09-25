@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.galfins.gnss_compare.Corrections.Correction;
+import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -29,27 +30,29 @@ public class GalileoConstellation extends Constellation {
     private static final String NAME = "Galileo";
     private static final String TAG = "GalileoConstellation";
     private static int constellationId = GnssStatus.CONSTELLATION_GALILEO;
+    private static double MASK_ELEVATION = 20; // degrees
+    private static double MASK_CN0 = 10; // dB-Hz
 
     private boolean fullBiasNanosInitialized = false;
     private long FullBiasNanos;
 
     private Coordinates rxPos;
 
-    private double tRxGalileoTOW;
+    protected double tRxGalileoTOW;
     private double tRxGalileoE1_2nd;
-    private double weekNumberNanos;
+    protected double weekNumberNanos;
 
     /**
      * Time of the measurement
      */
     private Time timeRefMsec;
 
-    private int visibleButNotUsed = 0;
+    protected int visibleButNotUsed = 0;
 
     /**
      * List holding observed satellites
      */
-    private List<SatelliteParameters> observedSatellites = new ArrayList<>();
+    protected List<SatelliteParameters> observedSatellites = new ArrayList<>();
 
 
 //    private long timeRx;
@@ -117,6 +120,9 @@ public class GalileoConstellation extends Constellation {
                 if (measurement.getConstellationType() != constellationId)
                     continue;
 
+                if(measurement.getSvid() == 27 || measurement.getSvid() == 25) //todo: hardcoded exlusion of a faulty satellite (SUPL not working)
+                    continue;
+
                 long ReceivedSvTimeNanos = measurement.getReceivedSvTimeNanos();
                 double TimeOffsetNanos = measurement.getTimeOffsetNanos();
 
@@ -177,7 +183,18 @@ public class GalileoConstellation extends Constellation {
                 int svID = measurement.getSvid();
 
 
-                if ((towKnown || towDecoded)) {
+                if ((towKnown || towDecoded)) { //todo don't leave it like this!!!
+
+//                    boolean satelliteAlreadySeen = false;
+//
+//                    for(SatelliteParameters satelliteParameters : observedSatellites)
+//                        if(satelliteParameters.getSatId() == measurement.getSvid())
+//                            satelliteAlreadySeen = true;
+//
+//                    if(satelliteAlreadySeen) {
+//
+//                        continue;
+//                    }
 
                     SatelliteParameters satelliteParameters = new SatelliteParameters(
                             measurement.getSvid(),
@@ -188,6 +205,9 @@ public class GalileoConstellation extends Constellation {
                     satelliteParameters.setSignalStrength(measurement.getCn0DbHz());
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
+
+                    if(measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
 
                     observedSatellites.add(satelliteParameters);
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGalileoTOW + ", " + pseudorangeTOW);
@@ -205,6 +225,9 @@ public class GalileoConstellation extends Constellation {
                     satelliteParameters.setUniqueSatId("E" + satelliteParameters.getSatId());
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
+
+                    if(measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
 
                     observedSatellites.add(satelliteParameters);
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGalileoTOW + ", " + pseudorangeE1_2nd);
@@ -278,8 +301,8 @@ public class GalileoConstellation extends Constellation {
     public void calculateSatPosition(Location initialLocation, Coordinates position) {
 
 
-//        rxPos = pose;
-//        rxPos = Coordinates.globalGeodInstance(52.1628855, 4.523316, 179.547);
+        // Make a list to hold the satellites that are to be excluded based on elevation/CN0 masking criteria
+        List<SatelliteParameters> excludedSatellites = new ArrayList<>();
 
         synchronized (this) {
             rxPos = Coordinates.globalXYZInstance(position.getX(), position.getY(), position.getZ());
@@ -318,7 +341,9 @@ public class GalileoConstellation extends Constellation {
                         initialLocation);
 
                 if (rnp == null) {
-                    break;
+                    excludedSatellites.add(observedSatellite);
+                    MainActivity.makeRnpFailedNotification();
+                    continue;
                 }
 
                 observedSatellite.setSatellitePosition(rnp);
@@ -335,6 +360,13 @@ public class GalileoConstellation extends Constellation {
                         new TopocentricCoordinates(
                                 rxPos,
                                 observedSatellite.getSatellitePosition()));
+
+
+                // Add to the exclusion list the satellites that do not pass the masking criteria
+                if(observedSatellite.getRxTopo().getElevation() < MASK_ELEVATION){
+                    excludedSatellites.add(observedSatellite);
+                }
+
 
                 double accumulatedCorrection = 0;
 
@@ -364,6 +396,9 @@ public class GalileoConstellation extends Constellation {
 
                 observedSatellite.setAccumulatedCorrection(accumulatedCorrection);
             }
+
+            // Remove from the list all the satellites that did not pass the masking criteria
+            observedSatellites.removeAll(excludedSatellites);
         }
     }
 

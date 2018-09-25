@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.galfins.gnss_compare.Corrections.Correction;
+import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -39,17 +40,19 @@ public class GpsConstellation extends Constellation {
     private long FullBiasNanos;
 
     private Coordinates rxPos;
-    private double tRxGPS;
-    private double weekNumberNanos;
+    protected double tRxGPS;
+    protected double weekNumberNanos;
 
     private static final int constellationId = GnssStatus.CONSTELLATION_GPS;
+    private static double MASK_ELEVATION = 20; // degrees
+    private static double MASK_CN0 = 10; // dB-Hz
 
     /**
      * Time of the measurement
      */
     private Time timeRefMsec;
 
-    private int visibleButNotUsed = 0;
+    protected int visibleButNotUsed = 0;
 
     // Condition for the pseudoranges that takes into account a maximum uncertainty for the TOW
     // (as done in gps-measurement-tools MATLAB code)
@@ -180,6 +183,9 @@ public class GpsConstellation extends Constellation {
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
 
+                    if(measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
+
                     observedSatellites.add(satelliteParameters);
 
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGPS + ", " + pseudorange);
@@ -209,6 +215,9 @@ public class GpsConstellation extends Constellation {
     @Override
     public void calculateSatPosition(Location initialLocation, Coordinates position) {
 
+        // Make a list to hold the satellites that are to be excluded based on elevation/CN0 masking criteria
+        List<SatelliteParameters> excludedSatellites = new ArrayList<>();
+
         synchronized (this) {
 
             rxPos = Coordinates.globalXYZInstance(position.getX(), position.getY(), position.getZ());
@@ -234,8 +243,11 @@ public class GpsConstellation extends Constellation {
                         0.0,
                         initialLocation);
 
-                if (rnp == null)
-                    break;
+                if (rnp == null) {
+                    excludedSatellites.add(observedSatellite);
+                    MainActivity.makeRnpFailedNotification();
+                    continue;
+                }
 
                 observedSatellite.setSatellitePosition(rnp);
 
@@ -243,6 +255,11 @@ public class GpsConstellation extends Constellation {
                         new TopocentricCoordinates(
                                 rxPos,
                                 observedSatellite.getSatellitePosition()));
+
+                // Add to the exclusion list the satellites that do not pass the masking criteria
+                if(observedSatellite.getRxTopo().getElevation() < MASK_ELEVATION){
+                    excludedSatellites.add(observedSatellite);
+                }
 
                 double accumulatedCorrection = 0;
 
@@ -260,6 +277,9 @@ public class GpsConstellation extends Constellation {
 
                 observedSatellite.setAccumulatedCorrection(accumulatedCorrection);
             }
+
+            // Remove from the list all the satellites that did not pass the masking criteria
+            observedSatellites.removeAll(excludedSatellites);
         }
     }
 

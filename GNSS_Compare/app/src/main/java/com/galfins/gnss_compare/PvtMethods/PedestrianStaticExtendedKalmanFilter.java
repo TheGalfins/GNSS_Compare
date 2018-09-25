@@ -4,8 +4,11 @@ import org.ejml.data.SingularMatrixException;
 import org.ejml.simple.SimpleMatrix;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
+import com.galfins.gnss_compare.FileLoggers.KalmanFilterFileLogger;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
+
+import android.location.Location;
 import android.util.Log;
 
 /**
@@ -33,7 +36,7 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
     /** noise in the horizontal direction on the position to allow positioning at pedestrians
      * velocity. This value is already in units of meters squared.
      */
-    private static final double xyNoise = 0.2;
+    private static final double xyNoise = 0.4;
     /** name of the pvt method as it appears in the selection menu for pvt methods
      */
     private static final String NAME = "Pedestrian EKF";
@@ -59,6 +62,9 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
     /** index of clock drift of the state vector
      */
     private int idxClockDrift = 4;
+    /** Kalman filter parameters file logger
+     */
+    private KalmanFilterFileLogger kalmanParamLogger = new KalmanFilterFileLogger();
 
     /** vector for the predicted state
      */
@@ -90,6 +96,11 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
      */
     final double DELTA_T = 1.0;
 
+    // Define the parameters for the elevation dependent weighting method [Jaume Subirana et al. GNSS Data Processing: Fundamentals and Algorithms]
+    private double a = 0.13;
+    private double b = 0.53;
+    private double elev;
+
     /** measurement vector with numStates entries
      */
     SimpleMatrix x_meas = new SimpleMatrix(numStates,1);
@@ -112,6 +123,28 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
         // Initialization of the process noise matrix
         initQ();
 
+    }
+
+    @Override
+    public void startLog(String name){
+        kalmanParamLogger.setName(name);
+        kalmanParamLogger.startNewLog();
+    }
+    @Override
+    public void stopLog() {
+        kalmanParamLogger.closeLog();
+    }
+    @Override
+    public void logError(double latError, double lonError) {
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logError(latError, lonError);
+        }
+    }
+    @Override
+    public void logFineLocation(Location fineLocation){
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logFineLocation(fineLocation);
+        }
     }
 
     /**
@@ -172,6 +205,9 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
         /** Kalman gain matrix K
          */
         SimpleMatrix K;
+        /** Innovation covariance
+         */
+        SimpleMatrix S;
 
         // Initialize the variables related to the measurement model
         /** Observation Matrix H
@@ -179,18 +215,18 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
         SimpleMatrix H = new SimpleMatrix(CONSTELLATION_SIZE, numStates);
         /** pseudorange vector, one entry for every used satellite
          */
-        SimpleMatrix prC1Vect = new SimpleMatrix(CONSTELLATION_SIZE,1);
+        SimpleMatrix prVect = new SimpleMatrix(CONSTELLATION_SIZE,1);
         /** predicted pseudoranges vector, one entry for every used satellite
          */
         SimpleMatrix measPred = new SimpleMatrix(CONSTELLATION_SIZE,1);
         /** variance-covariance matrix of the measurements R
          */
         SimpleMatrix R = SimpleMatrix.identity(CONSTELLATION_SIZE);
-        R = R.divide(1.0/100.0);
+//        R = R.divide(1.0/100.0);
 
         // meas variance of each satellite
-        SimpleMatrix sigma2C1 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
-        double measVarC1phone;
+//        SimpleMatrix sigma2C1 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
+        double sigma2Meas = Math.pow(5,2);
 
 
 
@@ -201,7 +237,9 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
                 continue;
 
             // Get the raw pseudoranges for each satellite
-            prC1Vect.set(k, constellation.getSatellite(k).getPseudorange());
+            prVect.set(k, constellation.getSatellite(k).getPseudorange());
+
+
 
             // Compute the predicted (geometric) distance towards each satellite
             distPred = Math.sqrt(
@@ -224,14 +262,20 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
                     - constellation.getSatellite(k).getClockBias()
                     + constellation.getSatellite(k).getAccumulatedCorrection());
 
+            // Form the VCM of the measurements (R)
+            elev = constellation.getSatellite(k).getRxTopo().getElevation() * (Math.PI / 180.0);
+            R.set(k,k,sigma2Meas * Math.pow(a + b * Math.exp(-elev/10.0),2));
+
             usedInCalculations ++;
         }
+
 
 
         if(usedInCalculations > 0) {
             // Compute the Kalman Gain
             try {
                 K = P_pred.mult(H.transpose().mult((H.mult(P_pred.mult(H.transpose())).plus(R)).invert()));
+                S = H.mult(P_pred.mult(H.transpose())).plus(R);
             } catch (SingularMatrixException e) {
                 Log.e(NAME, new String(" Matrix inversion failed"), e);
                 return Coordinates.globalXYZInstance(
@@ -240,13 +284,15 @@ public class PedestrianStaticExtendedKalmanFilter extends PvtMethod{
                     rxPosSimpleVector.get(2));
             }
             // Compute the Kalman innovation sequence
-            gamma = prC1Vect.minus(measPred);
+            gamma = prVect.minus(measPred);
 
             // Perform the measurement update
             x_meas = x_pred.plus(K.mult(gamma));
             P_meas = (SimpleMatrix.identity(numStates).minus((K.mult(H)))).mult(P_pred);
 
             // x_meas and P_meas are being used for the next set of measurements
+            if (kalmanParamLogger.isStarted())
+                kalmanParamLogger.logKalmanParam(x_meas, P_meas, numStates, gamma, S, CONSTELLATION_SIZE, constellation);
 
             firstExecution = false;
 

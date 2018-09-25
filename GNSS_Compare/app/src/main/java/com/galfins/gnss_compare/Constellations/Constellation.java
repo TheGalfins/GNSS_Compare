@@ -2,6 +2,8 @@ package com.galfins.gnss_compare.Constellations;
 
 import android.location.GnssMeasurementsEvent;
 import android.location.Location;
+import android.os.Build;
+import android.util.Log;
 
 import org.ejml.simple.SimpleMatrix;
 
@@ -28,14 +30,27 @@ public abstract class Constellation {
      */
     private static boolean initialized = false;
 
+
+
     /**
      * Registers all constellation classes which extend this
      */
-    public static void initialize() {
+    public static void initialize(boolean dualFrequencySupported) {
         if(!initialized) {
+
             GpsConstellation.registerClass();
             GalileoConstellation.registerClass();
             GalileoGpsConstellation.registerClass();
+
+            // coming soon :)
+//            if(dualFrequencySupported) {
+//                GpsL1Constellation.registerClass();
+//                GpsL5Constellation.registerClass();
+//                GpsIonoFreeConstellation.registerClass();
+//                GalileoE1Constellation.registerClass();
+//                GalileoE5aConstellation.registerClass();
+//                GalileoIonoFreeConstellation.registerClass();
+//            }
             initialized = true;
         }
     }
@@ -44,6 +59,8 @@ public abstract class Constellation {
      * Additional definition of an ID for a new constellation type
      */
     public static final int CONSTELLATION_GALILEO_GPS = 999; //todo is there a better way to define this?
+    public static final int CONSTELLATION_GALILEO_IonoFree = 998; //todo is there a better way to define this?
+    public static final int CONSTELLATION_GPS_IonoFree = 997; //todo is there a better way to define this?
 
     /**
      *

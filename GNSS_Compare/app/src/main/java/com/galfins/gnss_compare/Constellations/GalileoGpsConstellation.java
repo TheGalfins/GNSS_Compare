@@ -70,6 +70,14 @@ public class GalileoGpsConstellation extends Constellation {
         synchronized (this) {
             gpsConstellation.calculateSatPosition(location, position);
             galileoConstellation.calculateSatPosition(location, position);
+
+            observedSatellites.clear();
+
+            for (int i = 0; i < gpsConstellation.getUsedConstellationSize(); i++)
+                observedSatellites.add(gpsConstellation.getSatellite(i));
+
+            for (int i = 0; i < galileoConstellation.getUsedConstellationSize(); i++)
+                observedSatellites.add(galileoConstellation.getSatellite(i));
         }
     }
 
@@ -79,13 +87,6 @@ public class GalileoGpsConstellation extends Constellation {
             galileoConstellation.updateMeasurements(event);
             gpsConstellation.updateMeasurements(event);
 
-            observedSatellites.clear();
-
-            for (int i = 0; i < gpsConstellation.getUsedConstellationSize(); i++)
-                observedSatellites.add(gpsConstellation.getSatellite(i));
-
-            for (int i = 0; i < galileoConstellation.getUsedConstellationSize(); i++)
-                observedSatellites.add(galileoConstellation.getSatellite(i));
         }
     }
 

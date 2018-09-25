@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.GnssMeasurementsEvent;
 import android.location.Location;
@@ -28,8 +29,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.androidplot.util.PixelUtils;
+import com.galfins.gnss_compare.Constellations.GalileoConstellation;
+import com.galfins.gnss_compare.Constellations.GalileoGpsConstellation;
+import com.galfins.gnss_compare.Constellations.GpsConstellation;
+import com.galfins.gnss_compare.PvtMethods.PedestrianStaticExtendedKalmanFilter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -43,9 +49,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
-import com.galfins.gnss_compare.Constellations.GalileoConstellation;
-import com.galfins.gnss_compare.Constellations.GalileoGpsConstellation;
-import com.galfins.gnss_compare.Constellations.GpsConstellation;
 import com.galfins.gnss_compare.Corrections.Correction;
 import com.galfins.gnss_compare.Corrections.ShapiroCorrection;
 import com.galfins.gnss_compare.Corrections.TropoCorrection;
@@ -54,7 +57,6 @@ import com.galfins.gnss_compare.DataViewers.DataViewerAdapter;
 import com.galfins.gnss_compare.FileLoggers.FileLogger;
 import com.galfins.gnss_compare.FileLoggers.NmeaFileLogger;
 import com.galfins.gnss_compare.FileLoggers.RawMeasurementsFileLogger;
-import com.galfins.gnss_compare.PvtMethods.DynamicExtendedKalmanFilter;
 import com.galfins.gnss_compare.PvtMethods.PvtMethod;
 
 
@@ -121,11 +123,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private static Bundle savedState;
 
+    private static Snackbar rnpFailedSnackbar = null;
+
+    private Menu menu;
+
     private Observer calculationModuleObserver;
 
     private Observable uiThreadObservable;
-
-    private Menu menu;
 
     private GnssCoreService.GnssCoreBinder gnssCoreBinder;
 
@@ -290,8 +294,6 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null)
             savedState = savedInstanceState;
 
-        setContentView(R.layout.activity_main);
-
         initializeGnssCompareMainActivity();
 
         if (hasGnssAndLogPermissions()) {
@@ -308,6 +310,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeGnssCompareMainActivity() {
+
+        setContentView(R.layout.activity_main);
+
+        try {
+            TextView versionTextView = findViewById(R.id.versionCode);
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+
+            versionTextView.setText(getResources().getString(R.string.version_text_view,  version));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        initializeMetaDataHandler();
+
         uiThreadObservable = new Observable(){
             @Override
             public void notifyObservers() {
@@ -591,6 +608,20 @@ public class MainActivity extends AppCompatActivity {
                 .make(mainView, note, Snackbar.LENGTH_LONG);
 
         snackbar.show();
+    }
+
+    public static void makeRnpFailedNotification(){
+
+        if(rnpFailedSnackbar==null) {
+            rnpFailedSnackbar = Snackbar.make(
+                    mainView,
+                    "Failed to get ephemeris data. Retrying...",
+                    Snackbar.LENGTH_LONG
+            );
+            rnpFailedSnackbar.show();
+        } else if (!rnpFailedSnackbar.isShown())
+            rnpFailedSnackbar.show();
+
     }
 
 }

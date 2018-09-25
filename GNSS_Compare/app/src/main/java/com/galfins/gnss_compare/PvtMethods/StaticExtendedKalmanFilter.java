@@ -4,9 +4,11 @@ import org.ejml.data.SingularMatrixException;
 import org.ejml.simple.SimpleMatrix;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
+import com.galfins.gnss_compare.FileLoggers.KalmanFilterFileLogger;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 
+import android.location.Location;
 import android.util.Log;
 
 
@@ -54,6 +56,9 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
     /** index of clock drift of the state vector
      */
     private int idxClockDrift = 4;
+    /** Kalman filter parameters file logger
+     */
+    private KalmanFilterFileLogger kalmanParamLogger = new KalmanFilterFileLogger();
 
     /** vector for the predicted state
      */
@@ -85,6 +90,11 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
      */
     final double DELTA_T = 1.0; // time between measurements TODO
 
+    // Define the parameters for the elevation dependent weighting method [Jaume Subirana et al. GNSS Data Processing: Fundamentals and Algorithms]
+    private double a = 0.13;
+    private double b = 0.53;
+    private double elev;
+
     /** measurement vector with numStates entries
      */
     SimpleMatrix x_meas = new SimpleMatrix(numStates,1);
@@ -104,6 +114,28 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
         initQ();
 
 
+    }
+
+    @Override
+    public void startLog(String name){
+        kalmanParamLogger.setName(name);
+        kalmanParamLogger.startNewLog();
+    }
+    @Override
+    public void stopLog() {
+        kalmanParamLogger.closeLog();
+    }
+    @Override
+    public void logError(double latError, double lonError) {
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logError(latError, lonError);
+        }
+    }
+    @Override
+    public void logFineLocation(Location fineLocation){
+        if (kalmanParamLogger.isStarted()) {
+            kalmanParamLogger.logFineLocation(fineLocation);
+        }
     }
 
     @Override
@@ -158,6 +190,9 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
         /** Kalman gain matrix K
          */
         SimpleMatrix K;
+        /** Innovation covariance
+         */
+        SimpleMatrix S;
 
         // Initialize the variables related to the measurement model
         /** Observation Matrix H
@@ -165,16 +200,18 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
         SimpleMatrix H = new SimpleMatrix(CONSTELLATION_SIZE, numStates);
         /** pseudorange vector, one entry for every used satellite
          */
-        SimpleMatrix prC1Vect = new SimpleMatrix(CONSTELLATION_SIZE,1); // pseurorange
+        SimpleMatrix prVect = new SimpleMatrix(CONSTELLATION_SIZE,1); // pseurorange
         /** predicted pseudoranges vector, one entry for every used satellite
          */
         SimpleMatrix measPred = new SimpleMatrix(CONSTELLATION_SIZE,1); // pseudor. predicted
         /** variance-covariance matrix of the measurements R
          */
         SimpleMatrix R = SimpleMatrix.identity(CONSTELLATION_SIZE);
-        R = R.divide(1.0/100.0);
-        SimpleMatrix sigma2C1 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
-        double measVarC1phone;
+//        R = R.divide(1.0/100.0);
+
+// meas variance of each satellite
+//        SimpleMatrix sigma2C1 = new SimpleMatrix(CONSTELLATION_SIZE, 1);
+        double sigma2Meas = Math.pow(5,2);
 
 
         // Form the observation matrix H
@@ -183,7 +220,7 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
                 continue;
 
             // Get the raw pseudoranges for each satellite
-            prC1Vect.set(k, constellation.getSatellite(k).getPseudorange());
+            prVect.set(k, constellation.getSatellite(k).getPseudorange());
 
             // Compute the predicted (geometric) distance towards each satellite
             distPred = Math.sqrt(
@@ -206,6 +243,10 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
                     - constellation.getSatellite(k).getClockBias()
                     + constellation.getSatellite(k).getAccumulatedCorrection());
 
+            // Form the VCM of the measurements (R)
+            elev = constellation.getSatellite(k).getRxTopo().getElevation() * (Math.PI / 180.0);
+            R.set(k,k,sigma2Meas * Math.pow(a + b * Math.exp(-elev/10.0),2));
+
             usedInCalculations ++;
         }
 
@@ -215,6 +256,7 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
 
             try {
                 K = P_pred.mult(H.transpose().mult((H.mult(P_pred.mult(H.transpose())).plus(R)).invert()));
+                S = H.mult(P_pred.mult(H.transpose())).plus(R);
             } catch (SingularMatrixException e) {
                 Log.e(NAME, new String (" Matrix inversion failed"), e);
                 return Coordinates.globalXYZInstance(
@@ -225,13 +267,15 @@ public class StaticExtendedKalmanFilter extends PvtMethod {
 
 
             // Compute the Kalman innovation sequence
-            gamma = prC1Vect.minus(measPred);
+            gamma = prVect.minus(measPred);
 
             // Perform the measurement update
             x_meas = x_pred.plus(K.mult(gamma));
             P_meas = (SimpleMatrix.identity(numStates).minus((K.mult(H)))).mult(P_pred);
 
             // x_meas and P_meas are being used for the next set of measurements
+            if (kalmanParamLogger.isStarted())
+                kalmanParamLogger.logKalmanParam(x_meas, P_meas, numStates, gamma, S, CONSTELLATION_SIZE, constellation);
 
             firstExecution = false;
 

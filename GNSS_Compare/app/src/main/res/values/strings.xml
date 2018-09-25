@@ -30,4 +30,6 @@
     <string name="map_disabled_description">Map Viewer disabled! \nCheck out our <a href="https://gnss-compare.readthedocs.io/en/latest/user_manual/code_basics.html#using-the-google-maps-viewer">docs</a> to find out why</string>
     <string name="map_disabled_icon_description">Google Maps icon</string>
     <string name="developer_version">DEVELOPER VERSION</string>
+    <string name="version_text_view">Version: %1$s</string>
+    <string name="version_default">Version: N/A</string>
 </resources>
