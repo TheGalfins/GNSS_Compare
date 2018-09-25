@@ -423,6 +423,12 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> modulesNames = savedInstanceState.getStringArrayList(MODULE_NAMES_BUNDLE_TAG);
 
+        try {
+            Thread.sleep(1000); // wait for data viewers to initialize
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         for(String name : modulesNames){
             try {
                 createdCalculationModules.add(CalculationModule.fromConstructorArrayList(savedInstanceState.getStringArrayList(name)));
