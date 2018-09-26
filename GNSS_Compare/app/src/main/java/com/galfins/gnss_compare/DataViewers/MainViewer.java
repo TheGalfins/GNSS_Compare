@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.Observer;
 
 import com.galfins.gnss_compare.CalculationModule;
 import com.galfins.gnss_compare.Constellations.Constellation;
+import com.galfins.gnss_compare.Constellations.SatelliteParameters;
 import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gnss_compare.R;
 
@@ -33,6 +35,8 @@ public class MainViewer extends Fragment implements DataViewer {
 
     double nameColumnWidth = 0.0;
     double itemColumnWidth = 0.0;
+
+    private final static String TAG = MainViewer.class.getSimpleName();
 
     /**
      * CalculationGridItem is used as an interface for dynamically updated items within a GridLayout
@@ -236,7 +240,12 @@ public class MainViewer extends Fragment implements DataViewer {
         private Observer calculationUpdatedObserver = new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                items.get(((CalculationModule.CalculationModuleObservable) o).getParentReference().getConstellation().getName())
+
+                for(SatelliteParameters satParams : ((CalculationModule.CalculationModuleObservable) o).getParentReference().getConstellation().getSatellites()){
+                    Log.i(TAG, "update: satellite position: "+satParams.getSatellitePosition());
+                }
+
+                    items.get(((CalculationModule.CalculationModuleObservable) o).getParentReference().getConstellation().getName())
                     .updateViews(((CalculationModule.CalculationModuleObservable) o).getParentReference().getConstellation());
             }
         };
