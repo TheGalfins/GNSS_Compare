@@ -451,8 +451,8 @@ public class CalculationModule implements Runnable{
                     fileLogger.addNewPose(pose, constellation);
                 }
             }
+            measurementsUpdated = true;
         }
-        measurementsUpdated = true;
     }
 
     /**
