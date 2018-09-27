@@ -56,7 +56,7 @@ public class GpsConstellation extends Constellation {
 
     // Condition for the pseudoranges that takes into account a maximum uncertainty for the TOW
     // (as done in gps-measurement-tools MATLAB code)
-    private static final int MAXTOWUNCNS = 50;                                     // [nanoseconds]
+    private static final int MAX_TOW_UNC_NS = 50;                                     // [nanoseconds]
 
     private NavigationProducer rinexNavGps = null;
 
@@ -167,9 +167,9 @@ public class GpsConstellation extends Constellation {
                 int measState = measurement.getState();
 
                 // Bitwise AND to identify the states
-                boolean codeLock = (measState & GnssMeasurement.STATE_CODE_LOCK) > 0;
-                boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) > 0;
-                boolean towUncertainty = measurement.getReceivedSvTimeUncertaintyNanos() < MAXTOWUNCNS;
+                boolean codeLock = (measState & GnssMeasurement.STATE_CODE_LOCK) != 0;
+                boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) != 0;
+                boolean towUncertainty = measurement.getReceivedSvTimeUncertaintyNanos() < MAX_TOW_UNC_NS;
 
 
                 if (codeLock && towDecoded && towUncertainty && pseudorange < 1e9) {

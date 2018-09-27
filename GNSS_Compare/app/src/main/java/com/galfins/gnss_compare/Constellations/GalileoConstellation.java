@@ -172,9 +172,9 @@ public class GalileoConstellation extends Constellation {
                 int measState = measurement.getState();
 
                 // Bitwise AND to identify the states
-                boolean towKnown = (measState & GnssMeasurement.STATE_TOW_KNOWN) > 0;
-                boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) > 0;
-                boolean codeLock = (measState & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) > 0;
+                boolean towKnown = (measState & GnssMeasurement.STATE_TOW_KNOWN) != 0;
+                boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) != 0;
+                boolean codeLock = (measState & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) != 0;
 
                 // Variables for debugging
                 double prTOW = pseudorangeTOW;
