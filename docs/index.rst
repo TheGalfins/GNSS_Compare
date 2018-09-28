@@ -28,9 +28,7 @@ Check out the app on `Play Store <https://play.google.com/store/apps/details?id=
     :target: https://play.google.com/store/apps/details?id=com.galfins.gnss_compare
 
 
-The latest apk (beta version) to download and install on your phone always available `here <https://github.com/TheGalfins/GNSS_Compare/raw/master/release_apk/GNSS_Compare.apk>`_.
-
-Please note that you need Android 7.0+ to run the application. Also, please note that not all Android 7.0+ phones support the Galileo Satellite System. The list of Galileo compatible phones can be found `here <https://www.usegalileo.eu/EN/inner.html#data=smartphone>`_.
+Please note that you need Android 7.0+ to run the application. Also, please note that not all Android 7.0+ phones support the Galileo Satellite System or crucial for this project raw GNSS measurements. The list of compatible phones can be found `here <https://developer.android.com/guide/topics/sensors/gnss>`_.
 
 So far we've been testing the application on:
 
