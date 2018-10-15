@@ -418,6 +418,7 @@ public class CalculationModule{
                     }
                 }
             }
+            measurementsUpdated = true;
         }
     }
 
