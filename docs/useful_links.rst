@@ -13,4 +13,4 @@ Click `here <https://drive.google.com/open?id=1mp0PKg_SWw7ngPFqLXZQDNbhQiyJ6QJe>
 Open source code on Github
 ==========================
 
-Click `https://github.com/TheGalfins/GNSS_Compare/>`_.
+Click `here <https://github.com/TheGalfins/GNSS_Compare/>`_.
