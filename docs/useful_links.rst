@@ -9,3 +9,8 @@ Example of proposal
 ======================
 
 Click `here <https://drive.google.com/open?id=1mp0PKg_SWw7ngPFqLXZQDNbhQiyJ6QJe>`_.
+
+Open source code on Github
+==========================
+
+Click `https://github.com/TheGalfins/GNSS_Compare/>`_.
