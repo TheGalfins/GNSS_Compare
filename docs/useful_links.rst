@@ -8,7 +8,7 @@ In this section we have put some links that can be useful for the competitors of
 Example of proposal
 ======================
 
-Click `here <https://drive.google.com/open?id=1mp0PKg_SWw7ngPFqLXZQDNbhQiyJ6QJe>`_.
+You can find the original proposal we have submitted to the competition :download:`here <The_Galfins_proposal_full.pdf>`. Feel free to use it as an inspiration!
 
 Open source code on Github
 ==========================
