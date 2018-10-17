@@ -24,7 +24,7 @@ project = 'GNSS Compare'
 author = 'Mateusz Krainski'
 email = 'mateusz@krainski.eu'
 
-copyright = '{year}, the Galfins'.format(
+copyright = '{year}, the Galfins.'.format(
     year=datetime.date.today().year
 )
 
