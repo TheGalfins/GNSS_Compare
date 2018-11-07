@@ -1,4 +1,6 @@
 language: android
+jdk: oraclejdk8
+sudo: false
 android:
   components:
     # Uncomment the lines below if you want to
@@ -21,8 +23,5 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-27
 
-  before_script: cd GNSS_Compare
-  script:
-    - ./gradlew assembleDebug
-    - ./gradlew test
-  before_install: cd GNSS_Compare
+before_script: cd GNSS_Compare
+before_install: cd GNSS_Compare
