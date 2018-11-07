@@ -16,14 +16,17 @@
 
 package com.galfins.gnss_compare;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.galfins.gnss_compare.Constellations.Constellation;
@@ -161,16 +164,53 @@ public class GnssCoreService extends Service {
         if(calculationModules.size() == 0){
             if(savedModulesBundle==null)
                 createInitialCalculationModules();
-            else
-                createCalculationModulesFromBundle();
+            else{
+                try {
+                    createCalculationModulesFromBundle();
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                    Log.e(TAG, "onCreate: Failed to create bundled modules. Creating default...");
+                    calculationModules.clear();
+                    CalculationModule.clear();
+                    createInitialCalculationModules();
+                }
+            }
 
-            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-
-            calculationModules.registerForGnssUpdates(mFusedLocationClient, mLocationManager);
-            calculationModules.assignPoseUpdatedListener(poseListener);
+            try {
+                while (!tryRegisterForGnssUpdates())
+                    Thread.sleep(500);
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
 
         }
+    }
+
+    /**
+     * Checks if the permission has been granted
+     * @return True of false depending on if permission has been granted
+     */
+    private boolean hasGnssAndLogPermissions() {
+        // Permissions granted at install time.
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)  == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private boolean tryRegisterForGnssUpdates(){
+        if (hasGnssAndLogPermissions()) {
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            try {
+                calculationModules.registerForGnssUpdates(fusedLocationClient, locationManager);
+                calculationModules.assignPoseUpdatedListener(poseListener);
+            } catch (IllegalStateException e){
+                e.printStackTrace();
+                calculationModules.unregisterFromGnssUpdates();
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -21,7 +21,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
-import java.util.Observable;
 
 /**
  * A simple pager adapter that represents DataViewer objects, in
@@ -80,7 +79,7 @@ public class DataViewerAdapter extends FragmentStatePagerAdapter {
     public void initialize(){
         this.registerFragment(new MainViewer());
         this.registerFragment(new PowerPlotFragment());
-        this.registerFragment(new PoseErrorFragment());
+        this.registerFragment(new PositionErrorFragment());
         this.registerFragment(new MapFragment());
     }
 

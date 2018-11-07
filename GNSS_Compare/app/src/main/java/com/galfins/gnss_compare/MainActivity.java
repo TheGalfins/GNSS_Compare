@@ -122,11 +122,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public static RawMeasurementsFileLogger rawMeasurementsLogger = new RawMeasurementsFileLogger("rawMeasurements");
 
-    /**
-     * Locally saved state of created calculation modules
-     */
-    private static Bundle savedState;
-
     private static Snackbar rnpFailedSnackbar = null;
 
     private Menu menu;
@@ -136,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
     private GnssCoreService.GnssCoreBinder gnssCoreBinder;
 
     private boolean mGnssCoreBound = false;
+
+    CalculationModule newModule = null;
 
     private class GnssCoreServiceConnector implements ServiceConnection{
 
@@ -147,6 +144,13 @@ public class MainActivity extends AppCompatActivity {
                 mGnssCoreBound = true;
 
                 gnssCoreBinder.addObserver(calculationModuleObserver);
+
+                if(newModule!=null) {
+                    gnssCoreBinder.addModule(newModule);
+                    CreateModulePreference.notifyModuleCreated();
+                    makeNotification("Module " + newModule.getName() + " created...");
+                    newModule = null;
+                }
             }
         }
 
@@ -227,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setMaxWaitTime(500);
         locationRequest.setInterval(100);
+        locationRequest.setFastestInterval(100);
 
         locationCallback = new LocationCallback(){
             @Override
@@ -291,9 +296,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(savedInstanceState != null)
-            savedState = savedInstanceState;
 
         initializeGnssCompareMainActivity();
 
@@ -484,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startAndBindGnssCoreService(){
         if(!GnssCoreService.isServiceStarted()) {
+            //todo: encapsulate this in GnssCoreService
             startService(new Intent(MainActivity.this, GnssCoreService.class));
 
             if(!GnssCoreService.waitForServiceStarted()){
@@ -496,6 +499,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //todo: encapsulate this in GnssCoreService
         bindService(
                 new Intent(MainActivity.this, GnssCoreService.class),
                 mConnection,
@@ -528,8 +532,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        savedState = new Bundle();
-
         mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
         mFusedLocationClient.removeLocationUpdates(locationCallback);
     }
@@ -543,20 +545,12 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
             try {
-                final CalculationModule newModule = CalculationModule.createFromDescriptions(
+                newModule = CalculationModule.createFromDescriptions(
                         sharedPreferences.getString(CreateModulePreference.KEY_NAME, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_CONSTELLATION, null),
                         sharedPreferences.getStringSet(CreateModulePreference.KEY_CORRECTION_MODULES, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_PVT_METHOD, null),
                         sharedPreferences.getString(CreateModulePreference.KEY_FILE_LOGGER, null));
-
-                if(mGnssCoreBound) {
-                    gnssCoreBinder.addModule(newModule);
-                    CreateModulePreference.notifyModuleCreated();
-                    makeNotification("Module " + newModule.getName() + " created...");
-                } else {
-                    makeNotification("Error, GNSS Core service not running...");
-                }
 
             } catch (CalculationModule.NameAlreadyRegisteredException
                     | CalculationModule.NumberOfSeriesExceededLimitException

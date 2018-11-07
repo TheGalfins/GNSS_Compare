@@ -50,8 +50,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
 import com.galfins.gnss_compare.CalculationModulesArrayList;
@@ -64,7 +62,7 @@ import com.google.common.collect.Sets;
  * This class is for...
  */
 
-public class PoseErrorFragment extends Fragment implements DataViewer {
+public class PositionErrorFragment extends Fragment implements DataViewer {
     /**
      * The number of max point to be plotted for a single data series
      */
@@ -79,6 +77,12 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
      * Tag used for logging
      */
     private static final String TAG = "Positioning error plot";
+
+    /**
+     * Stores the phone's FINE location. Used as reference when calculating
+     * the positioning error
+     */
+    Location phoneInternalPosition;
 
     /**
      * Displayed plot title
@@ -161,7 +165,7 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
     @Override
     public void onLocationFromGoogleServicesResult(Location location) {
-
+        phoneInternalPosition = location;
     }
 
     @Override
@@ -289,16 +293,16 @@ public class PoseErrorFragment extends Fragment implements DataViewer {
 
         public void update(CalculationModule calculationModule){
             Coordinates calculatedPose = calculationModule.getPose();
-            Location phoneInternalPose = calculationModule.getLocationFromGoogleServices();
+//            Location phoneInternalPose = calculationModule.getLocationFromGoogleServices();
             seriesName = calculationModule.getName();
 
-            if(phoneInternalPose!=null && calculatedPose!=null) {
+            if(phoneInternalPosition!=null && calculatedPose!=null) {
 
                 double[] poseError = Coordinates.deltaGeodeticToDeltaMeters(
-                        phoneInternalPose.getLatitude(),
-                        phoneInternalPose.getAltitude(),
-                        (calculatedPose.getGeodeticLatitude() - phoneInternalPose.getLatitude()) * Math.PI / 180.0,
-                        (calculatedPose.getGeodeticLongitude() - phoneInternalPose.getLongitude()) * Math.PI / 180.0);
+                        phoneInternalPosition.getLatitude(),
+                        phoneInternalPosition.getAltitude(),
+                        (calculatedPose.getGeodeticLatitude() - phoneInternalPosition.getLatitude()) * Math.PI / 180.0,
+                        (calculatedPose.getGeodeticLongitude() - phoneInternalPosition.getLongitude()) * Math.PI / 180.0);
 
                 Log.d(TAG, "update: pose error: " + poseError[0] + ", " + poseError[1]);
 

@@ -20,7 +20,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.ArraySet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,8 +33,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Set;
 
 import com.galfins.gnss_compare.CalculationModule;
 import com.galfins.gnss_compare.CalculationModulesArrayList;
@@ -396,8 +393,6 @@ public class MainViewer extends Fragment implements DataViewer {
     private GridLayout constellationGridView;
     private HashMap<CalculationModule, CalculationGridItem> poseItems = new HashMap<>();
     private ConstellationGrid constellationGrid;
-
-    private static List<CalculationModule> seriesAddedBeforeInitialization = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
