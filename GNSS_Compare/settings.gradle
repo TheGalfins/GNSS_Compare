@@ -1,1 +1,2 @@
-include ':gogpsextracts', ':app' 
+include ':gogpsextracts'
+include ':app'
