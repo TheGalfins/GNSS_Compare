@@ -35,3 +35,4 @@ android:
 before_install: 
   - cd GNSS_Compare
   - yes | sdkmanager "platforms;android-27"
+  - ./gradlew gogpsextracts:build
