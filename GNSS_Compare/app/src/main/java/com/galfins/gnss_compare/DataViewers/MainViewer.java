@@ -102,7 +102,6 @@ public class MainViewer extends Fragment implements DataViewer {
          */
         private TextView usedView;
 
-
         /**
          * row id associated with this item.
          */
@@ -203,45 +202,58 @@ public class MainViewer extends Fragment implements DataViewer {
 
         GridLayout referenceToLayout;
         Map<String, ConstellationItem> items = new HashMap<>();
-        List<Constellation> listOfRegisteredConstellations = new ArrayList<>();
+        boolean initialized = false;
 
-        public ConstellationGrid(GridLayout layout){
-            referenceToLayout = layout;
+        private void initialize(){
 
-            for(String key : Constellation.getRegistered()){
-                try {
-                    Constellation constellation = Constellation.getClassByName(key).newInstance();
-                    listOfRegisteredConstellations.add(constellation);
-                    referenceToLayout.setRowCount(referenceToLayout.getRowCount()+1);
-                    items.put(constellation.getName(), new ConstellationItem(referenceToLayout, items.size()+1));
-                } catch (java.lang.InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
+            // todo: assess better if this race condition is true
+            if(Constellation.getRegistered().size() > 0) {
+                for (String key : Constellation.getRegistered()) {
+                    try {
+                        Constellation constellation = Constellation.getClassByName(key).newInstance();
+                        referenceToLayout.setRowCount(referenceToLayout.getRowCount() + 1);
+                        items.put(constellation.getName(), new ConstellationItem(referenceToLayout, items.size() + 1));
+                    } catch (java.lang.InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
+                initialized = true;
             }
         }
 
-        public void reinitialize(GridLayout constellationGridView) {
+        private void clearGrid(){
             for(Map.Entry<String, ConstellationItem> item : items.entrySet())
                 item.getValue().removeFromGrid(referenceToLayout);
 
             items.clear();
+        }
+
+        public ConstellationGrid(GridLayout layout){
+            referenceToLayout = layout;
+
+            initialize();
+        }
+
+        public void reinitialize(GridLayout constellationGridView) {
+            clearGrid();
 
             referenceToLayout = constellationGridView;
-            referenceToLayout.setRowCount(listOfRegisteredConstellations.size()+1);
 
-            for(Constellation constellation : listOfRegisteredConstellations)
-                items.put(constellation.getName(), new ConstellationItem(referenceToLayout, items.size()+1));
+            initialize();
         }
 
         public void update(CalculationModulesArrayList calculationModules){
 
-            Set<String> availableConstellations = new ArraySet<>();
+            if(!initialized)
+                initialize();
+            else {
+                ConstellationItem item;
+                for (CalculationModule calculationModule : calculationModules) {
+                    item = items.get(calculationModule.getConstellation().getName());
 
-            for(CalculationModule calculationModule : calculationModules){
-                items.get(calculationModule.getConstellation().getName())
-                        .updateViews(calculationModule.getConstellation());
-
-                availableConstellations.add(calculationModule.getConstellation().getName());
+                    if (item != null)
+                        item.updateViews(calculationModule.getConstellation());
+                }
             }
 
         }
@@ -280,7 +292,6 @@ public class MainViewer extends Fragment implements DataViewer {
             this.rowId = rowId;
 
             reinitializeViews(gridLayout);
-
         }
 
         @Override
@@ -395,11 +406,6 @@ public class MainViewer extends Fragment implements DataViewer {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(poseGridView != null) {
-            for (CalculationModule calculationModule : seriesAddedBeforeInitialization)
-                addSeries(calculationModule);
-            seriesAddedBeforeInitialization.clear();
-        }
 
         redrawGrid(poseGridView, poseItems);
     }
@@ -439,35 +445,6 @@ public class MainViewer extends Fragment implements DataViewer {
     }
 
     @Override
-    public void addSeries(CalculationModule calculationModule) {
-
-//        if(poseGridView==null || constellationGrid==null){
-//            seriesAddedBeforeInitialization.add(calculationModule);
-//        } else {
-//
-//            poseGridView.setRowCount(poseGridView.getRowCount() + 1);
-//
-//            poseItems.put(calculationModule, new PoseItem(
-//                    calculationModule,
-//                    poseGridView,
-//                    poseGridView.getRowCount() - 1
-//            ));
-//
-//            constellationGrid.addSeries(calculationModule);
-//        }
-    }
-
-    @Override
-    public void removeSeries(CalculationModule calculationModule) {
-//        if(poseGridView == null)
-//            seriesAddedBeforeInitialization.remove(calculationModule);
-//        else
-//            removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
-//
-//        constellationGrid.removeSeries(calculationModule);
-    }
-
-    @Override
     public void onLocationFromGoogleServicesResult(Location location) {
 
     }
@@ -483,17 +460,19 @@ public class MainViewer extends Fragment implements DataViewer {
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
-        modulesToBeAdded.clear();
-        modulesToBeRemoved.clear();
+        synchronized (this) {
+            modulesToBeAdded.clear();
+            modulesToBeRemoved.clear();
 
-        modulesToBeAdded.addAll(Sets.difference(
-                new HashSet<>(calculationModules),
-                poseItems.keySet()));
+            modulesToBeAdded.addAll(Sets.difference(
+                    new HashSet<>(calculationModules),
+                    poseItems.keySet()));
 
-        modulesToBeRemoved.addAll(
-                Sets.difference(
-                        poseItems.keySet(),
-                        new HashSet<>(calculationModules)));
+            modulesToBeRemoved.addAll(
+                    Sets.difference(
+                            poseItems.keySet(),
+                            new HashSet<>(calculationModules)));
+        }
     }
 
     @Override
@@ -516,24 +495,22 @@ public class MainViewer extends Fragment implements DataViewer {
             }
         }
 
-        /* todo: got a ConcurrentModificationException on the loop below. after
-        /  todo: when the main activity was launched after a delay after the gnss core service
-        */
-        for(CalculationModule calculationModule : modulesToBeAdded) {
-            poseGridView.setRowCount(poseGridView.getRowCount() + 1);
-            poseItems.put(calculationModule, new PoseItem(
-                    poseGridView,
-                    poseGridView.getRowCount() - 1
-            ));
-            poseItems.get(calculationModule).update(calculationModule);
-        }
-        modulesToBeAdded.clear();
+        synchronized (this) {
+            
+            for (CalculationModule calculationModule : modulesToBeAdded) {
+                poseGridView.setRowCount(poseGridView.getRowCount() + 1);
+                poseItems.put(calculationModule, new PoseItem(
+                        poseGridView,
+                        poseGridView.getRowCount() - 1
+                ));
+                poseItems.get(calculationModule).update(calculationModule);
+            }
+            modulesToBeAdded.clear();
 
-        // todo: got a ConcurrentModificationException on the loop below. after putting the app
-        // todo: to sleep and waking it back up (old calculation modules removed, new added
-        for(CalculationModule calculationModule : modulesToBeRemoved){
-            removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
+            for (CalculationModule calculationModule : modulesToBeRemoved) {
+                removeSeriesFromGrid(calculationModule, poseGridView, poseItems);
+            }
+            modulesToBeRemoved.clear();
         }
-        modulesToBeRemoved.clear();
     }
 }
