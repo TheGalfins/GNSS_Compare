@@ -46,6 +46,7 @@ If you want to be kept up to date with our updates, you can sign up to our `news
     :caption: GNSS Compare
 
     description
+    useful_links
     download
     team
     android_gnssMeasurements

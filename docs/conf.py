@@ -24,7 +24,7 @@ project = 'GNSS Compare'
 author = 'Mateusz Krainski'
 email = 'mateusz@krainski.eu'
 
-copyright = '{year}, the Galfins'.format(
+copyright = '{year}, the Galfins.'.format(
     year=datetime.date.today().year
 )
 
@@ -139,7 +139,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'GNSSCompare.tex', 'GNSS Compare Documentation',
-     'Mateusz Krainski', 'manual'),
+     'Sebastian Ciuban \\and Mateusz Krainski', 'manual'),
 ]
 
 
