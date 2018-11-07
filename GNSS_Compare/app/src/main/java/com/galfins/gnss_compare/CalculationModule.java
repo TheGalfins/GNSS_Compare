@@ -274,7 +274,6 @@ public class CalculationModule{
      * @param fileLoggerClass reference to the class used to create the file logger object
      * @throws NameAlreadyRegisteredException when name is already on the list of registered modules
      * @throws NumberOfSeriesExceededLimitException when no more modules can be created
-     * todo: add exception for when one of the classes is invalid
      */
     public CalculationModule(
             String name,
