@@ -46,5 +46,6 @@ dependencies {
 
     implementation group: 'com.google.guava', name: 'guava', version: '25.1-android'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-    implementation project(path: ':gogpsextracts')
+    implementation project(':gogpsextracts')
+//    implementation project(path: ':gogpsextracts')
 }
