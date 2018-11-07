@@ -23,4 +23,6 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-27
 
-before_script: cd GNSS_Compare
+before_install: 
+  - cd GNSS_Compare
+  - yes | sdkmanager "platforms;android-27"
