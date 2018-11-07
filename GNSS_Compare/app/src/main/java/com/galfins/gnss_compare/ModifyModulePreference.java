@@ -341,8 +341,10 @@ public class ModifyModulePreference extends AppCompatActivity {
         @NonNull
         @Override
         public View getView(final int pos, View convertView, @NonNull ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
+
+            // todo: use the View Holder pattern
+            View v;// = convertView;
+//            if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(R.layout.calculation_preference_item, null);
 
@@ -358,7 +360,7 @@ public class ModifyModulePreference extends AppCompatActivity {
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
-            }
+//            }
             return v;
         }
 
