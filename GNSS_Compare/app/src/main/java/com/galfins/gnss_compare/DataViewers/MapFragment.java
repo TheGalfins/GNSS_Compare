@@ -254,35 +254,39 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
-        modulesToBeAdded.clear();
-        modulesToBeAdded.addAll(Sets.difference(
-                new HashSet<>(calculationModules),
-                seenModules));
-        seenModules.addAll(modulesToBeAdded);
+        synchronized (this) {
+            modulesToBeAdded.clear();
+            modulesToBeAdded.addAll(Sets.difference(
+                    new HashSet<>(calculationModules),
+                    seenModules));
+            seenModules.addAll(modulesToBeAdded);
 
-        modulesToBeRemoved.clear();
-        modulesToBeRemoved.addAll(Sets.difference(
-                seenModules,
-                new HashSet<>(calculationModules)));
-        seenModules.removeAll(modulesToBeRemoved);
+            modulesToBeRemoved.clear();
+            modulesToBeRemoved.addAll(Sets.difference(
+                    seenModules,
+                    new HashSet<>(calculationModules)));
+            seenModules.removeAll(modulesToBeRemoved);
+        }
 
     }
 
     @Override
     public void updateOnUiThread(CalculationModulesArrayList calculationModules) {
 
-        for (CalculationModule calculationModule : modulesToBeAdded) {
-            addSeries(calculationModule);
-        }
-        modulesToBeAdded.clear();
+        synchronized (this) {
+            for (CalculationModule calculationModule : modulesToBeAdded) {
+                addSeries(calculationModule);
+            }
+            modulesToBeAdded.clear();
 
-        for (CalculationModule calculationModule : modulesToBeRemoved) {
-            removeSeries(calculationModule);
-        }
-        modulesToBeRemoved.clear();
+            for (CalculationModule calculationModule : modulesToBeRemoved) {
+                removeSeries(calculationModule);
+            }
+            modulesToBeRemoved.clear();
 
-        for(CalculationModule calculationModule: calculationModules) {
-            updateMapSeries(calculationModule);
+            for (CalculationModule calculationModule : calculationModules) {
+                updateMapSeries(calculationModule);
+            }
         }
     }
 
