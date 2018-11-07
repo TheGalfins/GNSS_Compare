@@ -57,6 +57,8 @@ public class GnssCoreService extends Service {
     private static final List<DeviceModel> SUPPORTED_DUAL_FREQUENCY_DEVICES = new ArrayList<DeviceModel>(){{
         add(new DeviceModel("Xiaomi", "MI 8"));
         add(new DeviceModel("Xiaomi", "MI 8 Pro"));
+        add(new DeviceModel("Xiaomi", "MI 8 UD"));
+        add(new DeviceModel("Xiaomi", "equuleus"));
         add(new DeviceModel("Huawei", "LYA-AL00"));
         add(new DeviceModel("Huawei", "LYA-AL10"));
         add(new DeviceModel("Huawei", "LYA-L09"));
