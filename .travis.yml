@@ -22,4 +22,7 @@ android:
     - sys-img-armeabi-v7a-android-27
 
   before_script: cd GNSS_Compare
+  script:
+    - ./gradlew assembleDebug
+    - ./gradlew test
   before_install: cd GNSS_Compare
