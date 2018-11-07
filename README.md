@@ -2,7 +2,7 @@
 
 Work in progress...
 
-[![Documentation Status](https://readthedocs.org/projects/gnss-compare/badge/?version=latest)](https://gnss-compare.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/gnss-compare/badge/?version=latest)](https://gnss-compare.readthedocs.io/en/latest/?badge=latest) [![License](http://img.shields.io/:license-apache-blue.svg)](LICENSE.txt)
 
 Check out the [docs](https://gnss-compare.readthedocs.io).
 
