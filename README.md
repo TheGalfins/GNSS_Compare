@@ -2,7 +2,8 @@
 
 Work in progress...
 
-[![Documentation Status](https://readthedocs.org/projects/gnss-compare/badge/?version=latest)](https://gnss-compare.readthedocs.io/en/latest/?badge=latest) [![License](http://img.shields.io/:license-apache-blue.svg)](LICENSE.txt) [![API](https://img.shields.io/badge/API-7%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=7)
+[![Documentation Status](https://readthedocs.org/projects/gnss-compare/badge/?version=latest)](https://gnss-compare.readthedocs.io/en/latest/?badge=latest) [![License](http://img.shields.io/:license-apache-blue.svg)](LICENSE.txt) [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
+
 
 Check out the [docs](https://gnss-compare.readthedocs.io).
 
