@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 TFI Systems
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an "AS IS"
+ * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
+
 package com.galfins.gnss_compare;
 
 import android.Manifest;
@@ -116,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
 
     private Observer calculationModuleObserver;
-
-    private Observable uiThreadObservable;
 
     private GnssCoreService.GnssCoreBinder gnssCoreBinder;
 
@@ -261,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new DataViewerAdapter(getSupportFragmentManager());
         mPagerAdapter.initialize();
-        mPagerAdapter.registerUiThreadObservable(uiThreadObservable);
         mPager.setAdapter(mPagerAdapter);
         PageIndicatorView pageIndicatorView = findViewById(R.id.pageIndicatorView);
         pageIndicatorView.setViewPager(mPager);
@@ -312,20 +325,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         initializeMetaDataHandler();
-
-        uiThreadObservable = new Observable(){
-            @Override
-            public void notifyObservers() {
-                setChanged();
-                super.notifyObservers();
-            }
-
-            @Override
-            public void notifyObservers(Object arg) {
-                setChanged();
-                super.notifyObservers(arg);
-            }
-        };
 
         calculationModuleObserver = new Observer() {
 
@@ -511,8 +510,10 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        unbindService(mConnection);
-        ((GnssCoreServiceConnector) mConnection).resetConnection();
+        if(mGnssCoreBound) {
+            unbindService(mConnection);
+            ((GnssCoreServiceConnector) mConnection).resetConnection();
+        }
 
         Log.d(TAG, "onPause: invoked");
     }

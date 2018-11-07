@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 TFI Systems
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an "AS IS"
+ * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ */
+
 package com.galfins.gnss_compare.DataViewers;
 
 import android.graphics.Color;
@@ -115,54 +131,17 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
 
         preformatPlot(plot);
 
-//        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
-//            synchronized (MainActivity.createdCalculationModules.get(i)) {
-//                try {
-//                    MainActivity.createdCalculationModules.get(i).removeObserver(plotUpdater);
-//                } catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
         initialized = true;
 
         XYSeriesFormatter formatter = new PowerBarFormatter(Color.BLUE, Color.BLACK);
         plot.addSeries(data, formatter);
         formatSeries(plot, formatter);
 
-//        for(int i=0; i<MainActivity.createdCalculationModules.size(); i++){
-//            synchronized (MainActivity.createdCalculationModules.get(i)) {
-//                addSeries(MainActivity.createdCalculationModules.get(i));
-//            }
-//        }
-
         return rootView;
     }
 
     @Override
-    public void addSeries(CalculationModule calculationModule) {
-//        data.addSeries(calculationModule);
-//        calculationModule.addObserver(plotUpdater);
-    }
-
-
-    /**
-     * Removes the series associated with {@code calculationModule} from the plot
-     * @param calculationModule reference to the calculation module
-     */
-    @Override
-    public void removeSeries(CalculationModule calculationModule){
-//        data.removeSeries(calculationModule);
-    }
-
-    @Override
     public void onLocationFromGoogleServicesResult(Location location) {
-
-    }
-
-    @Override
-    public void registerToUiThreadedUpdates(Observable UiTheadObservable) {
 
     }
 
@@ -284,7 +263,7 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
          *
          */
         PowerPlotDataSeries(){
-//            registeredCalculationModules.add(calculationModule);
+
         }
 
         void addSeries(CalculationModule calculationModule){
@@ -347,6 +326,9 @@ public class PowerPlotFragment extends Fragment implements DataViewer {
                     // not adding satellites already registered (this is a cross check if a
                     // satellite can be selected from multiple constellations (e.g. a Galileo satellite
                     // will be present in both Galileo and GPS+Galileo constellations.
+                    // todo: this has an issue when using e.g. WLS which can result in
+                    // todo: erroneous position, causing SUPL to fail - satellite is then
+                    // todo: not displayed
                     boolean satelliteFound = false;
 
                     for(SatelliteParameters sat : satellites){
