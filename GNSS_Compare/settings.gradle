@@ -1,2 +1,5 @@
 include ':gogpsextracts'
+
+project(':gogpsextracts').projectDir = new File(rootProject.projectDir, 'GoGpsExtracts')
+
 include ':app'
