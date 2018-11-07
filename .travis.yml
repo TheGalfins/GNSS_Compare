@@ -9,7 +9,7 @@ android:
     - platform-tools
 
     # The BuildTools version used by your project
-    - build-tools-27.0.2
+    - build-tools-27.0.3
 
     # The SDK version used to compile your project
     - android-27
@@ -18,10 +18,19 @@ android:
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
+    - addon-google_apis-google-27
+
+    - extra-android-support
 
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-27
+    - sys-img-armeabi-v7a-addon-google_apis-google-27
+
+  licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
 
 before_install: 
   - cd GNSS_Compare
