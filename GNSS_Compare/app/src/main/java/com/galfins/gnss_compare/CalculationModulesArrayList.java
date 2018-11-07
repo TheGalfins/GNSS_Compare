@@ -19,6 +19,7 @@ package com.galfins.gnss_compare;
 import android.location.GnssMeasurementsEvent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -71,7 +72,6 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
 
             if(mPoseUpdatedListener !=null)
                 mPoseUpdatedListener.onPoseUpdated();
-//            notifyObservers();
             }
         };
 
@@ -79,7 +79,8 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
 
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setMaxWaitTime(500);
-        locationRequest.setInterval(100);
+        locationRequest.setInterval(1000);
+        locationRequest.setFastestInterval(100);
 
         locationCallback = new LocationCallback(){
             @Override
@@ -107,7 +108,7 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
             fusedLocationClient.requestLocationUpdates(
                     locationRequest,
                     locationCallback,
-                    null);
+                    Looper.myLooper());
 
             locationManager.registerGnssMeasurementsCallback(
                     gnssCallback);
@@ -117,17 +118,10 @@ public class CalculationModulesArrayList extends ArrayList<CalculationModule> {
         }
     }
 
-    public void unregisterFromGnssUpdates(FusedLocationProviderClient fusedLocationClient, LocationManager locationManager){
-        fusedLocationClient.removeLocationUpdates(locationCallback);
-        locationManager.unregisterGnssMeasurementsCallback(gnssCallback);
-    }
-
     public void unregisterFromGnssUpdates(){
-        if (fusedLocationProviderClientReference!=null && locationManagerReference!=null) {
+        if (fusedLocationProviderClientReference!=null)
             fusedLocationProviderClientReference.removeLocationUpdates(locationCallback);
+        if(locationManagerReference!=null)
             locationManagerReference.unregisterGnssMeasurementsCallback(gnssCallback);
-        } else {
-            Log.e(TAG, "unregisterFromGnssUpdates: Unregistering non-registered object!");
-        }
     }
 }

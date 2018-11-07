@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setMaxWaitTime(500);
-        locationRequest.setInterval(100);
+        locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(100);
 
         locationCallback = new LocationCallback(){
