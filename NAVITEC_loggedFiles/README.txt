@@ -1,6 +1,10 @@
-The archive contains 4 logged files. The results from the scientific paper "GNSS Compare: Performance assessment of real-time PVT algorithms using raw GNSS measurements on an Android smartphone" were directly plotted from these files.
+The archive contains 4 logged files. The results from the scientific paper:
+"GNSS Compare: Performance assessment of real-time PVT algorithms using raw GNSS measurements on an Android smartphone" 
+were directly plotted from these files.
 
-The paper is presented at the European Space Agency NAVITEC 2018 conference along with "GNSS Compare: a novel software framework for processing raw GNSS measurements on an Android smartphone" explaining the software engineering aspects of the application.
+The paper is presented at the European Space Agency NAVITEC 2018 conference along with 
+"GNSS Compare: a novel software framework for processing raw GNSS measurements on an Android smartphone" 
+explaining the software engineering aspects of the application.
 ------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------
 1. GNSS Compare customized logging format:
