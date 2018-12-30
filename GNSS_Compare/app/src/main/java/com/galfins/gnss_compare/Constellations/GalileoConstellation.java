@@ -358,7 +358,7 @@ public class GalileoConstellation extends Constellation {
 
                 if (rnp == null) {
                     excludedSatellites.add(observedSatellite);
-                    MainActivity.makeRnpFailedNotification();
+                    Log.e(TAG, "calculateSatPosition: Getting RNP failed");
                     continue;
                 }
 

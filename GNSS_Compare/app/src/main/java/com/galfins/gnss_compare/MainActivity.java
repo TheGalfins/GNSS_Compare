@@ -55,6 +55,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.rd.PageIndicatorView;
 
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -169,6 +170,70 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    private UserNotifier userNotifierHandler = new UserNotifier() {
+
+        Snackbar snackbar = null;
+        String snackbarId = "";
+        int snackbarDuration = 0;
+        boolean snackbarAlive = false;
+
+        Runnable snackbarDismisser = new Runnable() {
+            @Override
+            public void run() {
+                while (snackbarAlive) {
+                    synchronized (this) {
+                        if (snackbarDuration > 100) {
+                            snackbarDuration -= 100;
+                        } else if (snackbar.isShown()) {
+                            snackbar.dismiss();
+                            snackbarAlive = false;
+                        }
+                    }
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        @Override
+        public void notifyUser(String text, int duration, String id) {
+            if(mainView == null)
+                return;
+            if (id == null) {
+                snackbar = Snackbar.make(
+                        mainView,
+                        text,
+                        duration
+                );
+                snackbar.show();
+            } else {
+                synchronized (this) {
+                    boolean snackbarExtended = false;
+                    if (id.equals(snackbarId) && snackbar!=null){
+                        if(snackbar.isShown()){
+                            snackbarDuration = duration;
+                            snackbarExtended = true;
+                        }
+                    }
+                    if (!snackbarExtended) {
+                        snackbar = Snackbar.make(
+                                mainView,
+                                text,
+                                Snackbar.LENGTH_INDEFINITE);
+                        snackbarDuration = duration;
+                        snackbar.show();
+                        snackbarAlive = true;
+                        new Thread(snackbarDismisser).start();
+                    }
+                }
+            }
+        }
+    };
 
     private ServiceConnection mConnection = new GnssCoreServiceConnector() ;
 
@@ -375,6 +440,20 @@ public class MainActivity extends AppCompatActivity {
         initializeToolbar();
 
         dismissableNotificationTextColor = ContextCompat.getColor(this, R.color.colorPrimaryBright2);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(int i=0; i<10; i++){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    userNotifierHandler.notifyUser("This is a test", 2000, "test");
+                }
+            }
+        }).start();
     }
 
     private void showInitializationDisclamer() {

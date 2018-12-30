@@ -4,10 +4,10 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.galfins.gnss_compare"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 27
-        versionCode 53
-        versionName "0.53 dev (toService)"
+        versionCode 60
+        versionName "0.60 (dev)"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
