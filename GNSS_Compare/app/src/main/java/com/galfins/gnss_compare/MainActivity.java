@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                                 mainView,
                                 text,
                                 Snackbar.LENGTH_INDEFINITE);
+                        snackbarId = id;
                         snackbarDuration = duration;
                         snackbar.show();
                         snackbarAlive = true;
