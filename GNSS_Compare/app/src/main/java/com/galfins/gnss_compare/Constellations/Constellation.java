@@ -47,8 +47,6 @@ public abstract class Constellation {
      */
     private static boolean initialized = false;
 
-    private static UserNotifier userNotifier;
-
     private static String TAG = "Constellation";
 
 
@@ -217,24 +215,4 @@ public abstract class Constellation {
      * @param event GNSS event
      */
     public abstract void updateMeasurements(GnssMeasurementsEvent event);
-
-    public static void assignUserNotifier(UserNotifier userNotifier){
-        Constellation.userNotifier = userNotifier;
-    }
-
-    protected void notifyUser(String text, int duration, String id){
-        if (userNotifier!=null){
-            userNotifier.notifyUser(text, duration, id);
-        } else {
-            Log.d(TAG, "notifyUser: userNotifier not set! Set it by calling Constellation.assignUserNotifier!");
-        }
-    }
-
-    protected void notifyUser(String text, int duration){
-        if (userNotifier!=null){
-            userNotifier.notifyUser(text, duration, null);
-        } else {
-            Log.d(TAG, "notifyUser: userNotifier not set! Set it by calling Constellation.assignUserNotifier!");
-        }
-    }
 }

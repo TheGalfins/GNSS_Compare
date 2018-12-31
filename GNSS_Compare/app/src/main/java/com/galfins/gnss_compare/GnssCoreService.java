@@ -77,6 +77,8 @@ public class GnssCoreService extends Service {
         add(new DeviceModel("Huawei", "LYA-L29"));
     }};
 
+    private static UserNotifier userNotifier;
+
     boolean dualFrequencySupported = false;
 
     private static final class DeviceModel {
@@ -148,6 +150,10 @@ public class GnssCoreService extends Service {
 
         public boolean getServiceStarted(){
             return serviceStarted;
+        }
+
+        public void assignUserNotifier(UserNotifier notifier) {
+            userNotifier = notifier;
         }
     }
 
@@ -369,4 +375,27 @@ public class GnssCoreService extends Service {
             calculationModules.add(calculationModule); // when simplified to addAll, doesn't work properly
         }
     }
+
+    public static void assignUserNotifier(UserNotifier userNotifier){
+        GnssCoreService.userNotifier = userNotifier;
+    }
+
+    public void notifyUser(String text, int duration, String id){
+        if (userNotifier!=null){
+            userNotifier.notifyUser(text, duration, id);
+        } else {
+            Log.d(TAG, "notifyUser: userNotifier not set! " +
+                    "Set it by calling GnssCoreService.assignUserNotifier!");
+        }
+    }
+
+    public void notifyUser(String text, int duration){
+        if (userNotifier!=null){
+            userNotifier.notifyUser(text, duration, null);
+        } else {
+            Log.d(TAG, "notifyUser: userNotifier not set! " +
+                    "Set it by calling GnssCoreService.assignUserNotifier!");
+        }
+    }
+
 }
