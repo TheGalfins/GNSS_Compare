@@ -58,7 +58,7 @@ public class CalculationModuleTests {
         FileLogger.initialize();
 
         String moduleName = "Test";
-        String constellationName = "GPS";
+        String constellationName = "GPS L1";
         String correctionName = "Klobuchar Iono Correction";
         Set<String> correctionNames = new HashSet<>();
         correctionNames.add(correctionName);

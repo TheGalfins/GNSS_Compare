@@ -55,7 +55,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.rd.PageIndicatorView;
 
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -176,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
         Snackbar snackbar = null;
         String snackbarId = "";
+        String snackbarText = "";
         int snackbarDuration = 0;
         boolean snackbarAlive = false;
 
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         @Override
-        public void notifyUser(String text, int duration, String id) {
+        public void displayMessage(String text, int duration, String id) {
             if(mainView == null)
                 return;
             if (id == null) {
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 synchronized (this) {
                     boolean snackbarExtended = false;
-                    if (id.equals(snackbarId) && snackbar!=null){
+                    if (id.equals(snackbarId) && text.equals(snackbarText) && snackbar!=null){
                         if(snackbar.isShown()){
                             snackbarDuration = duration;
                             snackbarExtended = true;
@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                                 mainView,
                                 text,
                                 Snackbar.LENGTH_INDEFINITE);
+                        snackbarText = text;
                         snackbarId = id;
                         snackbarDuration = duration;
                         snackbar.show();
