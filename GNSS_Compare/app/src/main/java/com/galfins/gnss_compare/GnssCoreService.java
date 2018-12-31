@@ -376,10 +376,6 @@ public class GnssCoreService extends Service {
         }
     }
 
-    public static void assignUserNotifier(UserNotifier userNotifier){
-        GnssCoreService.userNotifier = userNotifier;
-    }
-
     public void notifyUser(String text, int duration, String id){
         if (userNotifier!=null){
             userNotifier.notifyUser(text, duration, id);

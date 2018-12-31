@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
         initializeToolbar();
 
         dismissableNotificationTextColor = ContextCompat.getColor(this, R.color.colorPrimaryBright2);
-        
+
     }
 
     private void showInitializationDisclamer() {
