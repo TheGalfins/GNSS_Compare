@@ -49,6 +49,8 @@ public abstract class Constellation {
 
     private static String TAG = "Constellation";
 
+    protected static String RNP_NULL_MESSAGE = "RNP_NULL_MESSAGE";
+
 
 
     /**

@@ -5,13 +5,14 @@ import android.location.GnssMeasurement;
 import android.location.GnssMeasurementsEvent;
 import android.location.GnssStatus;
 import android.location.Location;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.galfins.gnss_compare.Corrections.Correction;
-import com.galfins.gnss_compare.MainActivity;
+import com.galfins.gnss_compare.GnssCoreService;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -276,7 +277,7 @@ public class GpsConstellation extends Constellation {
 
                 if (rnp == null) {
                     excludedSatellites.add(observedSatellite);
-                    Log.e(TAG, "calculateSatPosition: Getting RNP failed");
+                    GnssCoreService.notifyUser("Faled getting ephemeris data!", Snackbar.LENGTH_SHORT, RNP_NULL_MESSAGE);
                     continue;
                 }
 

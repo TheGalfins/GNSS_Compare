@@ -124,7 +124,7 @@ public class GnssCoreService extends Service {
         }
     };
 
-    private final String TAG = this.getClass().getSimpleName();
+    private static final String TAG = GnssCoreService.class.getSimpleName();
 
     public class GnssCoreBinder extends Binder{
 
@@ -376,7 +376,7 @@ public class GnssCoreService extends Service {
         }
     }
 
-    public void notifyUser(String text, int duration, String id){
+    public static void notifyUser(String text, int duration, String id){
         if (userNotifier!=null){
             userNotifier.displayMessage(text, duration, id);
         } else {
@@ -385,7 +385,7 @@ public class GnssCoreService extends Service {
         }
     }
 
-    public void notifyUser(String text, int duration){
+    public static void notifyUser(String text, int duration){
         if (userNotifier!=null){
             userNotifier.displayMessage(text, duration, null);
         } else {
