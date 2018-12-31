@@ -144,13 +144,13 @@ public class MainActivity extends AppCompatActivity {
                 mGnssCoreBound = true;
 
                 gnssCoreBinder.addObserver(calculationModuleObserver);
+                gnssCoreBinder.assignUserNotifier(userNotifierHandler);
 
                 if(newModule!=null) {
                     gnssCoreBinder.addModule(newModule);
                     CreateModulePreference.notifyModuleCreated();
                     makeNotification("Module " + newModule.getName() + " created...");
                     newModule = null;
-                    gnssCoreBinder.assignUserNotifier(userNotifierHandler);
                 }
             }
         }

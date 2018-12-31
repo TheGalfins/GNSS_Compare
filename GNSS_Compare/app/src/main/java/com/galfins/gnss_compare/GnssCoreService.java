@@ -378,18 +378,18 @@ public class GnssCoreService extends Service {
 
     public static void notifyUser(String text, int duration, String id){
         if (userNotifier!=null){
-            userNotifier.displayMessage(text, duration, id);
+            userNotifier.notifyUser(text, duration, id);
         } else {
-            Log.d(TAG, "displayMessage: userNotifier not set! " +
+            Log.e(TAG, "displayMessage: userNotifier not set! " +
                     "Set it by calling GnssCoreService.assignUserNotifier!");
         }
     }
 
     public static void notifyUser(String text, int duration){
         if (userNotifier!=null){
-            userNotifier.displayMessage(text, duration, null);
+            userNotifier.notifyUser(text, duration, null);
         } else {
-            Log.d(TAG, "displayMessage: userNotifier not set! " +
+            Log.e(TAG, "displayMessage: userNotifier not set! " +
                     "Set it by calling GnssCoreService.assignUserNotifier!");
         }
     }
