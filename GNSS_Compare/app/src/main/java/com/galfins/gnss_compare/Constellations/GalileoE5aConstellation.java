@@ -387,6 +387,7 @@ public class GalileoE5aConstellation extends Constellation {
             }
 
             // Remove from the list all the satellites that did not pass the masking criteria
+            visibleButNotUsed += excludedSatellites.size();
             observedSatellites.removeAll(excludedSatellites);
         }
     }

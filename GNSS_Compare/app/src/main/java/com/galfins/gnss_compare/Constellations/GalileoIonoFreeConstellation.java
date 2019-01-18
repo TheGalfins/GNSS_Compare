@@ -84,6 +84,8 @@ public class GalileoIonoFreeConstellation extends GalileoConstellation {
 
         galileoE5aConstellation.calculateSatPosition(initialLocation, position);
         galileoConstellation.calculateSatPosition(initialLocation, position);
+
+        visibleButNotUsed = max(galileoConstellation.getVisibleConstellationSize(), galileoE5aConstellation.getVisibleConstellationSize())-observedSatellites.size();
     }
 
     @Override

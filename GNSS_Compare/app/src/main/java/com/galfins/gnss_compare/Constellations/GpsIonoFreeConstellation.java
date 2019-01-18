@@ -85,6 +85,8 @@ public class GpsIonoFreeConstellation extends GpsConstellation {
 
         gpsL1Constellation.calculateSatPosition(initialLocation, position);
         gpsL5Constellation.calculateSatPosition(initialLocation, position);
+
+        visibleButNotUsed = max(gpsL1Constellation.getVisibleConstellationSize(), gpsL5Constellation.getVisibleConstellationSize())-observedSatellites.size();
     }
 
     @Override
