@@ -8,11 +8,9 @@ import android.location.Location;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.galfins.gnss_compare.Corrections.Correction;
 import com.galfins.gnss_compare.GnssCoreService;
+import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -21,49 +19,45 @@ import com.galfins.gogpsextracts.SatellitePosition;
 import com.galfins.gogpsextracts.Time;
 import com.galfins.gogpsextracts.TopocentricCoordinates;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by Mateusz Krainski on 17/02/2018.
+ * Created by Sebastian Ciuban on 22/10/2018.
  * This class is for...
  * <p>
- * GPS Pseudorange computation algorithm by: Mareike Burba
+ * GPS Pseudorange computation algorithm by: GSA White Paper
  * - variable name changes and comments were added
  * to fit the description in the GSA white paper
  * by: Sebastian Ciuban
  */
 
-public class GpsConstellation extends Constellation {
+public class GpsL5Constellation extends Constellation {
 
     private final static char satType = 'G';
-    private static final String NAME = "GPS L1";
-    private static final String TAG = "GpsConstellation";
-    private static double L1_FREQUENCY = 1.57542e9;
+    private static final String NAME = "GPS L5";
+    private static final String TAG = "GpsL5Constellation";
+    private static double L5_FREQUENCY = 1.17645e9;
     private static double FREQUENCY_MATCH_RANGE = 0.1e9;
+    private static double MASK_ELEVATION = 15; // degrees
+    private static double MASK_CN0 = 10; // dB-Hz
 
     private boolean fullBiasNanosInitialized = false;
     private long FullBiasNanos;
 
     private Coordinates rxPos;
-    protected double tRxGPS;
-    protected double weekNumberNanos;
-
-    public double getWeekNumber(){
-        return weekNumberNanos;
-    }
-
-    public double gettRxGPS(){
-        return tRxGPS;
-    }
+    private double tRxGPS;
+    private double weekNumberNanos;
+    private double weekNumber;
 
     private static final int constellationId = GnssStatus.CONSTELLATION_GPS;
-    private static double MASK_ELEVATION = 20; // degrees
-    private static double MASK_CN0 = 10; // dB-Hz
 
     /**
      * Time of the measurement
      */
     private Time timeRefMsec;
 
-    protected int visibleButNotUsed = 0;
+    private int visibleButNotUsed = 0;
 
     // Condition for the pseudoranges that takes into account a maximum uncertainty for the TOW
     // (as done in gps-measurement-tools MATLAB code)
@@ -81,7 +75,7 @@ public class GpsConstellation extends Constellation {
      */
     private ArrayList<Correction> corrections;
 
-    public GpsConstellation() {
+    public GpsL5Constellation() {
         // URL template from where the GPS ephemerides should be downloaded
         String IGN_NAVIGATION_HOURLY_ZIM2 = "ftp://igs.ensg.ign.fr/pub/igs/data/hourly/${yyyy}/${ddd}/zim2${ddd}${h}.${yy}n.Z";
         String NASA_NAVIGATION_HOURLY = "ftp://cddis.gsfc.nasa.gov/pub/gps/data/hourly/${yyyy}/${ddd}/hour${ddd}0.${yy}n.Z";
@@ -124,10 +118,11 @@ public class GpsConstellation extends Constellation {
         synchronized (this) {
             visibleButNotUsed = 0;
             observedSatellites.clear();
-            GnssClock gnssClock = event.getClock();
-            long TimeNanos = gnssClock.getTimeNanos();
-            timeRefMsec = new Time(System.currentTimeMillis());
-            double BiasNanos = gnssClock.getBiasNanos();
+            GnssClock gnssClock       = event.getClock();
+            long TimeNanos            = gnssClock.getTimeNanos();
+            timeRefMsec               = new Time(System.currentTimeMillis());
+            double BiasNanos          = gnssClock.getBiasNanos();
+
             double gpsTime, pseudorange;
 
             // Use only the first instance of the FullBiasNanos (as done in gps-measurement-tools)
@@ -143,30 +138,16 @@ public class GpsConstellation extends Constellation {
                 if (measurement.getConstellationType() != constellationId)
                     continue;
 
-                if(! (!measurement.hasCarrierFrequencyHz() || approximateEqual(measurement.getCarrierFrequencyHz(), L1_FREQUENCY, FREQUENCY_MATCH_RANGE)) )
+                if(!(measurement.hasCarrierFrequencyHz()
+                        && approximateEqual(measurement.getCarrierFrequencyHz(), L5_FREQUENCY, FREQUENCY_MATCH_RANGE)))
                     continue;
-
-                // todo: hardcoded exlusion of a faulty satellite (SUPL not working)
-//                if(measurement.getSvid() == 2 || measurement.getSvid() == 4
-//                        || measurement.getSvid() == 5 || measurement.getSvid() == 7
-//                        || measurement.getSvid() == 11 || measurement.getSvid() == 12
-//                        || measurement.getSvid() == 13 || measurement.getSvid() == 14
-//                        || measurement.getSvid() == 15 || measurement.getSvid() == 16
-//                        || measurement.getSvid() == 17 || measurement.getSvid() == 18
-//                        || measurement.getSvid() == 19 || measurement.getSvid() == 20
-//                        || measurement.getSvid() == 21 || measurement.getSvid() == 22
-//                        || measurement.getSvid() == 23 || measurement.getSvid() == 28
-//                        || measurement.getSvid() == 29 || measurement.getSvid() == 31)
-//                    continue;
-
 
                 long ReceivedSvTimeNanos = measurement.getReceivedSvTimeNanos();
                 double TimeOffsetNanos = measurement.getTimeOffsetNanos();
 
 
-                // GPS Time generation (GSA White Paper - page 20)
-                gpsTime =
-                        TimeNanos - (FullBiasNanos + BiasNanos); // TODO intersystem bias?
+                // Compute the reception time in nanoseconds (this method is needed for later processing, is not a duplicate)
+                gpsTime = TimeNanos - (FullBiasNanos + BiasNanos);
 
                 // Measurement time in full GPS time without taking into account weekNumberNanos(the number of
                 // nanoseconds that have occurred from the beginning of GPS time to the current
@@ -175,45 +156,37 @@ public class GpsConstellation extends Constellation {
                         gpsTime + TimeOffsetNanos;
 
 
+                // Compute the weeknumber
                 weekNumberNanos =
                         Math.floor((-1. * FullBiasNanos) / Constants.NUMBER_NANO_SECONDS_PER_WEEK)
                                 * Constants.NUMBER_NANO_SECONDS_PER_WEEK;
+
 
                 // GPS pseudorange computation
                 pseudorange =
                         (tRxGPS - weekNumberNanos - ReceivedSvTimeNanos) / 1.0E9
                                 * Constants.SPEED_OF_LIGHT;
 
-                // TODO Check that the measurement have a valid state such that valid pseudoranges are used in the PVT algorithm
-
-                /*
-
-                According to https://developer.android.com/ the GnssMeasurements States required
-                for GPS valid pseudoranges are:
-
-                int STATE_CODE_LOCK         = 1      (1 << 0)
-                int int STATE_TOW_DECODED   = 8      (1 << 3)
-
-                */
-
                 int measState = measurement.getState();
 
                 // Bitwise AND to identify the states
-                boolean codeLock = (measState & GnssMeasurement.STATE_CODE_LOCK) != 0;
-                boolean towDecoded = (measState & GnssMeasurement.STATE_TOW_DECODED) != 0;
+                boolean codeLock      = (measState & GnssMeasurement.STATE_CODE_LOCK) > 0;
+                boolean towDecoded    = (measState & GnssMeasurement.STATE_TOW_DECODED) > 0;
                 boolean towKnown      = false;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    towKnown = (measState & GnssMeasurement.STATE_TOW_KNOWN) != 0;
+                    towKnown = (measState & GnssMeasurement.STATE_TOW_KNOWN) > 0;
                 }
-                boolean towUncertainty = measurement.getReceivedSvTimeUncertaintyNanos() <  MAXTOWUNCNS;
+                boolean towUncertainty = measurement.getReceivedSvTimeUncertaintyNanos() < MAXTOWUNCNS;
 
 
-                if (codeLock && (towDecoded || towKnown)  && pseudorange < 1e9) { // && towUncertainty
+                if (codeLock && (towDecoded || towKnown)  && pseudorange < 1e9) {
                     SatelliteParameters satelliteParameters = new SatelliteParameters(
                             measurement.getSvid(),
                             new Pseudorange(pseudorange, 0.0));
 
-                    satelliteParameters.setUniqueSatId("G" + satelliteParameters.getSatId() + "_L1");
+//                    satelliteParameters.setUniqueSatId("G" + satelliteParameters.getSatId() + "<sub>L5</sub>");
+                    satelliteParameters.setUniqueSatId("G" + satelliteParameters.getSatId() + "_L5");
+
 
                     satelliteParameters.setSignalStrength(measurement.getCn0DbHz());
 
@@ -323,7 +296,7 @@ public class GpsConstellation extends Constellation {
     public static void registerClass() {
         register(
                 NAME,
-                GpsConstellation.class);
+                GpsL5Constellation.class);
     }
 
 
