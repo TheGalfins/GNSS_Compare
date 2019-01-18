@@ -78,11 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private final String MODULE_NAMES_BUNDLE_TAG = "__module_names";
 
     /**
-     * ID for startActivityForResult regarding the preferences screen
-     */
-    private static int PREFERENCES_REQUEST = 1;
-
-    /**
      * Permission needed for accessing the measurements from the GNSS chip
      */
     private static final String GNSS_REQUIRED_PERMISSIONS = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -145,13 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
                 gnssCoreBinder.addObserver(calculationModuleObserver);
                 gnssCoreBinder.assignUserNotifier(userNotifierHandler);
-
-                if(newModule!=null) {
-                    gnssCoreBinder.addModule(newModule);
-                    CreateModulePreference.notifyModuleCreated();
-                    makeNotification("Module " + newModule.getName() + " created...");
-                    newModule = null;
-                }
             }
         }
 
@@ -506,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_create_module:
                 // User chose the "Settings" item, show the app settings UI...
                 Intent preferenceIntent = new Intent(this, CreateModulePreference.class);
-                startActivityForResult(preferenceIntent, PREFERENCES_REQUEST);
+                startActivity(preferenceIntent);
                 return true;
 
             case R.id.action_modify_module:
@@ -603,35 +591,6 @@ public class MainActivity extends AppCompatActivity {
 
         mLocationManager.unregisterGnssMeasurementsCallback(gnssCallback);
         mFusedLocationClient.removeLocationUpdates(locationCallback);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PREFERENCES_REQUEST && resultCode == RESULT_OK) {
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-            try {
-                newModule = CalculationModule.createFromDescriptions(
-                        sharedPreferences.getString(CreateModulePreference.KEY_NAME, null),
-                        sharedPreferences.getString(CreateModulePreference.KEY_CONSTELLATION, null),
-                        sharedPreferences.getStringSet(CreateModulePreference.KEY_CORRECTION_MODULES, null),
-                        sharedPreferences.getString(CreateModulePreference.KEY_PVT_METHOD, null),
-                        sharedPreferences.getString(CreateModulePreference.KEY_FILE_LOGGER, null));
-
-            } catch (CalculationModule.NameAlreadyRegisteredException
-                    | CalculationModule.NumberOfSeriesExceededLimitException
-                    | CalculationModule.CalculationSettingsIncompleteException e) {
-
-                Snackbar snackbar = Snackbar
-                        .make(mainView, e.getMessage(), Snackbar.LENGTH_LONG);
-
-                snackbar.show();
-            }
-
-        }
     }
 
     @Override

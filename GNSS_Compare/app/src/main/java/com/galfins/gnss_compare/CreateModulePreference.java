@@ -16,13 +16,23 @@
 
 package com.galfins.gnss_compare;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -78,6 +88,24 @@ public class CreateModulePreference extends PreferenceActivity {
      */
     static private final char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
+
+
+    private static GnssCoreService.GnssCoreBinder gnssCoreBinder;
+    private static boolean mGnssCoreBound;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            gnssCoreBinder = (GnssCoreService.GnssCoreBinder) service;
+            mGnssCoreBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mGnssCoreBound = false;
+        }
+    };
+
     /**
      * Increments the invocationCounter after the module has been successfully created.
      */
@@ -97,21 +125,82 @@ public class CreateModulePreference extends PreferenceActivity {
     private Observer finishSignalObserver = new Observer() {
         @Override
         public void update(Observable observable, Object o) {
-            setResult(RESULT_OK);
-            finish();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CreateModulePreference.this);
+
+            View view = fragment.getView();
+
+            try {
+                CalculationModule newModule = CalculationModule.createFromDescriptions(
+                        sharedPreferences.getString(CreateModulePreference.KEY_NAME, null),
+                        sharedPreferences.getString(CreateModulePreference.KEY_CONSTELLATION, null),
+                        sharedPreferences.getStringSet(CreateModulePreference.KEY_CORRECTION_MODULES, null),
+                        sharedPreferences.getString(CreateModulePreference.KEY_PVT_METHOD, null),
+                        sharedPreferences.getString(CreateModulePreference.KEY_FILE_LOGGER, null));
+
+                if(mGnssCoreBound) {
+                    gnssCoreBinder.addModule(newModule);
+                    if(++invocationCounter > ALPHABET.length)
+                        invocationCounter = 0;
+                }
+
+                if(view != null) {
+                    Snackbar snackbar = Snackbar
+                            .make(view,
+                                    "Module " + newModule.getName() + " created...",
+                                    Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+
+                setResult(RESULT_OK);
+                finish();
+
+            } catch (CalculationModule.NameAlreadyRegisteredException
+                    | CalculationModule.NumberOfSeriesExceededLimitException
+                    | CalculationModule.CalculationSettingsIncompleteException e) {
+
+                if (view != null) {
+                    Snackbar snackbar = Snackbar
+                            .make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+
+                    snackbar.show();
+                }
+            }
         }
     };
+
+    private CreateModulePreferenceFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CreateModulePreferenceFragment fragment = new CreateModulePreferenceFragment();
+        fragment = new CreateModulePreferenceFragment();
         fragment.setArguments(getIntent().getExtras());
         fragment.assignObserver(finishSignalObserver);
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
         setResult(RESULT_CANCELED);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mGnssCoreBound) {
+            unbindService(mConnection);
+            mGnssCoreBound = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!mGnssCoreBound)
+            bindService(
+                    new Intent(this, GnssCoreService.class),
+                    mConnection,
+                    Context.BIND_AUTO_CREATE);
     }
 
     /**
@@ -254,6 +343,7 @@ public class CreateModulePreference extends PreferenceActivity {
             defineNamePreference(intentExtras);
 
             defineCreateButton(intentExtras);
+
         }
     }
 }

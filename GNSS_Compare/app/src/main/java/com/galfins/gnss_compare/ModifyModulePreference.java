@@ -184,8 +184,10 @@ public class ModifyModulePreference extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        unbindService(mConnection);
-        mGnssCoreBound = false;
+        if(mGnssCoreBound) {
+            unbindService(mConnection);
+            mGnssCoreBound = false;
+        }
     }
 
     @Override
