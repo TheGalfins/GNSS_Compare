@@ -6,12 +6,10 @@ import android.location.GnssMeasurementsEvent;
 import android.location.GnssStatus;
 import android.location.Location;
 import android.support.design.widget.Snackbar;
-import android.text.Html;
 import android.util.Log;
 
 import com.galfins.gnss_compare.Corrections.Correction;
 import com.galfins.gnss_compare.GnssCoreService;
-import com.galfins.gnss_compare.MainActivity;
 import com.galfins.gogpsextracts.Constants;
 import com.galfins.gogpsextracts.Coordinates;
 import com.galfins.gogpsextracts.NavigationProducer;
@@ -33,7 +31,7 @@ public class GalileoConstellation extends Constellation{
     protected static final String NAME = "Galileo E1";
     private static final String TAG = "GalileoE1Constellation";
     private static int constellationId = GnssStatus.CONSTELLATION_GALILEO;
-    private static double E1_FREQUENCY = 1.57542e9;
+    private static double E1a_FREQUENCY = 1.57542e9;
     private static double FREQUENCY_MATCH_RANGE = 0.1e9;
     private static double MASK_ELEVATION = 15; // degrees
     private static double MASK_CN0 = 10; // dB-Hz
@@ -141,11 +139,8 @@ public class GalileoConstellation extends Constellation{
                 if (measurement.getConstellationType() != constellationId)
                     continue;
 
-                if (measurement.getSvid() == 25 || measurement.getSvid() == 27 ) //todo: hardcoded exlusion of a faulty satellite (SUPL not working)
-                    continue;
-
-                if (!(measurement.hasCarrierFrequencyHz()
-                        && approximateEqual(measurement.getCarrierFrequencyHz(), E1_FREQUENCY, FREQUENCY_MATCH_RANGE)))
+                if (! ( !measurement.hasCarrierFrequencyHz()
+                        || approximateEqual(measurement.getCarrierFrequencyHz(), E1a_FREQUENCY, FREQUENCY_MATCH_RANGE)))
                     continue;
 
 
