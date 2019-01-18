@@ -70,6 +70,8 @@ public class GpsL5Constellation extends Constellation {
      */
     protected List<SatelliteParameters> observedSatellites = new ArrayList<>();
 
+    protected List<SatelliteParameters> unusedSatellites = new ArrayList<>();
+
     /**
      * Corrections which are to be applied to received pseudoranges
      */
@@ -118,6 +120,7 @@ public class GpsL5Constellation extends Constellation {
         synchronized (this) {
             visibleButNotUsed = 0;
             observedSatellites.clear();
+            unusedSatellites.clear();
             GnssClock gnssClock       = event.getClock();
             long TimeNanos            = gnssClock.getTimeNanos();
             timeRefMsec               = new Time(System.currentTimeMillis());
@@ -200,6 +203,16 @@ public class GpsL5Constellation extends Constellation {
                     Log.d(TAG, "updateConstellations(" + measurement.getSvid() + "): " + weekNumberNanos + ", " + tRxGPS + ", " + pseudorange);
                     Log.d(TAG, "updateConstellations: Passed with measurement state: " + measState);
                 } else {
+                    SatelliteParameters satelliteParameters = new SatelliteParameters(
+                            measurement.getSvid(),
+                            null
+                    );
+                    satelliteParameters.setUniqueSatId("G" + satelliteParameters.getSatId() + "_L5");
+                    satelliteParameters.setSignalStrength(measurement.getCn0DbHz());
+                    satelliteParameters.setConstellationType(measurement.getConstellationType());
+                    if (measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
+                    unusedSatellites.add(satelliteParameters);
                     visibleButNotUsed++;
                 }
             }
@@ -290,6 +303,7 @@ public class GpsL5Constellation extends Constellation {
             // Remove from the list all the satellites that did not pass the masking criteria
             visibleButNotUsed += excludedSatellites.size();
             observedSatellites.removeAll(excludedSatellites);
+            unusedSatellites.addAll(excludedSatellites);
         }
     }
 
@@ -327,6 +341,11 @@ public class GpsL5Constellation extends Constellation {
         synchronized (this) {
             return observedSatellites;
         }
+    }
+
+    @Override
+    public List<SatelliteParameters> getUnusedSatellites() {
+        return unusedSatellites;
     }
 
     @Override

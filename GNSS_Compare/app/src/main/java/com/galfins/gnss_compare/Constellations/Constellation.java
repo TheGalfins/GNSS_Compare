@@ -118,6 +118,8 @@ public abstract class Constellation {
      */
     public abstract List<SatelliteParameters> getSatellites();
 
+    public abstract List<SatelliteParameters> getUnusedSatellites();
+
     /**
      *
      * @return size of the visible constellation

@@ -64,9 +64,14 @@ public class GalileoConstellation extends Constellation{
 
 
     /**
-     * List holding observed satellites
+     * List holding used satellites
      */
     protected List<SatelliteParameters> observedSatellites = new ArrayList<>();
+
+    /**
+     * List holding unused satellites
+     */
+    protected List<SatelliteParameters> unusedSatellites = new ArrayList<>();
 
 
 //    private long timeRx;
@@ -116,8 +121,11 @@ public class GalileoConstellation extends Constellation{
     @Override
     public void updateMeasurements(GnssMeasurementsEvent event) {
         synchronized (this) {
+
             visibleButNotUsed = 0;
             observedSatellites.clear();
+            unusedSatellites.clear();
+
             GnssClock gnssClock = event.getClock();
             long TimeNanos = gnssClock.getTimeNanos();
             timeRefMsec = new Time(System.currentTimeMillis());
@@ -202,7 +210,6 @@ public class GalileoConstellation extends Constellation{
 //                    satelliteParameters.setUniqueSatId("E" + satelliteParameters.getSatId() + "<sub><small><small>E1</small></small></sub>");
                     satelliteParameters.setUniqueSatId("E" + satelliteParameters.getSatId() + "_E1");
 
-
                     satelliteParameters.setSignalStrength(measurement.getCn0DbHz());
 
                     satelliteParameters.setConstellationType(measurement.getConstellationType());
@@ -216,6 +223,16 @@ public class GalileoConstellation extends Constellation{
 
 
                 } else {
+                    SatelliteParameters satelliteParameters = new SatelliteParameters(
+                            measurement.getSvid(),
+                            null
+                    );
+                    satelliteParameters.setUniqueSatId("E" + satelliteParameters.getSatId() + "_E1");
+                    satelliteParameters.setSignalStrength(measurement.getCn0DbHz());
+                    satelliteParameters.setConstellationType(measurement.getConstellationType());
+                    if (measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
+                    unusedSatellites.add(satelliteParameters);
                     visibleButNotUsed++;
                 }
             }
@@ -263,6 +280,11 @@ public class GalileoConstellation extends Constellation{
         synchronized (this) {
             return observedSatellites;
         }
+    }
+
+    @Override
+    public List<SatelliteParameters> getUnusedSatellites() {
+        return unusedSatellites;
     }
 
     @Override
@@ -346,6 +368,7 @@ public class GalileoConstellation extends Constellation{
                 // Add to the exclusion list the satellites that do not pass the masking criteria
                 if(observedSatellite.getRxTopo().getElevation() < MASK_ELEVATION){
                     excludedSatellites.add(observedSatellite);
+                    continue;
                 }
 
                 // Initialize the variable to hold the results of the entire pseudorange correction models
@@ -381,8 +404,7 @@ public class GalileoConstellation extends Constellation{
             // Remove from the list all the satellites that did not pass the masking criteria
             visibleButNotUsed += excludedSatellites.size();
             observedSatellites.removeAll(excludedSatellites);
-
-
+            unusedSatellites.addAll(excludedSatellites);
         }
     }
 

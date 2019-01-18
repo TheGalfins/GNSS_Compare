@@ -37,6 +37,7 @@ public class GalileoGpsConstellation extends Constellation {
      * List holding observed satellites
      */
     protected List<SatelliteParameters> observedSatellites = new ArrayList<>();
+    private List<SatelliteParameters> unusedSatellites = new ArrayList<>();
 
     @Override
     public Coordinates getRxPos() {
@@ -68,9 +69,14 @@ public class GalileoGpsConstellation extends Constellation {
     }
 
     @Override
+    public List<SatelliteParameters> getUnusedSatellites() {
+        return unusedSatellites;
+    }
+
+    @Override
     public int getVisibleConstellationSize() {
         synchronized (this) {
-            return gpsConstellation.getVisibleConstellationSize() + galileoConstellation.getVisibleConstellationSize();
+            return observedSatellites.size()+unusedSatellites.size();
         }
     }
 
@@ -88,17 +94,21 @@ public class GalileoGpsConstellation extends Constellation {
             galileoConstellation.calculateSatPosition(location, position);
 
             observedSatellites.clear();
+            unusedSatellites.clear();
 
-            for (int i = 0; i < gpsConstellation.getUsedConstellationSize(); i++)
-                observedSatellites.add(gpsConstellation.getSatellite(i));
+            observedSatellites.addAll(gpsConstellation.getSatellites());
+            observedSatellites.addAll(galileoConstellation.getSatellites());
 
-            for (int i = 0; i < galileoConstellation.getUsedConstellationSize(); i++)
-                observedSatellites.add(galileoConstellation.getSatellite(i));
+            unusedSatellites.addAll(gpsConstellation.getUnusedSatellites());
+            unusedSatellites.addAll(galileoConstellation.getUnusedSatellites());
         }
     }
 
     public void updateMeasurements(GnssMeasurementsEvent event) {
         synchronized (this) {
+
+            observedSatellites.clear();
+            unusedSatellites.clear();
 
             galileoConstellation.updateMeasurements(event);
             gpsConstellation.updateMeasurements(event);

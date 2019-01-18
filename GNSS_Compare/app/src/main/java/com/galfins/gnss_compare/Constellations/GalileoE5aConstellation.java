@@ -59,6 +59,7 @@ public class GalileoE5aConstellation extends Constellation {
      */
     private List<SatelliteParameters> observedSatellites = new ArrayList<>();
 
+    protected List<SatelliteParameters> unusedSatellites = new ArrayList<>();
 
 //    private long timeRx;
 
@@ -109,6 +110,7 @@ public class GalileoE5aConstellation extends Constellation {
         synchronized (this) {
             visibleButNotUsed = 0;
             observedSatellites.clear();
+            unusedSatellites.clear();
             GnssClock gnssClock       = event.getClock();
             long TimeNanos            = gnssClock.getTimeNanos();
             timeRefMsec               = new Time(System.currentTimeMillis());
@@ -226,6 +228,16 @@ public class GalileoE5aConstellation extends Constellation {
 
 
                 } else {
+                    SatelliteParameters satelliteParameters = new SatelliteParameters(
+                            measurement.getSvid(),
+                            null
+                    );
+                    satelliteParameters.setUniqueSatId("E" + satelliteParameters.getSatId() + "_E5a");
+                    satelliteParameters.setSignalStrength(measurement.getCn0DbHz());
+                    satelliteParameters.setConstellationType(measurement.getConstellationType());
+                    if (measurement.hasCarrierFrequencyHz())
+                        satelliteParameters.setCarrierFrequency(measurement.getCarrierFrequencyHz());
+                    unusedSatellites.add(satelliteParameters);
                     visibleButNotUsed++;
                 }
             }
@@ -273,6 +285,11 @@ public class GalileoE5aConstellation extends Constellation {
         synchronized (this) {
             return observedSatellites;
         }
+    }
+
+    @Override
+    public List<SatelliteParameters> getUnusedSatellites() {
+        return null;
     }
 
     @Override
@@ -389,6 +406,7 @@ public class GalileoE5aConstellation extends Constellation {
             // Remove from the list all the satellites that did not pass the masking criteria
             visibleButNotUsed += excludedSatellites.size();
             observedSatellites.removeAll(excludedSatellites);
+            unusedSatellites.addAll(excludedSatellites);
         }
     }
 
