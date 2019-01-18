@@ -54,51 +54,7 @@ import java.util.Observer;
  */
 public class GnssCoreService extends Service {
 
-    private static final List<DeviceModel> SUPPORTED_DUAL_FREQUENCY_DEVICES = new ArrayList<DeviceModel>(){{
-        add(new DeviceModel("Xiaomi", "MI 8"));
-        add(new DeviceModel("Xiaomi", "MI 8 Pro"));
-        add(new DeviceModel("Xiaomi", "MI 8 UD"));
-        add(new DeviceModel("Xiaomi", "equuleus"));
-        add(new DeviceModel("Huawei", "LYA-AL00"));
-        add(new DeviceModel("Huawei", "LYA-AL10"));
-        add(new DeviceModel("Huawei", "LYA-L09"));
-        add(new DeviceModel("Huawei", "LYA-L29"));
-        add(new DeviceModel("Huawei", "LYA-TL00"));
-        add(new DeviceModel("Huawei", "LYA-AL00P"));
-        add(new DeviceModel("Huawei", "EVR-AL00"));
-        add(new DeviceModel("Huawei", "EVR-L29"));
-        add(new DeviceModel("Huawei", "EVR-TL00"));
-        add(new DeviceModel("Huawei", "HMA-AL00"));
-        add(new DeviceModel("Huawei", "HMA-L09"));
-        add(new DeviceModel("Huawei", "HMA-L29"));
-        add(new DeviceModel("Huawei", "HMA-TL00"));
-        add(new DeviceModel("Huawei", "HMA-L29"));
-        add(new DeviceModel("Huawei", "LYA-L0C"));
-        add(new DeviceModel("Huawei", "LYA-L29"));
-    }};
-
     private static UserNotifier userNotifier;
-
-    boolean dualFrequencySupported = false;
-
-    private static final class DeviceModel {
-        private String manufacturer;
-        private String model;
-
-        DeviceModel(String manufacturer, String model){
-            this.manufacturer = manufacturer;
-            this.model = model;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (getClass() != obj.getClass())
-                return false;
-
-            DeviceModel compared = (DeviceModel) obj;
-            return compared.model.equals(model) && compared.manufacturer.equals(manufacturer);
-        }
-    }
 
     /**
      * Tag used to mark module names for savedInstanceStates of the onCreate method.
@@ -175,13 +131,7 @@ public class GnssCoreService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        DeviceModel thisDevice = new DeviceModel(Build.MANUFACTURER, Build.MODEL);
-
-        for(DeviceModel device : SUPPORTED_DUAL_FREQUENCY_DEVICES)
-            if(thisDevice.equals(device))
-                dualFrequencySupported = true;
-
-        Constellation.initialize(dualFrequencySupported);
+        Constellation.initialize();
         Correction.initialize();
         PvtMethod.initialize();
         FileLogger.initialize();

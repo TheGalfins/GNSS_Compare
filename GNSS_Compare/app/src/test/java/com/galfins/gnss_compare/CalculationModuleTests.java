@@ -52,7 +52,7 @@ public class CalculationModuleTests {
 
         CalculationModule.clear();
 
-        Constellation.initialize(false);
+        Constellation.initialize();
         Correction.initialize();
         PvtMethod.initialize();
         FileLogger.initialize();

@@ -56,22 +56,17 @@ public abstract class Constellation {
     /**
      * Registers all constellation classes which extend this
      */
-    public static void initialize(boolean dualFrequencySupported) {
+    public static void initialize() {
         if(!initialized) {
 
             GpsConstellation.registerClass();
             GalileoConstellation.registerClass();
             GalileoGpsConstellation.registerClass();
+            GpsL5Constellation.registerClass();
+            GpsIonoFreeConstellation.registerClass();
+            GalileoE5aConstellation.registerClass();
+            GalileoIonoFreeConstellation.registerClass();
 
-            // coming soon :)
-//            if(dualFrequencySupported) {
-//                GpsL1Constellation.registerClass();
-//                GpsL5Constellation.registerClass();
-//                GpsIonoFreeConstellation.registerClass();
-//                GalileoE1Constellation.registerClass();
-//                GalileoE5aConstellation.registerClass();
-//                GalileoIonoFreeConstellation.registerClass();
-//            }
             initialized = true;
         }
     }
