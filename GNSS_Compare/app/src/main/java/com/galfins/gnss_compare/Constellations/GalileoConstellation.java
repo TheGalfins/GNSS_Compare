@@ -147,10 +147,9 @@ public class GalileoConstellation extends Constellation{
                 if (measurement.getConstellationType() != constellationId)
                     continue;
 
-                if (! ( !measurement.hasCarrierFrequencyHz()
-                        || approximateEqual(measurement.getCarrierFrequencyHz(), E1a_FREQUENCY, FREQUENCY_MATCH_RANGE)))
-                    continue;
-
+                if (measurement.hasCarrierFrequencyHz())
+                    if (!approximateEqual(measurement.getCarrierFrequencyHz(), E1a_FREQUENCY, FREQUENCY_MATCH_RANGE))
+                        continue;
 
                 long ReceivedSvTimeNanos = measurement.getReceivedSvTimeNanos();
                 double TimeOffsetNanos = measurement.getTimeOffsetNanos();
@@ -163,6 +162,7 @@ public class GalileoConstellation extends Constellation{
                 tRx = 1e-9 * (TimeNanos - (podFullBiasNanos + BiasNanos));
 
                 // Compute the weeknumber
+                // todo: integer division? why floor?
                 weekNumber = Math.floor(-dayFullBias / Constants.WEEKSEC);
                 modDayFullBias = (dayFullBias + weekNumber * Constants.WEEKSEC);
 
@@ -186,7 +186,7 @@ public class GalileoConstellation extends Constellation{
 
                 boolean codeLockE1BC = (measState & GnssMeasurement.STATE_GAL_E1BC_CODE_LOCK) != 0;
                 boolean codeLockE1C = (measState & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) != 0;
-                boolean msecAmbiguity = (measState & GnssMeasurement.STATE_MSEC_AMBIGUOUS) != 0;
+//                boolean msecAmbiguity = (measState & GnssMeasurement.STATE_MSEC_AMBIGUOUS) != 0;
 
                 // Solve for the 100 millisecond ambiguity
                 if (towDecoded && towKnown && (codeLockE1BC && codeLockE1C)) {
@@ -199,7 +199,7 @@ public class GalileoConstellation extends Constellation{
                 pseudorangeE1 = PrSeconds * Constants.SPEED_OF_LIGHT;
 
                 // Variables for debugging
-                int svID = measurement.getSvid();
+//                int svID = measurement.getSvid();
 
                 if (towDecoded || towKnown || (codeLockE1BC && codeLockE1C) && pseudorangeE1 < 3e7 ) {
 
@@ -326,7 +326,7 @@ public class GalileoConstellation extends Constellation{
                 long timeRx = tGalileo.getMsec();
 
 
-                /**Compute the Galileo satellite coordinates
+                /*Compute the Galileo satellite coordinates
 
                  INPUT:
                  @param timeRx         = time of measurement reception - UNIX        [milliseconds]
@@ -352,7 +352,7 @@ public class GalileoConstellation extends Constellation{
                 observedSatellite.setSatellitePosition(rnp);
 
 
-                /** Compute the azimuth and elevation w.r.t the user's approximate location
+                /* Compute the azimuth and elevation w.r.t the user's approximate location
 
                  INPUT:
                  @param rxPos                = user's approximate ECEF coordinates       [cartesian]
@@ -374,7 +374,7 @@ public class GalileoConstellation extends Constellation{
                 // Initialize the variable to hold the results of the entire pseudorange correction models
                 double accumulatedCorrection = 0;
 
-                /** Compute the accumulated corrections for the pseudorange measurements
+                /* Compute the accumulated corrections for the pseudorange measurements
                  * Currently the accumulated corrections contain the following effects:
                  *                  - Ionosphere
                  *                  - Troposphere
