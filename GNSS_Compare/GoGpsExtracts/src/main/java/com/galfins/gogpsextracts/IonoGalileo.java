@@ -19,9 +19,8 @@
  */
 package com.galfins.gogpsextracts;
 
-import android.location.cts.nano.GalileoEphemeris;
-
 import com.galfins.gogpsextracts.Streamable;
+import com.google.location.suplclient.supl.Ephemeris;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -90,16 +89,10 @@ public class IonoGalileo implements Streamable {
 		read(dai,oldVersion);
 	}
 
-	public IonoGalileo(GalileoEphemeris.NeQuickModelProto iono, GalileoEphemeris.UtcModelProto utcModel) {
-		this.alpha[0] = (float) iono.alpha[0];
-		this.alpha[1] = (float) iono.alpha[1];
-		this.alpha[2] = (float) iono.alpha[2];
-
-		if (utcModel!=null) {
-			this.utcA1 = utcModel.a1;
-			this.utcA0 = utcModel.a0;
-			this.utcTOW = utcModel.tow;
-		}
+	public IonoGalileo(Ephemeris.IonosphericModelProto ionoProto2) {
+		this.alpha[0] = (float) ionoProto2.getAlpha(0);
+		this.alpha[1] = (float) ionoProto2.getAlpha(1);
+		this.alpha[2] = (float) ionoProto2.getAlpha(2);
 	}
 
 	/**

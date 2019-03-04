@@ -19,10 +19,8 @@
  */
 package com.galfins.gogpsextracts;
 
-import android.location.cts.nano.Ephemeris;
-import android.location.cts.nano.GalileoEphemeris;
-
 import com.galfins.gogpsextracts.Streamable;
+import com.google.location.suplclient.supl.Ephemeris;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -90,44 +88,16 @@ public class IonoGps implements Streamable {
 	public IonoGps(DataInputStream dai, boolean oldVersion) throws IOException{
 		read(dai,oldVersion);
 	}
-	public IonoGps(Ephemeris.IonosphericModelProto iono, Ephemeris.UtcModelProto utcModel){
-	    this.alpha[0] = (float) iono.alpha[0];
-        this.alpha[1] = (float) iono.alpha[1];
-        this.alpha[2] = (float) iono.alpha[2];
-        this.alpha[3] = (float) iono.alpha[3];
+	public IonoGps(Ephemeris.IonosphericModelProto ionoProto){
+	    this.alpha[0] = (float) ionoProto.getAlpha(0);
+        this.alpha[1] = (float) ionoProto.getAlpha(1);
+        this.alpha[2] = (float) ionoProto.getAlpha(2);
+        this.alpha[3] = (float) ionoProto.getAlpha(3);
 
-        this.beta[0] = (float) iono.beta[0];
-        this.beta[1] = (float) iono.beta[1];
-        this.beta[2] = (float) iono.beta[2];
-        this.beta[3] = (float) iono.beta[3];
-
-        if (utcModel!=null) {
-            this.utcA1 = utcModel.a1;
-            this.utcA0 = utcModel.a0;
-            this.utcTOW = utcModel.tow;
-        }
-
-        //health =
-        //utcWNT =
-        //utcLS =
-        //utcWNF =
-        //utcDN =
-        //utcLSF =
-        //validHealth =
-        //validUTC =
-        //validKlobuchar =
-	}
-
-	public IonoGps(GalileoEphemeris.NeQuickModelProto iono, GalileoEphemeris.UtcModelProto utcModel) {
-		this.alpha[0] = (float) iono.alpha[0];
-		this.alpha[1] = (float) iono.alpha[1];
-		this.alpha[2] = (float) iono.alpha[2];
-
-		if (utcModel!=null) {
-			this.utcA1 = utcModel.a1;
-			this.utcA0 = utcModel.a0;
-			this.utcTOW = utcModel.tow;
-		}
+        this.beta[0] = (float) ionoProto.getBeta(0);
+        this.beta[1] = (float) ionoProto.getBeta(1);
+        this.beta[2] = (float) ionoProto.getBeta(2);
+        this.beta[3] = (float) ionoProto.getBeta(3);
 	}
 
 	/**

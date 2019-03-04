@@ -97,6 +97,26 @@ public class Time {
 		this.fraction = fullTime - this.msec;
 		this.gc.setTimeInMillis(this.msec);
 	}
+
+	public Time(int week, double weekSec, char satID){
+		if (satID == 'E') {
+			df.setTimeZone(zone);
+			gc.setTimeZone(zone);
+			double fullTime = (Constants.UNIX_GST_DAYS_DIFF * Constants.SEC_IN_DAY + week * Constants.DAYS_IN_WEEK * Constants.SEC_IN_DAY + weekSec) * 1000L;
+			this.msec = (long) (fullTime);
+			this.fraction = fullTime - this.msec;
+			this.gc.setTimeInMillis(this.msec);
+		}
+		else {
+			df.setTimeZone(zone);
+			gc.setTimeZone(zone);
+			double fullTime = (Constants.UNIX_GPS_DAYS_DIFF * Constants.SEC_IN_DAY + week * Constants.DAYS_IN_WEEK * Constants.SEC_IN_DAY + weekSec) * 1000L;
+			this.msec = (long) (fullTime);
+			this.fraction = fullTime - this.msec;
+			this.gc.setTimeInMillis(this.msec);
+		}
+	}
+
 	/**
 	 * @param dateStr
 	 * @return

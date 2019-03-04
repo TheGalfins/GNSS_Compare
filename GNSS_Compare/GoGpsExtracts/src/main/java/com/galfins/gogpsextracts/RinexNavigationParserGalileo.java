@@ -1,10 +1,12 @@
 package com.galfins.gogpsextracts;
 
 import android.location.Location;
-import android.location.cts.nano.GalileoEphemeris;
 import android.util.Log;
 
 import com.galfins.gogpsextracts.EphemerisSystemGalileo;
+import com.google.location.suplclient.ephemeris.EphemerisResponse;
+import com.google.location.suplclient.ephemeris.GalEphemeris;
+import com.google.location.suplclient.ephemeris.GnssEphemeris;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -77,11 +79,13 @@ public class RinexNavigationParserGalileo extends EphemerisSystemGalileo impleme
 		}
 	}
 
-	public RinexNavigationParserGalileo(GalileoEphemeris.GalNavMessageProto galNavMsg) {
-        for (int iSv = 0; iSv<galNavMsg.ephemerids.length; iSv++) {
-            this.eph.add(new EphGalileo(galNavMsg.ephemerids[iSv]));
-        }
-        this.iono = new IonoGalileo(galNavMsg.iono, galNavMsg.utcModel);
+	public RinexNavigationParserGalileo(EphemerisResponse ephResponse) {
+		for (GnssEphemeris eph : ephResponse.ephList) {
+			if (eph instanceof GalEphemeris) {
+				this.eph.add(new EphGalileo((GalEphemeris)eph));
+			}
+		}
+		this.iono = new IonoGalileo(ephResponse.ionoProto2);
 	}
 
 	/* (non-Javadoc)

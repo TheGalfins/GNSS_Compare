@@ -56,6 +56,7 @@ public class Constants {
 	public static final long SEC_IN_HALF_WEEK = 302400L;
 	// Days difference between UNIX time and GPS time
 	public static final long UNIX_GPS_DAYS_DIFF = 3657L;
+	public static final long UNIX_GST_DAYS_DIFF = 10825L; //935280000 seconds
 	// MFB just add nanoseconds in a week
 	public static final long NUMBER_NANO_SECONDS_PER_WEEK = 604800000000000L;
 	public static final long WEEKSEC = 604800;

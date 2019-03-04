@@ -1,10 +1,12 @@
 package com.galfins.gogpsextracts;
 
 import android.location.Location;
-import android.location.cts.nano.Ephemeris;
 import android.util.Log;
 
 import com.galfins.gogpsextracts.EphemerisSystem;
+import com.google.location.suplclient.ephemeris.EphemerisResponse;
+import com.google.location.suplclient.ephemeris.GnssEphemeris;
+import com.google.location.suplclient.ephemeris.GpsEphemeris;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -54,11 +56,13 @@ public class RinexNavigationParserGps extends EphemerisSystem implements Navigat
         this.fileNav = fileNav;
     }
 
-    public RinexNavigationParserGps(Ephemeris.GpsNavMessageProto gpsNavMsg){
-        for (int iSv = 0; iSv<gpsNavMsg.ephemerids.length; iSv++) {
-            this.eph.add(new EphGps(gpsNavMsg.ephemerids[iSv]));
+    public RinexNavigationParserGps(EphemerisResponse ephResponse){
+        for (GnssEphemeris eph : ephResponse.ephList) {
+            if (eph instanceof GpsEphemeris) {
+                this.eph.add(new EphGps((GpsEphemeris)eph));
+            }
         }
-        this.iono = new IonoGps(gpsNavMsg.iono, gpsNavMsg.utcModel);
+        this.iono = new IonoGps(ephResponse.ionoProto);
     }
 
     // RINEX Read constructors

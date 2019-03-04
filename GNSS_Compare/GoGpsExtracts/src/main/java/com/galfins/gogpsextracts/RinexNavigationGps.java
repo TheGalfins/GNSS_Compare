@@ -1,9 +1,6 @@
 package com.galfins.gogpsextracts;
 
 import android.location.Location;
-import android.location.cts.nano.Ephemeris;
-import android.location.cts.nano.GalileoEphemeris;
-import android.location.cts.suplClient.SuplRrlpController;
 import android.util.ArraySet;
 import android.util.Base64;
 import android.util.Log;
@@ -12,6 +9,11 @@ import android.util.Pair;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+
+import com.google.location.suplclient.ephemeris.EphemerisResponse;
+import com.google.location.suplclient.ephemeris.GpsEphemeris;
+import com.google.location.suplclient.supl.SuplConnectionRequest;
+import com.google.location.suplclient.supl.SuplController;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -231,6 +233,10 @@ public class RinexNavigationGps implements NavigationProducer {
         RinexNavigationParserGps rnp = null;
 
         String suplName = url;
+        final int serverPort = 7275;
+        final boolean sslEnabled = true;
+        final boolean messageLoggingEnabled = true;
+        final boolean loggingEnabled = true;
         File rnf = new File(RNP_CACHE, suplName);
 
         if (rnf.exists()) {
@@ -246,20 +252,27 @@ public class RinexNavigationGps implements NavigationProducer {
         try {
 
             Log.w(TAG, "getFromSUPL: Getting data using SUPL client..." );
-            SuplRrlpController mSuplController = new SuplRrlpController(suplName,7276);
-            Pair<Ephemeris.GpsNavMessageProto, GalileoEphemeris.GalNavMessageProto> navMsg;
-            navMsg = mSuplController.generateNavMessage((long) (initialLocation.getLatitude()*1e7), (long) (initialLocation.getLongitude()*1e7));
+            SuplConnectionRequest request =
+                    SuplConnectionRequest.builder()
+                            .setServerHost(suplName)
+                            .setServerPort(serverPort)
+                            .setSslEnabled(sslEnabled)
+                            .setMessageLoggingEnabled(messageLoggingEnabled)
+                            .setLoggingEnabled(loggingEnabled)
+                            .build();
 
-            Ephemeris.GpsNavMessageProto gpsNavMsg = navMsg.first;
+            SuplController mSuplController = new SuplController(request);
 
-            if (gpsNavMsg.rpcStatus == Ephemeris.GpsNavMessageProto.SUCCESS) {
-                rnp = new RinexNavigationParserGps(gpsNavMsg);
+            mSuplController.sendSuplRequest((long) (initialLocation.getLatitude()*1e7), (long) (initialLocation.getLongitude()*1e7));
+            EphemerisResponse ephResponse = mSuplController.generateEphResponse((long) (initialLocation.getLatitude()*1e7), (long) (initialLocation.getLongitude()*1e7));
+
+            if (ephResponse != null) {
+                rnp = new RinexNavigationParserGps(ephResponse);
             }
 
             Log.w(TAG, "getFromSUPL: Received data from SUPL server" );
 
-        } catch (IOException |
-                NullPointerException |
+        } catch (NullPointerException |
                 UnsupportedOperationException |
                 IllegalArgumentException |
                 IndexOutOfBoundsException e) {

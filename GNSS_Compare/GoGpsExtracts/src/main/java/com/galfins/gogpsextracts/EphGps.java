@@ -20,7 +20,7 @@
  */
 package com.galfins.gogpsextracts;
 
-import android.location.cts.nano.Ephemeris;
+import com.google.location.suplclient.ephemeris.GpsEphemeris;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -113,39 +113,39 @@ public class EphGps implements Streamable {
 		read(dai,oldVersion);
 	}
 
-	public EphGps(Ephemeris.GpsEphemerisProto ephemerids) {
-		this.satID = ephemerids.prn;
+	public EphGps(GpsEphemeris ephemerids) {
+		this.satID = ephemerids.svid;
 		this.satType = 'G';
         this.week = ephemerids.week;
-        this.L2Code = ephemerids.l2Code;
-        this.L2Flag = ephemerids.l2Flag;
-		this.svAccur = (int) ephemerids.svAccuracyM;
-		this.svHealth = ephemerids.svHealth;
+        this.L2Code = ephemerids.codeL2;
+        this.L2Flag = (ephemerids.l2PDataFlag) ? 1 : 0;
+		this.svAccur = (int) ephemerids.accuracyM;
+		this.svHealth = ephemerids.health;
         this.iodc = ephemerids.iodc;
         this.iode = ephemerids.iode;
-        this.toc = ephemerids.toc;
-        this.toe = ephemerids.toe;
-        this.af0 = ephemerids.af0;
-        this.af1 = ephemerids.af1;
-        this.af2 = ephemerids.af2;
-        this.tgd  =ephemerids.tgd;
-        this.rootA = ephemerids.rootOfA;
-        this.e = ephemerids.e;
-        this.i0 = ephemerids.i0;
-        this.iDot = ephemerids.iDot;
-        this.omega = ephemerids.omega;
-        this.omega0= ephemerids.omega0;
-        this.omegaDot = ephemerids.omegaDot;
-        this.M0 = ephemerids.m0;
-        this.deltaN = ephemerids.deltaN;
-        this.cic = ephemerids.cic;
-        this.cis = ephemerids.cis;
-        this.crc = ephemerids.crc;
-        this.crs = ephemerids.crs;
-        this.cuc = ephemerids.cuc;
-        this.cus = ephemerids.cus;
-        this.fitInt = (long) ephemerids.fitInterval;
-        this.refTime = new Time(week, toc);
+        this.toc = ephemerids.tocS;
+        this.toe = ephemerids.keplerModel.toeS;
+        this.af0 = ephemerids.af0S;
+        this.af1 = ephemerids.af1SecPerSec;
+        this.af2 = ephemerids.af2SecPerSec2;
+        this.tgd  =ephemerids.tgdS;
+        this.rootA = ephemerids.keplerModel.sqrtA;
+        this.e = ephemerids.keplerModel.eccentricity;
+        this.i0 = ephemerids.keplerModel.i0;
+        this.iDot = ephemerids.keplerModel.iDot;
+        this.omega = ephemerids.keplerModel.omega;
+        this.omega0= ephemerids.keplerModel.omega0;
+        this.omegaDot = ephemerids.keplerModel.omegaDot;
+        this.M0 = ephemerids.keplerModel.m0;
+        this.deltaN = ephemerids.keplerModel.deltaN;
+        this.cic = ephemerids.keplerModel.cic;
+        this.cis = ephemerids.keplerModel.cis;
+        this.crc = ephemerids.keplerModel.crc;
+        this.crs = ephemerids.keplerModel.crs;
+        this.cuc = ephemerids.keplerModel.cuc;
+        this.cus = ephemerids.keplerModel.cus;
+        this.fitInt = (long) ((ephemerids.fitIntvFlag) ? 1 : 0);
+        this.refTime = new Time(week, toc, satType);
 	}
 
     /**
