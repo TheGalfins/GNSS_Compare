@@ -96,8 +96,13 @@ public class GalileoGpsConstellation extends Constellation {
             observedSatellites.clear();
             unusedSatellites.clear();
 
-            observedSatellites.addAll(gpsConstellation.getSatellites());
-            observedSatellites.addAll(galileoConstellation.getSatellites());
+            for (int i=0; i<gpsConstellation.getUsedConstellationSize(); i++){
+                observedSatellites.add(gpsConstellation.getSatellite(i));
+            }
+
+            for (int i=0; i<galileoConstellation.getUsedConstellationSize(); i++){
+                observedSatellites.add(galileoConstellation.getSatellite(i));
+            }
 
             unusedSatellites.addAll(gpsConstellation.getUnusedSatellites());
             unusedSatellites.addAll(galileoConstellation.getUnusedSatellites());
@@ -106,9 +111,6 @@ public class GalileoGpsConstellation extends Constellation {
 
     public void updateMeasurements(GnssMeasurementsEvent event) {
         synchronized (this) {
-
-            observedSatellites.clear();
-            unusedSatellites.clear();
 
             galileoConstellation.updateMeasurements(event);
             gpsConstellation.updateMeasurements(event);
