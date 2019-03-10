@@ -470,14 +470,19 @@ public class MainViewer extends Fragment implements DataViewer {
             modulesToBeAdded.clear();
             modulesToBeRemoved.clear();
 
-            modulesToBeAdded.addAll(Sets.difference(
-                    new HashSet<>(calculationModules),
-                    poseItems.keySet()));
+            modulesToBeAdded.addAll(
+                    Sets.difference(
+                            new HashSet<>(calculationModules),
+                            poseItems.keySet()
+                    )
+            );
 
             modulesToBeRemoved.addAll(
                     Sets.difference(
                             poseItems.keySet(),
-                            new HashSet<>(calculationModules)));
+                            new HashSet<>(calculationModules)
+                    )
+            );
         }
     }
 
