@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
                         } else if (snackbar.isShown()) {
                             snackbar.dismiss();
                             snackbarAlive = false;
+                        } else {
+                            snackbarAlive = false;
                         }
                     }
 
