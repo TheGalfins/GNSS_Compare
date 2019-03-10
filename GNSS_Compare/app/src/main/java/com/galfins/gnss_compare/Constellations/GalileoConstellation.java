@@ -368,7 +368,7 @@ public class GalileoConstellation extends Constellation{
 
                 if (rnp == null) {
                     excludedSatellites.add(observedSatellite);
-                    //GnssCoreService.notifyUser("Failed getting ephemeris data!", Snackbar.LENGTH_SHORT, RNP_NULL_MESSAGE);
+                    GnssCoreService.notifyUser("Failed getting ephemeris data!", Snackbar.LENGTH_SHORT, RNP_NULL_MESSAGE);
                     continue;
                 }
 
