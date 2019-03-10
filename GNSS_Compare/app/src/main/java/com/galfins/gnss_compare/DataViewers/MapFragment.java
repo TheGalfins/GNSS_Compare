@@ -87,8 +87,6 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
 
     private boolean mapInActivity = false;
 
-    Set<CalculationModule> seenModules = new HashSet<>();
-
     private class SafeMarkerDescription {
         private Coordinates location;
         private int drawableReference;
@@ -254,17 +252,15 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
-        seenModules = dataSeries.keySet();
-
         synchronized (this) {
             modulesToBeAdded.clear();
             modulesToBeAdded.addAll(Sets.difference(
                     new HashSet<>(calculationModules),
-                    seenModules));
+                    dataSeries.keySet()));
 
             modulesToBeRemoved.clear();
             modulesToBeRemoved.addAll(Sets.difference(
-                    seenModules,
+                    dataSeries.keySet(),
                     new HashSet<>(calculationModules)));
         }
 
