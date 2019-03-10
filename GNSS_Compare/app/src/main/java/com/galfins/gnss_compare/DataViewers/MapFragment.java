@@ -254,18 +254,18 @@ public class MapFragment extends Fragment implements DataViewer, OnMapReadyCallb
     @Override
     public void update(CalculationModulesArrayList calculationModules) {
 
+        seenModules = dataSeries.keySet();
+
         synchronized (this) {
             modulesToBeAdded.clear();
             modulesToBeAdded.addAll(Sets.difference(
                     new HashSet<>(calculationModules),
                     seenModules));
-            seenModules.addAll(modulesToBeAdded);
 
             modulesToBeRemoved.clear();
             modulesToBeRemoved.addAll(Sets.difference(
                     seenModules,
                     new HashSet<>(calculationModules)));
-            seenModules.removeAll(modulesToBeRemoved);
         }
 
     }
