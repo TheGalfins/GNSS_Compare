@@ -39,7 +39,7 @@ We have the time prediction of the state vector (x) and it's variance-covariance
   \mathbf{P}^-_k = \mathbf{F}_k \mathbf{P}^+_{k-1} \mathbf{F}^{\text{T}}_k + \mathbf{Q}_k .
 
 In the next step we can compute the innovation vector (gamma) and it's variance-covariance matrix (S) with the help of
-the obsevation vector (z), the observation matrix (H) and the measurement noise matrix (R):
+the observation vector (z), the observation matrix (H) and the measurement noise matrix (R):
 
 .. math::
   \boldsymbol{\gamma}_k = \mathbf{z}_k - \mathbf{H}_k\hat{\mathbf{x}}^-_k
@@ -60,7 +60,7 @@ Finally the measurement update step is:
 
 However, before explaining how the EKF for the *static user* and the *dynamic user* was implemented, we still
 need to talk about the measurement model based on the GNSS pseudoranges retrieved from the smartphone's GNSS
-receiver. If you are familiar with this concepts, you can skip the following section.
+receiver. If you are familiar with these concepts, you can skip the following section.
 
 Pseudorange measurement model
 -----------------------------
@@ -75,7 +75,7 @@ and the receiver noise (epsilon).
 We know, there are more effects that are perturbing the GNSS measurements, however
 we wish to keep things as simple as possible and the interested persons can always consider more error sources in the *GNSS Compare's* code.
 
-The above equation is non-linear because of the geometric distance (rho) between the receiver and the GNSS satellite. Luckly we can
+The above equation is non-linear because of the geometric distance (rho) between the receiver and the GNSS satellite. Luckily we can
 linearize it if we have knowledge about an approximated position of the receiver (X0, Y0, Z0), which we do! We do have from the time prediction
 step of the EKF. Taking this into account and applying a first order Taylor series expansion we obtain:
 
@@ -86,7 +86,7 @@ On the left side of the equation we have moved every term that can be computed. 
 by using the approximate receiver position information. On the right hand side we have the unknowns (dX, dY, dZ, dtR) and their coefficients. Based on the linearized
 pseudorange equation one can form the observation matrix (H).
 
-*Practical advise: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns that we are estimating directly in the EKF state vector. Check the GNSS Compare code ( e.g.,* ``StaticExtendedKalmanFilter`` *class ) to understand how this is handled*.
+*Practical advice: Take care that the unknowns from the linearized pseudorange equations are not the same as the position related unknowns that we are estimating directly in the EKF state vector. Check the GNSS Compare code ( e.g.,* ``StaticExtendedKalmanFilter`` *class ) to understand how this is handled*.
 
 Good, now we can see how the EKF was implemented for the *static user* and the *dynamic user*!
 
@@ -145,7 +145,7 @@ In the above expression the receiver clock related parameters are expressed as:
   S_f \approx \frac{h_0}{2}.
 
 The parameter h-2 and h0 are the Power Spectral Densities (PSD) of the random walk frequency noise and of the white noise, as defined in the suggested book above. Some typical values for a low quality Temperature
-Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practical advise before using this values
+Compensated Crystal Oscillator (TCXO) are 2e-20 and 2e-19 (in seconds). A practical advice before using this values
 is to take care that we are dealing with the parameters of a variance-covariance matrix and also that they have
 to be converted in units of meters (remember that we have expressed the receiver clock states in units of meters).
 
@@ -179,7 +179,7 @@ new process noise matrix. Which is exactly what we are going to do next, therefo
 
 
 For the process noise matrix we use the approach presented in the book of Robert Grover Brown and Patrick Y. C. Hwang
-( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, is the third time we refer to this book in the implemented PVT algorithms section, however you can trust us that is a very good one!
+( *Introduction to Random Signals and Applied Kalman Filtering* ). Indeed, it is the third time we refer to this book in the implemented PVT algorithms section, however you can trust us that it is a very good one!
 
 .. math::
   \mathbf{Q}_k =
@@ -195,12 +195,12 @@ For the process noise matrix we use the approach presented in the book of Robert
    \end{pmatrix}
 
 The parameters Sx, Sy and Sz are the spectral amplitudes that reflect the position random process. Unfortunately, setting their values
-is not as straigth forward as for the receiver clock states. We have to rely on what we call the *tunning* process which is
+is not as straightforward as for the receiver clock states. We have to rely on what we call the *tunning* process which is
 modifying the values in Q and R experimentally (i.e., trial and error). Just as a note, this can be avoided by designing and
 implementing *adaptive* estimators. Who knows, maybe you (the reader) will decide to implement some nice ideas now that
 this possibility is enabled with *GNSS Compare's* flexible framework.
 
-*Practical advise: When the observation matrix (H) is being built do consider that it's size is defined in the following way:
+*Practical advice: When the observation matrix (H) is being built do consider that it's size is defined in the following way:
 the number of rows is the number of measurements and the number of columns is the number of unknowns. Therefore when
 switching from the static case to the dynamic case, H changes also. We mention this just to be sure that a possible conceptual hiccup
 is avoided.*
@@ -214,7 +214,7 @@ is tunned to our situation.
 
 Let's start with the R matrix. We set R to be a diagonal matrix containing the variances of each pseudorange measurement.
 The measurement noise matrix being diagonal relies on the assumption that there is no cross-correlation between the measurements
-coming from different satellites ( *an assumption that is not entirely represeting the reality, however it fits most of the
+coming from different satellites ( *an assumption that is not entirely representing the reality, however it fits most of the
 applications* ). Therefore, the diagonal elements of the R matrix are:
 
 .. math::
@@ -222,7 +222,7 @@ applications* ). Therefore, the diagonal elements of the R matrix are:
 
 To keep things relatively simple, we can assign the value for the sigma 10 meters ( *don't forget to square it before putting it in R* ).
 Another assumption that is made is that the measurements received at the k-th epoch have equal variances ( *ok, this assumption is not
-true at all* ). However here is an idea for you, maybe you can try investigating some interesting measurement weigthing methods and then
+true at all* ). However here is an idea for you, maybe you can try investigating some interesting measurement weighing methods and then
 *compare* (the main keyword of the whole project) the results you get with our not so realistic assumption. Let the researcher within you thrive!
 
 Let's move to the Q matrix now. For this we present three tunning examples: static, pedestrian and dynamic.
@@ -243,7 +243,7 @@ In the above we use the *c* notation for the speed of light.
 
 Intuitively we should have used the EKF designed for a dynamic user in this situation. It would only make sense as a pedestrian *changes* his/hers
 position over time. However, one must take into account that the raw measurements delivered by the smartphone's GNSS receiver are quite noisy and if
-there are no other means to detect the motion of the user (e.g., using an Inertial Measurement Unit) then estimating the velocities can make our results not soo accurate.
+there are no other means to detect the motion of the user (e.g., using an Inertial Measurement Unit) then estimating the velocities can make our results not too accurate.
 Having this situation in view we have found a workaround: we use the EKF designed for a static user and we let some process noise for the X and Y coordinates ( *unless
 one of our users is not Superman we are not that interested in the Z direction* ). This means that we have the following Q matrix:
 
@@ -272,15 +272,15 @@ Finally we have arrived at the final case regarding the tunning of the dynamic E
 Weighted Least Squares
 ======================
 
-*GNSS Compare* offers also the possibility to change the PVT estimator if the user whishes so. By not requiring knowledge about
+*GNSS Compare* offers also the possibility to change the PVT estimator if the user wishes to. By not requiring knowledge about
 the dynamics, Weighted Least Squares (WLS) can be used to estimate the position using only the pseudorange measurements. However there
 are some drawbacks like: the quality of the estimations fully depends on the quality of the measurements and also the WLS
 requires a minimum number of measurements (typically 4 if we want to estimate the 3D position and the receiver clock bias).
 
-Nevertheless is useful to have such an estimator as its behavior can be studied in real-time/post-processing in comparison with an EKF.
+Nevertheless it is useful to have such an estimator as its behavior can be studied in real-time/post-processing in comparison with an EKF.
 And all this thanks to *GNSS Compare*!
 
-Altough the pseudorange measurement model was presented in the EKF description we will do it one more time just for the
+Although the pseudorange measurement model was presented in the EKF description we will do it one more time just for the
 sake of completion.
 
 Pseudorange measurement model
@@ -325,4 +325,4 @@ To estimate the vector of unknowns (x) in the WLS sense, we proceed in the follo
 .. math::
   \hat{\mathbf{x}}_{\text{WLS}} = \left(\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{H} \right)^{-1}\mathbf{H}^{\text{T}} \mathbf{W} \mathbf{z}.
 
-*Practical advise: In the WLS case, as the position is concerned, we are estimating the difference between the approximated position and the true position until this difference is below a certain threshold. We encourage you to check the*    ``WeightedLeastSquares``  *class to see how this is handled.*
+*Practical advice: In the WLS case, as the position is concerned, we are estimating the difference between the approximated position and the true position until this difference is below a certain threshold. We encourage you to check the*    ``WeightedLeastSquares``  *class to see how this is handled.*
